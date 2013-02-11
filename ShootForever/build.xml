@@ -1,0 +1,38 @@
+<project name="StarlingTemplateWeb" default="copyProjectFiles" basedir=".">
+	<property name="ROOT" location="../../"/>
+	<property name="STARLING" location="${ROOT}/Frameworks/Starling/Starling-Framework/"/>
+	
+	<target name="copyProjectFiles" depends="copyParticlesSample">
+		<!-- Copy starling.swc to libs folder 
+		<copy file="${STARLING}/starling/bin/starling.swc" todir="libs" />
+		-->
+		<!-- Copy starling source files -->
+		<copy todir="./starling-source">
+			<fileset dir="${STARLING}/starling/src"/> 
+		</copy>
+		<!-- Copy demo files -->
+		<copy todir="./src">
+			<fileset dir="${STARLING}/samples/demo/src"/> 
+		</copy>
+		<copy todir="./media">
+			<fileset dir="${STARLING}/samples/demo/media"/> 
+		</copy>
+	</target>
+	
+	<target name="copyParticlesSample">
+
+		<!-- Copy starling source files -->
+		<copy todir="./starling-extensions">
+			<fileset dir="${ROOT}/Frameworks/Starling/Starling-Particles-Extension/src"/> 
+		</copy>
+		
+		<!-- Copy demo files -->
+		<copy file="${ROOT}/Frameworks/Starling/Starling-Particles-Extension/demo/src/Startup.as"
+				tofile="./src/StartupParticles.as" />
+		<copy file="${ROOT}/Frameworks/Starling/Starling-Particles-Extension/demo/src/Demo.as"
+				tofile="./src/Demo.as" />
+		<copy todir="./media">
+			<fileset dir="${ROOT}/Frameworks/Starling/Starling-Particles-Extension/demo/media"/> 
+		</copy>
+	</target>
+</project>
