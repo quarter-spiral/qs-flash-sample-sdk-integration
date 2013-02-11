@@ -6,7 +6,16 @@ package
 		[Embed(source = "../media/textures/player.png")]
 		public static const PlayerImage:Class;
 		
-		//STARLING:
+		[Embed(source = "../media/textures/bullet.png")]
+		public static const BulletImage:Class;
+		
+		[Embed(source = "../media/textures/enemy1.png")]
+		public static const Enemy1Image:Class;
+
+		[Embed(source = "../media/textures/enemy2.png")]
+		public static const Enemy2Image:Class;
+		
+		//STARLING DEMO:
         
         [Embed(source = "../media/textures/background.png")]
         public static const Background:Class;

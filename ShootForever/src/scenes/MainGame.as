@@ -113,6 +113,9 @@ package scenes
 				{
 					gameWorld.mousePos.x = touch.globalX;
 					gameWorld.mousePos.y = touch.globalY;
+					
+					if (touch.phase == TouchPhase.BEGAN)
+						gameWorld.mouseClicked = true;
 				}
 			}
 		}

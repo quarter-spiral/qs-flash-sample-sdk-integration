@@ -24,6 +24,8 @@ package
         
         public function Game()
         {
+			Constants.init();
+			
             Starling.current.stage.stageWidth  = Constants.GameWidth;
             Starling.current.stage.stageHeight = Constants.GameHeight;
             Assets.contentScaleFactor = Starling.current.contentScaleFactor;
