@@ -9,6 +9,12 @@ package
 		[Embed(source = "../media/textures/bullet.png")]
 		public static const BulletImage:Class;
 		
+		[Embed(source = "../media/textures/pause.png")]
+		public static const PauseImage:Class;
+		
+		[Embed(source = "../media/textures/start.png")]
+		public static const StartImage:Class;
+		
 		[Embed(source = "../media/textures/enemy1.png")]
 		public static const Enemy1Image:Class;
 

@@ -4,6 +4,7 @@ package world
 	{
 		public var killScore:int;
 		public var killXp:int;
+		public var maxHealth:int;
 		public var radius:int;
 		public var speed:int;
 		public var shoots:Boolean;
@@ -14,6 +15,7 @@ package world
 		public function EnemyProperties(
 			killScore:int,
 			killXp:int,
+			maxHealth:int,
 			radius:int,
 			speed:int,
 			shoots:Boolean,
@@ -24,8 +26,8 @@ package world
 		{
 			this.killScore = killScore;
 			this.killXp = killXp;
+			this.maxHealth = maxHealth;
 			this.radius = radius;
-			this.speed = speed;
 			this.speed = speed;
 			this.shoots = shoots;
 			this.shotSpeed = shotSpeed;

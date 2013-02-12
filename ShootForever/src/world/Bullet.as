@@ -17,10 +17,12 @@ package world
 		
 		//Size of this shot for collision purposes
 		public var radius:Number;
+		public var boundBox:Rectangle;
+		
+		public var damage:Number;
 	
 		//Internal util values (to prevent a lot of object allocation)
 		protected var deltaPos:Vec2;
-		protected var boundBox:Rectangle;
 		
 		public function Bullet(parentWorld:World)
 		{
@@ -36,21 +38,28 @@ package world
 			image.pivotX = image.width/2;
 			image.pivotY = image.height/2;
 			
-			deltaPos = new Vec2(); 
 			boundBox = new Rectangle();
+			
+			deltaPos = new Vec2(); 
 		}
 		
 		public override function update(dt:Number):void {
+			if (alive == false) return;
+			
 			deltaPos.setValsFrom(vel);
 			deltaPos.scale(dt);
 			pos.add(deltaPos);
 			
-			boundBox.setTo(pos.x-radius*0.5, pos.y-radius*0.5, radius, radius);
+			updateBoundingBox();
 			
 			//If moved out of game bounds, no longer alive
 			var worldBounds:Rectangle = parentWorld.getWorldBounds();
 			if (!worldBounds.intersects(boundBox))
 				alive = false;
+		}
+		
+		public function updateBoundingBox():void {
+			boundBox.setTo(pos.x-radius*0.5, pos.y-radius*0.5, radius, radius);
 		}
 	}
 }

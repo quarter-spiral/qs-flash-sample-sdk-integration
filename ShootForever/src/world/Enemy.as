@@ -15,6 +15,8 @@ package world
 		public var alive:Boolean;
 		public var enemyType:int = 0;
 		
+		public var currHealth:int;
+		
 		//The properties object to which we're linked
 		public var props:EnemyProperties;
 		
@@ -41,6 +43,9 @@ package world
 			this.enemyType = typeNum;
 			
 			props = Constants.ENEMY_PROPERTIES[typeNum];
+			
+			//Init health from props
+			currHealth = props.maxHealth;
 			
 			//Initialize velocity based on type
 			switch (typeNum) {
@@ -70,6 +75,8 @@ package world
 		}
 
 		public override function update(dt:Number):void {
+			if (alive == false) return;
+			
 			//Update enemy movement based on type
 			switch (enemyType) {
 				case 1:

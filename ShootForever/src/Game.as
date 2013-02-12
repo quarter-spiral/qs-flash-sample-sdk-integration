@@ -5,6 +5,7 @@ package
     import flash.utils.getQualifiedClassName;
     
     import scenes.MainGame;
+    import scenes.MainMenu;
     import scenes.Screen;
     
     import starling.core.Starling;
@@ -17,14 +18,20 @@ package
     import starling.text.TextField;
     import starling.textures.Texture;
     import starling.utils.VAlign;
+    
+    import world.PlayerInfo;
 
     public class Game extends Sprite
     {
         private var currentScreen:Screen;
+		
+		private var playerInfo:PlayerInfo;
         
         public function Game()
         {
 			Constants.init();
+			
+			playerInfo = new PlayerInfo();
 			
             Starling.current.stage.stageWidth  = Constants.GameWidth;
             Starling.current.stage.stageHeight = Constants.GameHeight;
@@ -34,48 +41,41 @@ package
             Assets.prepareSounds();
             Assets.loadBitmapFonts();
             
-            var scenesToCreate:Array = [
-                ["scenes.MainGame", MainGame]
-            ];
-            
-//            var buttonTexture:Texture = Assets.getTexture("ButtonBig");
-//            var count:int = 0;
-//            
-//            for each (var sceneToCreate:Array in scenesToCreate)
-//            {
-//                var sceneTitle:String = sceneToCreate[0];
-//                var sceneClass:Class  = sceneToCreate[1];
-//                
-//                var button:Button = new Button(buttonTexture, sceneTitle);
-//                button.x = count % 2 == 0 ? 28 : 167;
-//                button.y = 160 + int(count / 2) * 52;
-//                button.name = getQualifiedClassName(sceneClass);
-//                button.addEventListener(Event.TRIGGERED, onButtonTriggered);
-//                mMainMenu.addChild(button);
-//                ++count;
-//            }
-            
             addEventListener(Screen.CLOSING, onScreenClosing);
             addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
             addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-            
-//            // show information about rendering method (hardware/software)
-//            
-//            var driverInfo:String = Starling.context.driverInfo;
-//            var infoText:TextField = new TextField(310, 64, driverInfo, "Verdana", 10);
-//            infoText.x = 5;
-//            infoText.y = 475 - infoText.height;
-//            infoText.vAlign = VAlign.BOTTOM;
-//            infoText.touchable = false;
-//            mMainMenu.addChild(infoText);
-        }
+      	}
+		
+		public function getPlayerInfo():PlayerInfo {
+			return playerInfo;
+		}
+		
+		public function showScene(name:String):void
+		{
+			//Close current screen?
+			if (currentScreen) {
+				currentScreen.close();
+				currentScreen = null;
+			}
+			
+			//Create the requested screen
+			//TODO: later, we might want to save & reuse screens
+			switch (name) {
+				case "MainMenu": currentScreen = new MainMenu(this); break;
+				case "MainGame": currentScreen = new MainGame(this); break;
+			}
+			if (currentScreen) {
+				addChild(currentScreen);
+				currentScreen.start();
+			}
+		}
         
         private function onAddedToStage(event:Event):void
         {
             //stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
 			
-			//DEBUG: Go direct to gameplay
-			showScene("scenes.MainGame");
+			showScene("MainMenu");
+			//showScene("MainGame"); //DEBUG: Go direct to gameplay
         }
         
         private function onRemovedFromStage(event:Event):void
@@ -87,31 +87,12 @@ package
         {
             if (event.keyCode == Keyboard.S)
                 Starling.current.showStats = !Starling.current.showStats;
-//            else if (event.keyCode == Keyboard.X)
-//                Starling.context.dispose();
         }
-        
-        private function onButtonTriggered(event:Event):void
-        {
-            var button:Button = event.target as Button;
-            showScene(button.name);
-        }
-        
+		
         private function onScreenClosing(event:Event):void
         {
             currentScreen.removeFromParent(true);
 			currentScreen = null;
-        }
-        
-        private function showScene(name:String):void
-        {
-			//TODO: Close current screen?
-            //if (currentScree/n) currentScreen.di
-            
-            var screenClass:Class = getDefinitionByName(name) as Class;
-            currentScreen = new screenClass() as Screen;
-            addChild(currentScreen);
-			currentScreen.start();
         }
     }
 }

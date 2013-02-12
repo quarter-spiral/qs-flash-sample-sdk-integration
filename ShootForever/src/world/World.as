@@ -22,6 +22,7 @@ package world
 		private var currTime:Number = 0;
 		private var lastEnemySpawnTime:Number = 0;
 		
+		//Player traits
 		private var imageContainer:DisplayObjectContainer;
 		
 		//The main player object in the world
@@ -63,14 +64,14 @@ package world
 		}
 		
 		//Prepares world for a new game instance
-		public function init():void {
+		public function init(playerInfo:PlayerInfo):void {
 			clear(); //remove existing world objects
 			
 			currTime = 0;
 			lastEnemySpawnTime = 0;
 			
 			//Create player at the bottom of the screen
-			player = new Player(this);
+			player = new Player(this, playerInfo.upgrades);
 			player.pos.x = Constants.GameWidth/2;
 			player.pos.y = Constants.GameHeight - player.image.height/2;
 			addObjectImage(player);
@@ -111,7 +112,11 @@ package world
 			for (i = 0; i < numEnemies; i++) {
 				enemies[i].update(dt);
 				
-				//TODO: If enemy is now offscreen or dead, remove from active enemies
+				//Remove enemy once dead
+				if (enemies[i].alive == false) {
+					removeEnemy((i));
+					i--; numEnemies--;
+				}
 			}
 			
 			//Then player bullets
@@ -122,7 +127,6 @@ package world
 				if (playerBullets[i].alive == false) {
 					removePlayerBullet(i);
 					i--; numPlayerBullets--;
-					//TODO: animated removal, if not just falling off the screen
 				}
 			}
 			
@@ -133,10 +137,13 @@ package world
 				
 				//TODO: If bullet hit something, remove it (and animated removal)
 			}
+			
+			updateEnemyCollisions();
+			updatePlayerCollisions();
 		}
 		
 		//Spawns shots from player periodically
-		public function updatePlayerShooting():void {
+		protected function updatePlayerShooting():void {
 			//If enough time has passed, spawn a new shot
 			var timeSinceShot:Number = currTime - player.lastShotTime;
 			if (timeSinceShot > player.getTimeBetweenShots())
@@ -144,12 +151,67 @@ package world
 		}
 		
 		//Creates enemies as necessary during main game loop
-		public function updateEnemySpawning():void {
+		protected function updateEnemySpawning():void {
 			//PLACEHOLDER BASIC: Spawn an enemy every second or so
 			var timeSinceEnemySpawn:Number = currTime - lastEnemySpawnTime;
 			if (timeSinceEnemySpawn > 1.0) {
 				spawnEnemy(0);
 			}
+		}
+		
+		//Check for enemy's being hit by player bullets
+		//If hit occurs, hurt the enemy and check if it needs to die
+		protected function updateEnemyCollisions():void {
+			var numEnemies:int = enemies.length;
+			var numPlayerBullets:int = playerBullets.length;
+			
+			//For lack of an acceleration data structure, do a full m*n intersection of everything...
+			for (var i:int = 0; i < numEnemies; i++) {
+				if (enemies[i].alive == false) continue;
+				for (var j:int = 0; j < numPlayerBullets; j++) {
+					if (playerBullets[j].alive == false) continue;
+					
+					if (enemies[i].boundBox.intersects(playerBullets[j].boundBox)) {
+						//Remove bullet
+						playerBullets[j].alive = false;
+						
+						//Hurt enemy, or kill if health is 0
+						enemies[i].currHealth -= playerBullets[j].damage;
+						if (enemies[i].currHealth <= 0) {
+							enemies[i].currHealth = 0;
+							enemies[i].alive = false;
+							
+							//TODO: Animate hurt/death with pretty particles
+						}
+					}
+				}
+			}
+		}
+		
+		
+		//Check for player being hit by enemies, enemy bullets, or falling XP
+		//If hit occurs, run appropriate response
+		protected function updatePlayerCollisions():void {
+			var numEnemies:int = enemies.length;
+			var numEnemyBullets:int = enemyBullets.length;
+			//var numXP //TODO, once we have falling XP
+			
+			//Player-enemy collisions
+			for (var i:int = 0; i < numEnemies; i++) {
+				if (enemies[i].alive == false) continue;
+		
+				if (player.checkCollisionRect(enemies[i].boundBox)) {
+					//Remove enemy
+					enemies[i].alive = false;
+						
+					//TODO: Hurt or kill player
+					//TODO: Animate hurt/death with pretty particles
+				}
+			}
+			
+			//TODO: Player-enemy-bullet collisions
+			
+			//TODO: Player-XP collisions
 		}
 		
 		public function spawnPlayerBullet():void {
@@ -158,7 +220,9 @@ package world
 			var bullet:Bullet = bulletPool.checkOut();
 			bullet.alive = true;
 			bullet.radius = player.shotRadius;
+			bullet.damage = player.shotDamage;
 			bullet.pos.setValsFrom(player.pos);
+			bullet.updateBoundingBox(); //init the bound box pos
 			bullet.vel.setVals(0, -player.shotSpeed); //negative so we move updwards
 			addObjectImage(bullet);
 			
@@ -188,7 +252,7 @@ package world
 				
 				//TODO: Starting pos for other enemy types
 			}
-							
+			
 			addObjectImage(enemy);
 			
 			enemies.push(enemy);

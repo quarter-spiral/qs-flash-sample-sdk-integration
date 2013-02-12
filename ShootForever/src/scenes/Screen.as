@@ -9,10 +9,13 @@ package scenes
     {
         public static const CLOSING:String = "closing";
         
-        private var mBackButton:Button;
+        //private var mBackButton:Button;
+		
+		protected var parentGame:Game;
         
-        public function Screen()
+        public function Screen(parentGame:Game)
         {
+			this.parentGame = parentGame;
 //            mBackButton = new Button(Assets.getTexture("ButtonBack"), "Back");
 //            mBackButton.x = Constants.CenterX - mBackButton.width / 2;
 //            mBackButton.y = Constants.GameHeight - mBackButton.height + 1;

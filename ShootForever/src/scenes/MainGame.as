@@ -1,5 +1,6 @@
 package scenes
 {
+    import flash.display.BitmapData;
     import flash.system.System;
     
     import math.Vec2;
@@ -16,6 +17,9 @@ package scenes
     import starling.events.TouchEvent;
     import starling.events.TouchPhase;
     import starling.text.TextField;
+    import starling.textures.Texture;
+    import starling.utils.HAlign;
+    import starling.utils.VAlign;
     import starling.utils.formatString;
     
     import world.World;
@@ -29,8 +33,15 @@ package scenes
 		private var bg:DisplayObject;
 		private var mainPlane:Sprite;		//container for most gameplay object images
         
+		//UI elements
+		private var pauseBtn : Button;
+		private var scoreTxt : TextField;		
+		private var pauseImage : Image;
+		
 		//Most recent mouse position
 		private var mousePos:Vec2;
+		
+		private var paused:Boolean = false;
 		
 //        private var mContainer:Sprite;
 //        private var mFrameCount:int;
@@ -41,9 +52,9 @@ package scenes
 		
 		private var gameWorld:World;
         
-        public function MainGame()
+        public function MainGame(parentGame : Game)
         {
-            super();
+            super(parentGame);
             
             // the container will hold all test objects
 //            mContainer = new Sprite();
@@ -65,11 +76,32 @@ package scenes
 			addChild(bg);
 			
 			mainPlane = new Sprite();
-			addChild(mainPlane);			
+			mainPlane.touchable = false;
+			addChild(mainPlane);	
+			
+			//Pause button/image
+			pauseImage = new Image(Texture.fromBitmapData(new BitmapData(1, 1, true, 0x000000FF)));
+			pauseImage.scaleX = Constants.GameWidth;
+			pauseImage.scaleY = Constants.GameHeight;
+			addChild(pauseImage);
+			pauseImage.touchable = false;
+			pauseImage.visible = false;
+			pauseBtn = new Button(Assets.getTexture("PauseImage"));
+			pauseBtn.addEventListener(Event.TRIGGERED, onPauseClick);
+			pauseBtn.x = Constants.GameWidth - pauseBtn.width;
+			pauseBtn.y = 0;
+			addChild(pauseBtn);
+
+			// Score
+			scoreTxt = new TextField(150, 75, "000000", "Verdana", 20, 0xffffff);
+			scoreTxt.hAlign = HAlign.CENTER;
+			scoreTxt.vAlign = VAlign.TOP;
+			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
+			this.addChild(scoreTxt);
 			
 			//Create the game world
 			gameWorld = new World(mainPlane);
-			gameWorld.init();
+			gameWorld.init(parentGame.getPlayerInfo());
         }
 		
 		public override function start():void {
@@ -98,10 +130,12 @@ package scenes
         
         private function onEnterFrame(event:EnterFrameEvent):void
         {
-			//Basically, just update logical game world...
-			gameWorld.update(event.passedTime);
-			//Then update the graphical representation thereof
-			gameWorld.updateGraphics();
+			if (!paused) {
+				//Basically, just update logical game world...
+				gameWorld.update(event.passedTime);
+				//Then update the graphical representation thereof
+				gameWorld.updateGraphics();
+			}
         }
 		
 		private function onTouch(event:TouchEvent):void
@@ -118,6 +152,15 @@ package scenes
 						gameWorld.mouseClicked = true;
 				}
 			}
+		}
+		
+		private function updateScoreText():void {
+			scoreTxt.text = parentGame.getPlayerInfo().currScore.toString();
+		}
+		
+		private function onPauseClick(event:Event):void {
+			paused = !paused;
+			pauseImage.visible = paused;
 		}
         
 //        private function onStartButtonTriggered(event:Event):void
