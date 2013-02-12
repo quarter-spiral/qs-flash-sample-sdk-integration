@@ -3,11 +3,48 @@ package
     public class AssetEmbeds
     {
         // Bitmaps
+		
+		[Embed(source = "../media/textures/black_square.png")]
+		public static const BlackSquare:Class;
+		
 		[Embed(source = "../media/textures/player.png")]
 		public static const PlayerImage:Class;
 		
 		[Embed(source = "../media/textures/bullet.png")]
 		public static const BulletImage:Class;
+		
+		[Embed(source = "../media/textures/xp_tiny.png")]
+		public static const XpTinyImage:Class;
+		
+		[Embed(source = "../media/textures/xp_small.png")]
+		public static const XpSmallImage:Class;
+		
+		[Embed(source = "../media/textures/xp_medsmall.png")]
+		public static const XpMedSmallImage:Class;
+		
+		[Embed(source = "../media/textures/xp_medium.png")]
+		public static const XpMediumImage:Class;
+		
+		[Embed(source = "../media/textures/xp_medlarge.png")]
+		public static const XpMedLargeImage:Class;
+		
+		[Embed(source = "../media/textures/xp_large.png")]
+		public static const XpLargeImage:Class;
+		
+		[Embed(source = "../media/textures/xp_bar_bg.png")]
+		public static const XpBarBg:Class;
+		
+		[Embed(source = "../media/textures/xp_bar_fill.png")]
+		public static const XpBarFill:Class;
+		
+		[Embed(source = "../media/textures/xp_bar_mini_bg.png")]
+		public static const XpBarMiniBg:Class;
+		
+		[Embed(source = "../media/textures/xp_bar_mini_fill.png")]
+		public static const XpBarMiniFill:Class;
+		
+		[Embed(source = "../media/textures/bomb.png")]
+		public static const BombImage:Class;
 		
 		[Embed(source = "../media/textures/pause.png")]
 		public static const PauseImage:Class;
@@ -15,11 +52,17 @@ package
 		[Embed(source = "../media/textures/start.png")]
 		public static const StartImage:Class;
 		
+		[Embed(source = "../media/textures/treasure_chest.png")]
+		public static const TreasureChestImage:Class;
+		
 		[Embed(source = "../media/textures/enemy1.png")]
 		public static const Enemy1Image:Class;
 
 		[Embed(source = "../media/textures/enemy2.png")]
 		public static const Enemy2Image:Class;
+
+		[Embed(source = "../media/textures/star.png")]
+		public static const StarImage:Class;
 		
 		//STARLING DEMO:
         

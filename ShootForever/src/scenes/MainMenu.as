@@ -1,6 +1,6 @@
 package scenes
-{
-	import flash.display.BitmapData;
+{	
+	import flash.net.SharedObject;
 	
 	import starling.display.BlendMode;
 	import starling.display.Button;
@@ -8,7 +8,6 @@ package scenes
 	import starling.display.Image;
 	import starling.events.Event;
 	import starling.text.TextField;
-	import starling.textures.Texture;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
 
@@ -32,8 +31,8 @@ package scenes
 			super(parentGame);
 			
 			//TEST: Set better-than-initial player stats
-			parentGame.getPlayerInfo().playerLevel = 3;
-			parentGame.getPlayerInfo().highScore = 12345;
+			//parentGame.getPlayerInfo().playerLevel = 3;
+			//parentGame.getPlayerInfo().highScore = 12345;
 			
 			bg = new Image(Assets.getTexture("Background"));
 			bg.blendMode = BlendMode.NONE;
@@ -63,16 +62,16 @@ package scenes
 			this.addChild(playerNameTxt);
 			
 			highScoreLbl = new TextField(150, 75, "High Score: ", Constants.MAIN_FONT, 16, 0xffffff);
-			highScoreLbl.hAlign = HAlign.CENTER;
+			highScoreLbl.hAlign = HAlign.LEFT;
 			highScoreLbl.vAlign = VAlign.TOP;
 			highScoreLbl.x = int(Constants.GameWidth*0.25 - highScoreLbl.width/2);
 			highScoreLbl.y = 450;
 			this.addChild(highScoreLbl);
 			
 			highScoreTxt = new TextField(150, 75, "0", Constants.MAIN_FONT, 16, 0xffffff);
-			highScoreTxt.hAlign = HAlign.CENTER;
+			highScoreTxt.hAlign = HAlign.LEFT;
 			highScoreTxt.vAlign = VAlign.TOP;
-			highScoreTxt.x = int(Constants.GameWidth*0.75 - highScoreTxt.width/2);
+			highScoreTxt.x = int(highScoreLbl.x + highScoreLbl.width + 50);
 			highScoreTxt.y = 450;
 			this.addChild(highScoreTxt);
 			
@@ -83,10 +82,10 @@ package scenes
 			rankLbl.y = 470;
 			this.addChild(rankLbl);
 			
-			rankTxt = new TextField(150, 75, "", Constants.MAIN_FONT, 16, 0xffffff);
-			rankTxt.hAlign = HAlign.CENTER;
+			rankTxt = new TextField(300, 75, "", Constants.MAIN_FONT, 16, 0xffffff);
+			rankTxt.hAlign = HAlign.LEFT;
 			rankTxt.vAlign = VAlign.TOP;
-			rankTxt.x = int(Constants.GameWidth*0.75 - rankTxt.width/2);
+			rankTxt.x = int(rankLbl.x + rankLbl.width + 50);
 			rankTxt.y = 470;
 			this.addChild(rankTxt);
 			
@@ -107,11 +106,12 @@ package scenes
 		}
 		
 		protected function onStartClick(event:Event):void {
-			parentGame.showScene("MainGame");
+			parentGame.showScreen("MainGame");
 		}
 		
 		protected function onClearDataClick(event:Event):void {
-			parentGame.getPlayerInfo().reset();
+			parentGame.resetPlayerInfo();
+			
 			refreshFromPlayerInfo();
 		}
 	}

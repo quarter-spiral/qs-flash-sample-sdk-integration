@@ -1,5 +1,7 @@
 package world
 {	
+	import flash.geom.Rectangle;
+	
 	import math.Vec2;
 	
 	import starling.display.DisplayObject;
@@ -13,6 +15,12 @@ package world
 		//Position in game world
 		public var pos:Vec2;
 		
+		//Size of collision box
+		public var size:Vec2;
+		
+		//Current bounding box for this object (in world space)
+		public var boundBox:Rectangle;
+		
 		//Graphical representation of this game object
 		public var image:starling.display.DisplayObject;
 		
@@ -21,12 +29,16 @@ package world
 		{
 			this.parentWorld = parentWorld;
 			pos = new Vec2();
+			size = new Vec2();
+			boundBox = new Rectangle();
 		}
 		
 		//Runs any update logic for this game object for current world state,
 		//advancing the game by dt seconds.
 		public function update(dt:Number):void {
-			//OVERRIDE FOR SPECIFIC BEHAVIOR
+			//OVERRIDE FOR SPECIFIC BEHAVIOR, but do call this as well
+			
+			updateBoundingBox();
 		}
 		
 		public function updateGraphics():void {
@@ -43,6 +55,11 @@ package world
 				image.dispose();
 				image = null;
 			}
+		}
+
+		public function updateBoundingBox():void {
+			//Bounding box is centered about current position
+			boundBox.setTo(pos.x-size.x*0.5, pos.y-size.y*0.5, size.x, size.y);
 		}
 	}
 }

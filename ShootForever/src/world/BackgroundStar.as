@@ -6,21 +6,16 @@ package world
 	
 	import starling.display.Image;
 
-	//A bullet/laser/what-have-you fired by the player or an enemy
-	public class Bullet extends GameObject
+	/** Just a pretty background star.... no more, no less */
+	public class BackgroundStar extends GameObject
 	{
-		//Velocity of bullet
 		public var vel:Vec2;
-		
-		//Indicates if this bullet is active or not still (set to false when exiting game)
 		public var alive:Boolean;
 		
-		public var damage:Number;
-	
 		//Internal util values (to prevent a lot of object allocation)
 		protected var deltaPos:Vec2;
 		
-		public function Bullet(parentWorld:World)
+		public function BackgroundStar(parentWorld:World)
 		{
 			super(parentWorld);
 			
@@ -30,9 +25,10 @@ package world
 			
 			alive = true;
 			
-			image = new Image(Assets.getTexture("BulletImage"));
-			image.pivotX = image.width/2;
-			image.pivotY = image.height/2;
+			image = new Image(Assets.getTexture("StarImage"));
+			image.width = image.height = 2;
+			//image.pivotX = image.width/2;
+			//image.pivotY = image.height/2;
 			
 			deltaPos = new Vec2(); 
 		}

@@ -1,11 +1,11 @@
 package scenes
 {
-    import flash.display.BitmapData;
-    import flash.system.System;
+    import flash.ui.Keyboard;
     
     import math.Vec2;
     
-    import starling.core.Starling;
+    import scenes.ui.XpBar;
+    
     import starling.display.BlendMode;
     import starling.display.Button;
     import starling.display.DisplayObject;
@@ -13,16 +13,16 @@ package scenes
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
     import starling.events.Event;
+    import starling.events.KeyboardEvent;
     import starling.events.Touch;
     import starling.events.TouchEvent;
     import starling.events.TouchPhase;
     import starling.text.TextField;
-    import starling.textures.Texture;
     import starling.utils.HAlign;
     import starling.utils.VAlign;
-    import starling.utils.formatString;
     
     import world.World;
+    import world.pools.ImagePool;
 
 	/** Runs the primary gameplay for ShootForever */
     public class MainGame extends Screen
@@ -30,59 +30,79 @@ package scenes
 //        private var mStartButton:Button;
 //        private var mResultText:TextField;
 		
-		private var bg:DisplayObject;
+		private var bg:DisplayObject;		//the absolute farthest backdrop
 		private var mainPlane:Sprite;		//container for most gameplay object images
+		private var bgPlane:Sprite;			//container for bg gameplay object images;
         
 		//UI elements
 		private var pauseBtn : Button;
-		private var scoreTxt : TextField;		
+		private var scoreTxt : TextField;	
+		private var scoreMultTxt : TextField;
+		private var xpBar : XpBar;
 		private var pauseImage : Image;
+		private var bombContainer : Sprite;
+		
+		private var bombPool:ImagePool;
+		private var bombsOnBar:Vector.<Image>;
 		
 		//Most recent mouse position
 		private var mousePos:Vec2;
 		
 		private var paused:Boolean = false;
 		
-//        private var mContainer:Sprite;
-//        private var mFrameCount:int;
-//        private var mElapsed:Number;
-//        private var mStarted:Boolean;
-//        private var mFailCount:int;
-//        private var mWaitFrames:int;
-		
 		private var gameWorld:World;
         
         public function MainGame(parentGame : Game)
         {
             super(parentGame);
+			
+			bombPool = new ImagePool(createBomb, cleanBomb, 3, 20);
+			bombsOnBar = new Vector.<Image>();
             
-            // the container will hold all test objects
-//            mContainer = new Sprite();
-//            mContainer.touchable = false; // we do not need touch events on the test objects -- 
-//                                          // thus, it is more efficient to disable them.
-//            addChildAt(mContainer, 0);
-//            
-//            mStartButton = new Button(Assets.getTexture("ButtonNormal"), "Start benchmark");
-//            mStartButton.addEventListener(Event.TRIGGERED, onStartButtonTriggered);
-//            mStartButton.x = Constants.CenterX - int(mStartButton.width / 2);
-//            mStartButton.y = 20;
-//            addChild(mStartButton);
-            
-//            mStarted = false;
-//            mElapsed = 0.0;
-
 			bg = new Image(Assets.getTexture("Background"));
 			bg.blendMode = BlendMode.NONE;
 			addChild(bg);
 			
+			bgPlane = new Sprite();
+			bgPlane.touchable = false;
+			addChild(bgPlane);
+			
 			mainPlane = new Sprite();
 			mainPlane.touchable = false;
 			addChild(mainPlane);	
+
+			// Score
+			scoreTxt = new TextField(150, 75, "000000", Constants.MAIN_FONT, 20, 0xffffff);
+			scoreTxt.hAlign = HAlign.CENTER;
+			scoreTxt.vAlign = VAlign.TOP;
+			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
+			this.addChild(scoreTxt);
 			
-			//Pause button/image
-			pauseImage = new Image(Texture.fromBitmapData(new BitmapData(1, 1, true, 0x000000FF)));
+			//Score multiplier
+			scoreMultTxt = new TextField(100,75, "", Constants.MAIN_FONT, 30, 0xffffff);
+			scoreMultTxt.hAlign = HAlign.CENTER;
+			scoreMultTxt.vAlign = VAlign.TOP;
+			scoreMultTxt.x = int(Constants.GameWidth/2 - scoreMultTxt.width/2);
+			scoreMultTxt.y = scoreTxt.y + 25;
+			this.addChild(scoreMultTxt);
+			
+			//XP
+			xpBar = new XpBar(true);
+			xpBar.x = Constants.GameWidth - xpBar.width - 5;
+			xpBar.y = Constants.GameHeight - xpBar.height - 5;
+			this.addChild(xpBar);
+			
+			//Bomb container
+			bombContainer = new Sprite();
+			bombContainer.x = 5;
+			bombContainer.y = Constants.GameHeight - 20;
+			this.addChild(bombContainer);
+			
+			//Pause button/cover image
+			pauseImage = new Image(Assets.getTexture("BlackSquare"));
 			pauseImage.scaleX = Constants.GameWidth;
 			pauseImage.scaleY = Constants.GameHeight;
+			pauseImage.alpha = 0.6;
 			addChild(pauseImage);
 			pauseImage.touchable = false;
 			pauseImage.visible = false;
@@ -91,16 +111,9 @@ package scenes
 			pauseBtn.x = Constants.GameWidth - pauseBtn.width;
 			pauseBtn.y = 0;
 			addChild(pauseBtn);
-
-			// Score
-			scoreTxt = new TextField(150, 75, "000000", "Verdana", 20, 0xffffff);
-			scoreTxt.hAlign = HAlign.CENTER;
-			scoreTxt.vAlign = VAlign.TOP;
-			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
-			this.addChild(scoreTxt);
 			
 			//Create the game world
-			gameWorld = new World(mainPlane);
+			gameWorld = new World(mainPlane, bgPlane);
 			gameWorld.init(parentGame.getPlayerInfo());
         }
 		
@@ -110,6 +123,10 @@ package scenes
 			
 			//Start main game loop
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		
+			//Init XP bar limits for player's current level (may be updated during game as xp is collected) 
+			xpBar.setLevel(parentGame.getPlayerInfo().playerLevel);
+			updateXPBar();
 		}
 		
 		public override function close(): void {
@@ -131,10 +148,22 @@ package scenes
         private function onEnterFrame(event:EnterFrameEvent):void
         {
 			if (!paused) {
+				//Limit size of updates to about 10 Hz to prevent big update steps
+				var updateDt:Number = Math.min(event.passedTime, 0.1);
+					
 				//Basically, just update logical game world...
-				gameWorld.update(event.passedTime);
+				gameWorld.update(updateDt);
 				//Then update the graphical representation thereof
 				gameWorld.updateGraphics();
+				
+				//Update score/XP (TODO: these don't always need to be updated every frame. Update only on events from gameWorld)
+				updateScoreText();
+				updateXPBar();
+				updateBombsBar();
+				
+				//If player is dead, finish the game 
+				if (gameWorld.isPlayerAlive == false)
+					runGameEnd();
 			}
         }
 		
@@ -155,69 +184,78 @@ package scenes
 		}
 		
 		private function updateScoreText():void {
-			scoreTxt.text = parentGame.getPlayerInfo().currScore.toString();
+			scoreMultTxt.text = "x" + gameWorld.gameInfo.currMultiplier.toString();
+			scoreTxt.text = gameWorld.gameInfo.getScore().toString();
+		}
+		
+		private function updateXPBar():void {
+			xpBar.setCurrXp(gameWorld.gameInfo.getXp());
+			
+			//If player leveled up, update the XP bar limits
+			if (gameWorld.gameInfo.getLevel() >  xpBar.getLevel()) 
+				xpBar.setLevel(gameWorld.gameInfo.getLevel());
+		}
+		
+		private function updateBombsBar():void {
+			var numBombsDelta:int = gameWorld.gameInfo.currBombs - bombsOnBar.length;
+			var i:int = 0;
+			//Remove as needed...
+			if (numBombsDelta < 0) {
+				var removedBombs:Vector.<Image> = bombsOnBar.splice(bombsOnBar.length + numBombsDelta, -numBombsDelta);
+				for (i = 0; i < removedBombs.length; i++) 
+					bombPool.checkIn(removedBombs[i]);
+			}
+			//Add as needed...
+			else if (numBombsDelta > 0) {
+				for (i = 0; i < numBombsDelta; i++) {
+					var bomb:Image = bombPool.checkOut();
+					bomb.x = bombsOnBar.length * bomb.width;
+					bombContainer.addChild(bomb);
+					bombsOnBar.push(bomb);
+				}
+			}
 		}
 		
 		private function onPauseClick(event:Event):void {
 			paused = !paused;
 			pauseImage.visible = paused;
 		}
-        
-//        private function onStartButtonTriggered(event:Event):void
-//        {
-//            trace("Starting benchmark");
-//            
-//            mStartButton.visible = false;
-//            mStarted = true;
-//            mFailCount = 0;
-//            mWaitFrames = 2;
-//            mFrameCount = 0;
-//            
-//            if (mResultText) 
-//            {
-//                mResultText.removeFromParent(true);
-//                mResultText = null;
-//            }
-//            
-//            addTestObjects();
-//        }
-//        
-//        private function addTestObjects():void
-//        {
-//            var padding:int = 15;
-//            var numObjects:int = mFailCount > 20 ? 2 : 10;
-//            
-//            for (var i:int = 0; i<numObjects; ++i)
-//            {
-//                var egg:Image = new Image(Assets.getTexture("BenchmarkObject"));
-//                egg.x = padding + Math.random() * (Constants.GameWidth - 2 * padding);
-//                egg.y = padding + Math.random() * (Constants.GameHeight - 2 * padding);
-//                mContainer.addChild(egg);
-//            }
-//        }
-//        
-//        private function benchmarkComplete():void
-//        {
-//            mStarted = false;
-//            mStartButton.visible = true;
-//            
-//            var fps:int = Starling.current.nativeStage.frameRate;
-//            
-//            trace("Benchmark complete!");
-//            trace("FPS: " + fps);
-//            trace("Number of objects: " + mContainer.numChildren);
-//            
-//            var resultString:String = formatString("Result:\n{0} objects\nwith {1} fps",
-//                                                   mContainer.numChildren, fps);
-//            mResultText = new TextField(240, 200, resultString);
-//            mResultText.fontSize = 30;
-//            mResultText.x = Constants.CenterX - mResultText.width / 2;
-//            mResultText.y = Constants.CenterY - mResultText.height / 2;
-//            
-//            addChild(mResultText);
-//            
-//            mContainer.removeChildren();
-//            System.pauseForGCIfCollectionImminent();
-//        }
+		
+		public override function onKey(event:KeyboardEvent):void {
+			//Debug hotkeys
+			if (event.keyCode == Keyboard.K) {
+				gameWorld.killPlayer(false);
+				runGameEnd();
+			}
+			else if (event.keyCode == Keyboard.X) {
+				gameWorld.awardXpToPlayer(200);
+			}
+			else if (event.keyCode == Keyboard.T) {
+				gameWorld.spawnEnemy(Constants.TREASURE_CHEST_ID);
+			}
+			else if (event.keyCode == Keyboard.B) {
+				gameWorld.gameInfo.currBombs++;
+			}
+		}
+		
+		private function runGameEnd():void {
+			//Save the game info
+			parentGame.getPlayerInfo().latestGameInfo = gameWorld.gameInfo;
+			
+			//Open the game over screen
+			parentGame.showScreen("GameOver");
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////
+		//Object pool creators/cleaners
+		///////////////////////////////////////////////////////////////////////////////////////////////
+		private function createBomb():Image {
+			var bomb:Image = new Image(Assets.getTexture("BombImage"));
+			return bomb;
+		}
+		
+		private function cleanBomb(bomb:Image):void {
+			if (bomb.parent) bomb.parent.removeChild(bomb);
+		}
     }
 }

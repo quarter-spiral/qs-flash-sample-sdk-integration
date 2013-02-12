@@ -35,6 +35,8 @@ package world
 			delta = new Vec2();
 			closest = new Vec2();
 			
+			size.setVals(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
+			
 			//Placeholder static image. TODO: animated player image that depends on state
 			image = new Image(Assets.getTexture("PlayerImage"));
 			image.pivotX = image.width/2;
@@ -58,35 +60,9 @@ package world
 		
 		//Returns true if player is currently colliding with given rectangle
 		public function checkCollisionRect(rect:Rectangle):Boolean {
-			//We consider the player to be circular, so do a rectangle-circle collision check
-			//(assuming rectangle is axis-aligned)
+			return boundBox.intersects(rect);
 			
-			//Source: http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
-	
-			// Find the closest point to the circle within the rectangle
-			closest.setVals(Math.max(Math.min(pos.x, rect.left), rect.right), Math.max(Math.min(pos.y, rect.top), rect.bottom));
-			
-			// Calculate the distance between the circle's center and this closest point
-			delta.setValsFrom(pos);
-			delta.sub(closest);
-			
-			// If the distance is less than the circle's radius, an intersection occurs
-			var distSqrd:Number = delta.lensqrd();
-			if (distSqrd < Constants.PLAYER_RADIUS * Constants.PLAYER_RADIUS)
-				return true;
-			
-			return false;
-		}
-		
-		//Returns true if player is currently colliding with given point
-		public function checkCollisionPoint(x:Number, y:Number):Boolean {
-			delta.setVals(x, y);
-			delta.sub(this.pos);
-			
-			if (delta.lensqrd() < Constants.PLAYER_RADIUS*Constants.PLAYER_RADIUS)
-				return true;
-			
-			return false;
+			//TODO: Switch back to circle-rectangle collisions if we have time in the future
 		}
 	}
 }

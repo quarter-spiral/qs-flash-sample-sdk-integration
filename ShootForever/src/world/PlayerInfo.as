@@ -5,10 +5,15 @@ package world
 	{
 		public var name:String;
 		public var highScore:int;
-		public var currScore:int;
 		public var playerLevel:int;
+		public var currentXP:int;
+		public var currentSpendableXP:int;
 		
 		public var upgrades:PlayerUpgrades;
+		
+		//A hacky way to store info from latest game so we can update 
+		//the player state based on those results
+		public var latestGameInfo:GameInfo;
 		
 		public function PlayerInfo()
 		{
@@ -19,8 +24,9 @@ package world
 		public function reset():void {
 			name = "Player";
 			highScore = 0;
-			currScore = 0;
 			playerLevel = 0;
+			currentXP = 0;
+			currentSpendableXP = 0;
 			upgrades = new PlayerUpgrades();
 		}
 	}

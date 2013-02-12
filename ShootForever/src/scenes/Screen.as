@@ -3,6 +3,7 @@ package scenes
     import starling.display.Button;
     import starling.display.Sprite;
     import starling.events.Event;
+    import starling.events.KeyboardEvent;
     
 	/** Based game screen class for ShootForever */
     public class Screen extends Sprite
@@ -31,5 +32,8 @@ package scenes
 		public function close():void {
 			dispatchEvent(new Event(CLOSING, true));
 		}
+		
+		//React to a keyboard event (forwarded by listener on root Game class)
+		public function onKey(event:KeyboardEvent):void {}
     }
 }
