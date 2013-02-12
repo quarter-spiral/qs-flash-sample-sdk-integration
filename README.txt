@@ -1,4 +1,4 @@
-SHOOT FOREVER: A demo of Quarter Spiral's functionality in a Flash shmup
+SHOOT SHOOT FOREVER: A demo of Quarter Spiral's functionality in a Flash shmup. For more info on Quarter Spiral's game publishing platform visit http://www.quarterspiral.com
 
 This game was built using the Starling framework, an optimized 2D-graphics engine
 for flash. See more at http://gamua.com/starling/
