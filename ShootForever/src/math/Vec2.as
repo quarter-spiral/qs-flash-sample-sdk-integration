@@ -1,5 +1,7 @@
 package math
 {
+	import starling.utils.deg2rad;
+
 	/** Basic 2D floating point vector */
 	public class Vec2
 	{
@@ -39,6 +41,13 @@ package math
 				x /= magnitude;
 				y /= magnitude;
 			}
+		}
+		
+		//Sets this vector to be in the direction of angle with speed magnitude
+		//angle is in degrees
+		public function setMovement(angle:Number, speed:Number):void {
+			this.x = Math.cos(deg2rad(angle))* speed;
+			this.y = Math.sin(deg2rad(angle))* speed;
 		}
 	}
 }

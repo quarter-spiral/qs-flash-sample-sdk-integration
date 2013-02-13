@@ -232,9 +232,41 @@ package world
 			var timeSinceEnemySpawn:Number = currTime - lastEnemySpawnTime;
 			if (timeSinceEnemySpawn > 1.0) {
 				//PLACEHOLDER: Spawn random enemy types
-				var NumEnemyTypes:int = Constants.ENEMY_PROPERTIES.length;
+				/*var NumEnemyTypes:int = Constants.ENEMY_PROPERTIES.length;
 				var enemyType:int = RandomUtils.randomInt(1, NumEnemyTypes-1);
-				spawnEnemy(enemyType);
+				spawnEnemy(enemyType);*/
+				
+				//spawn single enemy
+				//spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
+				
+				//TEST spawn a wave of 5 basics
+				var tempMove:int = math.RandomUtils.randomInt(0,4);
+				
+				for(var i:int = 0;i<5;i++) {
+					var enemy:Enemy = spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
+					
+					switch(i) {
+						case 0:
+							enemy.setStartPos(100 + i*50, -30);
+							break;
+						case 1:
+							enemy.setStartPos(100 + i*50, -20);
+							break;
+						case 2:
+							enemy.setStartPos(100 + i*50, -10);
+							break;
+						case 3:
+							enemy.setStartPos(100 + i*50, -20);
+							break;
+						case 4:
+							enemy.setStartPos(100 + i*50, -30);
+							break;
+					}
+					
+					//enemy.setStartPos(100 + i*50, -10);
+					enemy.moveType = tempMove;	
+					enemy.setInitialVelocity();
+				}
 			}
 		}
 		
@@ -368,7 +400,7 @@ package world
 			bulletPool.checkIn(removedBullet);
 		}
 		
-		public function spawnEnemy(typeNum:int):void {
+		public function spawnEnemy(typeNum:int):Enemy {
 			if (typeNum == Constants.TREASURE_CHEST_ID)
 				lastChestSpawnTime = currTime;
 			else
@@ -380,7 +412,7 @@ package world
 			enemy.hasDarted = false;
 			enemy.setType(typeNum);
 			
-			//Set enemy spawn position based on type
+			//Set enemy spawn initial variables based on type
 			var startXPct:Number = 0;
 			var startYPct:Number = 0;
 			switch (typeNum) {
@@ -397,7 +429,8 @@ package world
 				}
 				case Constants.BASIC_ANGLED_ENEMY_ID: {
 					startXPct = 0.3 + Math.random()*0.4;
-					enemy.setStartPos(startXPct * Constants.GameWidth, -enemy.boundBox.height/2);	
+					enemy.setStartPos(startXPct * Constants.GameWidth, -enemy.boundBox.height/2);
+					enemy.moveType = math.RandomUtils.randomInt(0,4);
 					break;
 				}
 				case Constants.HORIZONTAL_ENEMY_ID:
@@ -412,6 +445,8 @@ package world
 			
 			addObjectImage(enemy);
 			enemies.push(enemy);
+			
+			return enemy;
 		}
 		
 		public function removeEnemy(enemyIdx:int):void {
@@ -427,7 +462,7 @@ package world
 			xpObj.setProperties(props);
 			xpObj.pos.setValsFrom(startPos);
 			//Start with a random "upward" velocity
-			xpObj.vel.setVals((Math.random() - 0.5) * Constants.GameWidth*0.25, -100);
+			xpObj.vel.setVals((Math.random() - 0.5) * Constants.GameWidth*0.5, -200-Math.random()*100);
 			
 			addObjectImage(xpObj);
 			xpObjs.push(xpObj);

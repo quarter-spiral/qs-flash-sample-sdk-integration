@@ -56,7 +56,7 @@ package
 		public static var XP_PROPERTIES:Vector.<XpProperties> = new Vector.<XpProperties>();
 		private static var totalXpWeight:int = 0;
 		
-		public static const XP_GRAVITY:Number = 10; //Affects how quickly XP falls from baddies
+		public static const XP_GRAVITY:Number = 12; //Affects how quickly XP falls from baddies
 		
 		//Xp costs in upgrade store
 		public static const UPGRADE_SHOTS_PER_SECOND_COST:Number = 500;

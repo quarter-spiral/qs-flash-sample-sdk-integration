@@ -2,9 +2,11 @@ package world
 {
 	import flash.geom.Rectangle;
 	
+	import math.RandomUtils;
 	import math.Vec2;
 	
 	import starling.display.Image;
+	import starling.utils.deg2rad;
 
 	//A logical enemy of the player in the game world
 	public class Enemy extends GameObject
@@ -25,6 +27,9 @@ package world
 		
 		//The properties object to which we're linked
 		public var props:EnemyProperties;
+		
+		//sets the existence of moveType variable
+		public var moveType:int;
 		
 		//Internal util values (to prevent a lot of object allocation)
 		protected var deltaPos:Vec2;
@@ -65,8 +70,29 @@ package world
 				case Constants.BASIC_ANGLED_ENEMY_ID:
 				default:					
 					//Set movement direction toward player's position
-					getDirectionToPlayer(vel);
-					vel.scale(props.speed);
+					/*getDirectionToPlayer(vel);
+					vel.scale(props.speed);*/
+					
+					//test of type method
+					switch (this.moveType) {
+						case 0:
+							//vel.setVals(0,100);
+							vel.setMovement(80,props.speed);
+							break;
+						case 1:
+							vel.setMovement(85,props.speed);
+							break;
+						case 2:
+							vel.setMovement(90,props.speed);
+							break;
+						case 3:
+							vel.setMovement(95,props.speed);
+							break;
+						case 4:
+							vel.setMovement(100,props.speed);
+							break;
+					}
+					
 					break;
 				case Constants.HORIZONTAL_ENEMY_ID:
 					vel.setVals(props.speed, 0);
