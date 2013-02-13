@@ -33,8 +33,8 @@ package
 		//GAMEPLAY CONSTANTS
 		
 		//PLAYER
-		public static const PLAYER_WIDTH:int = 50;
-		public static const PLAYER_HEIGHT:int = 30;
+		public static const PLAYER_WIDTH:int = 1;//50;
+		public static const PLAYER_HEIGHT:int = 1;//30;
 		
 		public static const PLAYER_BULLET_RADIUS:int = 2;
 		

@@ -167,12 +167,18 @@ package world
 			
 			//If moved out of game bounds, no longer alive
 			//(note that we expand the "out of bounds" area a bit so that enemies can start off-screen)
-			var worldBounds:Rectangle = parentWorld.getWorldBounds();
+			/*var worldBounds:Rectangle = parentWorld.getWorldBounds();
 			worldBoundsPadded.setTo(worldBounds.x - boundBox.width*0.5, 
 									worldBounds.y - boundBox.height*0.5, 
 									worldBounds.width + boundBox.width*0.5,
 									worldBounds.height + boundBox.height*0.5);
 			if (!worldBoundsPadded.intersects(boundBox))
+				alive = false;
+			
+			super.update(dt);*/
+			
+			//ETHAN TEST - kill enemies below screen
+			if(pos.y>Constants.GameHeight+50||pos.x<-500||pos.x>Constants.GameHeight+500) 
 				alive = false;
 			
 			super.update(dt);

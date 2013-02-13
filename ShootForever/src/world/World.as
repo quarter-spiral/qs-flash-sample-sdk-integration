@@ -239,7 +239,7 @@ package world
 				//spawn single enemy
 				//spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
 				
-				//TEST spawn a wave of 5 basics
+				//ETHAN TEST spawn a wave of 5 basics
 				var tempMove:int = math.RandomUtils.randomInt(0,4);
 				
 				for(var i:int = 0;i<5;i++) {
@@ -247,23 +247,22 @@ package world
 					
 					switch(i) {
 						case 0:
-							enemy.setStartPos(100 + i*50, -30);
+							enemy.setStartPos(100 + i*50, -120);
 							break;
 						case 1:
-							enemy.setStartPos(100 + i*50, -20);
+							enemy.setStartPos(100 + i*50, -70);
 							break;
 						case 2:
-							enemy.setStartPos(100 + i*50, -10);
-							break;
-						case 3:
 							enemy.setStartPos(100 + i*50, -20);
 							break;
+						case 3:
+							enemy.setStartPos(100 + i*50, -70);
+							break;
 						case 4:
-							enemy.setStartPos(100 + i*50, -30);
+							enemy.setStartPos(100 + i*50, -120);
 							break;
 					}
 					
-					//enemy.setStartPos(100 + i*50, -10);
 					enemy.moveType = tempMove;	
 					enemy.setInitialVelocity();
 				}
@@ -274,7 +273,8 @@ package world
 			//PLACEHOLDER BASIC: Spawn a chest every so often
 			var timeSinceChestSpawn:Number = currTime - lastChestSpawnTime;
 			if (timeSinceChestSpawn > 10.0) {
-				spawnEnemy(Constants.TREASURE_CHEST_ID);
+				var enemy:Enemy = spawnEnemy(Constants.TREASURE_CHEST_ID);
+				enemy.setInitialVelocity();
 			}
 		}
 		
@@ -441,7 +441,7 @@ package world
 					break;
 			}
 			
-			enemy.setInitialVelocity();
+			//enemy.setInitialVelocity(); //TEST veloticy is only set by enemy creation
 			
 			addObjectImage(enemy);
 			enemies.push(enemy);
