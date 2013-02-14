@@ -48,6 +48,8 @@ package world
 		private var xpObjs:Vector.<XpObject>;
 		//All active background stars in the world
 		private var stars:Vector.<BackgroundStar>;
+		//Counter of # of times enemies have been spawned
+		private var spawnCounter:int = 0;
 		
 		//Temp util objects to avoid a bunch of object creations on each frame
 		private var playerMouseDelta:Vec2;
@@ -239,33 +241,42 @@ package world
 				//spawn single enemy
 				//spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
 				
-				//ETHAN TEST spawn a wave of 5 basics
-				var tempMove:int = math.RandomUtils.randomInt(0,4);
+				var enemy:Enemy;
 				
-				for(var i:int = 0;i<5;i++) {
-					var enemy:Enemy = spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
-					
-					switch(i) {
-						case 0:
-							enemy.setStartPos(100 + i*50, -120);
-							break;
-						case 1:
-							enemy.setStartPos(100 + i*50, -70);
-							break;
-						case 2:
-							enemy.setStartPos(100 + i*50, -20);
-							break;
-						case 3:
-							enemy.setStartPos(100 + i*50, -70);
-							break;
-						case 4:
-							enemy.setStartPos(100 + i*50, -120);
-							break;
-					}
-					
-					enemy.moveType = tempMove;	
+				//5 singles then a wave
+				if(spawnCounter<5) {
+					enemy = spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
 					enemy.setInitialVelocity();
+				} else {
+					var tempMove:int = math.RandomUtils.randomInt(0,4);
+					
+					for(var i:int = 0;i<5;i++) {
+						enemy = spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
+						
+						switch(i) {
+							case 0:
+								enemy.setStartPos(100 + i*50, -120);
+								break;
+							case 1:
+								enemy.setStartPos(100 + i*50, -70);
+								break;
+							case 2:
+								enemy.setStartPos(100 + i*50, -20);
+								break;
+							case 3:
+								enemy.setStartPos(100 + i*50, -70);
+								break;
+							case 4:
+								enemy.setStartPos(100 + i*50, -120);
+								break;
+						}
+						
+						enemy.moveType = tempMove;	
+						enemy.setInitialVelocity();
+					}
 				}
+				
+				spawnCounter += 1;
 			}
 		}
 		
