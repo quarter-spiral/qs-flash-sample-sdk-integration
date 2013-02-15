@@ -41,7 +41,7 @@ package world
 		protected function updateEnemySpawning():void {
 			//PLACEHOLDER BASIC: Spawn an enemy every second or so
 			var timeSinceEnemySpawn:Number = parentWorld.getTime() - lastEnemySpawnTime;
-			if (timeSinceEnemySpawn > .5) {
+			if (timeSinceEnemySpawn > .75) {
 				//PLACEHOLDER: Spawn random enemy types
 				/*var NumEnemyTypes:int = Constants.ENEMY_PROPERTIES.length;
 				var enemyType:int = RandomUtils.randomInt(1, NumEnemyTypes-1);
@@ -51,7 +51,7 @@ package world
 				//spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
 				
 				var enemy:Enemy;
-				var waveType:int = math.RandomUtils.randomInt(0,2);
+				var waveType:int = math.RandomUtils.randomInt(0,3);
 				var tempMove:int = math.RandomUtils.randomInt(0,4);
 				
 				//5 singles then a wave
@@ -90,9 +90,15 @@ package world
 							break;
 						case 2:
 							//horizontal dart enemy
-							enemy = spawnObject(Constants.DART_HORIZONTAL_ENEMY_ID);
+							enemy = spawnObject(Constants.DART_LEFT_ENEMY_ID);
 							enemy.moveType = tempMove;
-							enemy.setStartPos(-50,75+200*Math.random());
+							enemy.setStartPos(450,75+200*Math.random());
+							enemy.setInitialVelocity();
+							break;
+						case 3:
+							//big straight on dart
+							enemy = spawnObject(Constants.DART_ENEMY_ID);
+							enemy.setStartPos(75+250*Math.random(),-30);
 							enemy.setInitialVelocity();
 							break;
 					}
@@ -145,6 +151,39 @@ package world
 								enemy.setStartPos(-25-50*i,100*i+spawnAnchor);
 								enemy.setInitialVelocity();
 							}
+							break;
+						case 3:
+							//big dart with a v of normals
+							//TODO - SLOW ASS SINE ENEMIES
+							for(i = 0;i<5;i++) {
+								switch(i) {
+									case 0:
+										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
+										enemy.setStartPos(100 + i*50, -120);
+										break;
+									case 1:
+										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
+										enemy.setStartPos(100 + i*50, -70);
+										break;
+									case 2:
+										enemy = spawnObject(Constants.DART_ENEMY_ID);
+										enemy.setStartPos(100 + i*50, -20);
+										break;
+									case 3:
+										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
+										enemy.setStartPos(100 + i*50, -70);
+										break;
+									case 4:
+										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
+										enemy.setStartPos(100 + i*50, -120);
+										break;
+								}
+								
+								enemy.moveType = 3;	
+								enemy.setInitialVelocity();
+							}
+							break;
+							
 					}
 						
 				}

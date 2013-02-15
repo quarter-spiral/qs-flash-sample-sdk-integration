@@ -74,7 +74,8 @@ package
 		
 		public static var   DART_ENEMY_ID:int;
 		
-		public static var 	DART_HORIZONTAL_ENEMY_ID:int
+		public static var 	DART_HORIZONTAL_ENEMY_ID:int;
+		public static var   DART_LEFT_ENEMY_ID:int;
 		
 		public static var SINE_WAVE_ENEMY_ID:int;
 		public static const WAVE_ENEMY_SIDE_MOTION_AMPLITUDE:Number = 100;	//Amplitude of sideways motion for sinusoid enemy
@@ -144,7 +145,7 @@ package
 			props.speed = 30;
 			props.imageName = "TreasureChestImage";
 			props.harmsPlayer = false;
-			props.darts = false;
+			props.dartTarget = false;
 			ENEMY_PROPERTIES.push(props);
 			
 			BASIC_ANGLED_ENEMY_ID = enemyId++;
@@ -156,7 +157,7 @@ package
 			props.speed = 200;
 			props.imageName = "Enemy1Image";
 			props.harmsPlayer = true;
-			props.darts = false;
+			props.dartTarget = false;
 			ENEMY_PROPERTIES.push(props);
 			
 			HORIZONTAL_ENEMY_ID = enemyId++;
@@ -168,22 +169,23 @@ package
 			props.speed = 100;
 			props.imageName = "Enemy1Image";
 			props.harmsPlayer = true;
-			props.darts = false;
+			props.dartTarget = false;
 			ENEMY_PROPERTIES.push(props);
 			
 			DART_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 2;
-			props.maxHealth = 1;
-			props.size.setVals(25,25);
+			props.killXpCoins = 10;
+			props.maxHealth = 3;
+			props.size.setVals(60,65);
 			props.speed = 50;
-			props.imageName = "Enemy2Image";
+			props.imageName = "Enemy4Image";
 			props.harmsPlayer = true;
-			props.darts = true;
-			props.dartDelay = 2;
-			props.dartPause = 0.5;
-			props.postDartSpeedMult = 4.0;
+			props.dartTarget = false;
+			props.dartStraight = true;
+			props.dartDelay = 2.5;
+			props.dartPause = 1.5;
+			props.postDartSpeedMult = 7.0;
 			ENEMY_PROPERTIES.push(props);
 			
 			DART_HORIZONTAL_ENEMY_ID = enemyId++;
@@ -195,10 +197,25 @@ package
 			props.speed = 150;
 			props.imageName = "Enemy3Image";
 			props.harmsPlayer = true;
-			props.darts = true;
+			props.dartTarget = true;
 			props.dartDelay = .75;
 			props.dartPause = 0.25;
 			props.postDartSpeedMult = 2.5;
+			ENEMY_PROPERTIES.push(props);
+			
+			DART_LEFT_ENEMY_ID = enemyId++;
+			props = new EnemyProperties();
+			props.killScore = 10;
+			props.killXpCoins = 2;
+			props.maxHealth = 1;
+			props.size.setVals(25,25);
+			props.speed = -150;
+			props.imageName = "Enemy3Image";
+			props.harmsPlayer = true;
+			props.dartTarget = true;
+			props.dartDelay = .75;
+			props.dartPause = 0.25;
+			props.postDartSpeedMult = -2.5;
 			ENEMY_PROPERTIES.push(props);
 			
 			SINE_WAVE_ENEMY_ID = enemyId++;
@@ -210,7 +227,7 @@ package
 			props.speed = 150;
 			props.imageName = "Enemy2Image";
 			props.harmsPlayer = true;
-			props.darts = false;
+			props.dartTarget = false;
 			ENEMY_PROPERTIES.push(props);
 		}
 		

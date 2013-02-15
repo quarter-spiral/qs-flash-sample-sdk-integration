@@ -98,10 +98,15 @@ package world
 					vel.setVals(props.speed, 0);
 					break;
 				case Constants.DART_ENEMY_ID:
+					this.props.dartDelay = .5 + Math.random()*2.5;
 					vel.setVals(0, props.speed);
 					break;
 				case Constants.DART_HORIZONTAL_ENEMY_ID:
 					vel.setVals(props.speed, 0);					
+					this.props.dartDelay = .5 + Math.random()*.5;
+					break;
+				case Constants.DART_LEFT_ENEMY_ID:
+					vel.setVals(props.speed, 0);			
 					this.props.dartDelay = .5 + Math.random()*.5;
 					break;
 				case Constants.SINE_WAVE_ENEMY_ID:
@@ -141,8 +146,8 @@ package world
 					break;
 			}
 			
-			//If this enemy darts, do so if it's time
-			if (props.darts) {
+			//If this enemy dartTarget, do so if it's time
+			if (props.dartTarget) {
 				if (!hasDarted && liveTime > props.dartDelay) {
 					//Pause...
 					if (liveTime < props.dartDelay + props.dartPause)
@@ -154,6 +159,23 @@ package world
 						hasDarted = true;
 					}
 						
+				}
+			}
+			
+			//If this enemy dartStraigth, do so if it's time
+			if (props.dartStraight) {
+				if (!hasDarted && liveTime > props.dartDelay) {
+					//Pause...
+					if (liveTime < props.dartDelay + props.dartPause)
+						vel.setVals(0,0);
+					else {
+						//Dart straight forward
+						//getDirectionToPlayer(vel);
+						//vel.scale(props.speed * props.postDartSpeedMult);
+						vel.setVals(0,props.speed * props.postDartSpeedMult);
+						hasDarted = true;
+					}
+					
 				}
 			}
 			
