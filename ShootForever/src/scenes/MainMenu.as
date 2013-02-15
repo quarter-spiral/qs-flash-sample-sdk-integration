@@ -39,7 +39,7 @@ package scenes
 			addChild(bg);
 			
 			//Game title
-			gameTitleLbl = new TextField(400, 75, "ShootForever", Constants.MAIN_FONT, 30, 0xffffff);
+			gameTitleLbl = new TextField(400, 75, "ImpossiBattle", Constants.MAIN_FONT, 30, 0xffffff);
 			gameTitleLbl.hAlign = HAlign.CENTER;
 			gameTitleLbl.vAlign = VAlign.TOP;
 			gameTitleLbl.x = int(Constants.GameWidth/2 - gameTitleLbl.width/2);
