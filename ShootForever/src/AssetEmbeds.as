@@ -60,6 +60,9 @@ package
 
 		[Embed(source = "../media/textures/enemy2.png")]
 		public static const Enemy2Image:Class;
+		
+		[Embed(source = "../media/textures/enemy3.png")]
+		public static const Enemy3Image:Class;
 
 		[Embed(source = "../media/textures/star.png")]
 		public static const StarImage:Class;

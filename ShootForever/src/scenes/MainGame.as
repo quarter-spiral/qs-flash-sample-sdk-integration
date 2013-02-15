@@ -231,7 +231,7 @@ package scenes
 				gameWorld.awardXpToPlayer(200);
 			}
 			else if (event.keyCode == Keyboard.T) {
-				gameWorld.spawnEnemy(Constants.TREASURE_CHEST_ID);
+				gameWorld.spawnObject(Constants.TREASURE_CHEST_ID);
 			}
 			else if (event.keyCode == Keyboard.B) {
 				gameWorld.gameInfo.currBombs++;

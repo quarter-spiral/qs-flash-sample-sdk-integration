@@ -101,7 +101,8 @@ package world
 					vel.setVals(0, props.speed);
 					break;
 				case Constants.DART_HORIZONTAL_ENEMY_ID:
-					vel.setVals(props.speed, 0);
+					vel.setVals(props.speed, 0);					
+					this.props.dartDelay = .5 + Math.random()*.5;
 					break;
 				case Constants.SINE_WAVE_ENEMY_ID:
 					//Fall down toward bottom of screen (will move sideways as needed)

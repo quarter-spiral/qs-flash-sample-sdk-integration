@@ -26,7 +26,9 @@ package world
 			alive = true;
 			
 			image = new Image(Assets.getTexture("StarImage"));
-			image.width = image.height = 2;
+			image.width = 1;
+			image.height = 3;
+			//image.width = image.height = 2;
 			//image.pivotX = image.width/2;
 			//image.pivotY = image.height/2;
 			

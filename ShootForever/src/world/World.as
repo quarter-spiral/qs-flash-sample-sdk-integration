@@ -27,9 +27,6 @@ package world
 		public var isPlayerAlive:Boolean = true;
 		
 		private var currTime:Number = 0;
-		private var lastChestSpawnTime:Number = 0;
-		private var lastEnemySpawnTime:Number = 0;
-		private var lastStarSpawnTime:Number = 0;
 		private var playerDeathTime:Number = 0;
 		
 		//Render layers
@@ -48,8 +45,9 @@ package world
 		private var xpObjs:Vector.<XpObject>;
 		//All active background stars in the world
 		private var stars:Vector.<BackgroundStar>;
-		//Counter of # of times enemies have been spawned
-		private var spawnCounter:int = 0;
+		
+		//Handles pretty much all spawning logic
+		private var flowMan:GameflowManager;
 		
 		//Temp util objects to avoid a bunch of object creations on each frame
 		private var playerMouseDelta:Vec2;
@@ -86,17 +84,18 @@ package world
 			enemyPool = new EnemyPool(createEnemy, cleanEnemy, 20, 200);
 			xpPool = new XpPool(createXpObj, cleanXpObj, 30, 200);
 			starPool = new StarPool(createStar, cleanStar, 50, 200);
+			
+			flowMan = new GameflowManager(this);
 		}
 		
 		//Prepares world for a new game instance
 		public function init(playerInfo:PlayerInfo):void {
 			clear(); //remove existing world objects
 			
+			flowMan.reset();
+			
 			isPlayerAlive = true;
 			currTime = 0;
-			lastChestSpawnTime = 0;
-			lastEnemySpawnTime = 0;
-			lastStarSpawnTime = 0;
 			playerDeathTime = 0;
 			gameInfo = new GameInfo();
 			gameInfo.init(playerInfo);
@@ -132,6 +131,11 @@ package world
 			return player;
 		}
 		
+		//Returns current gametime, in seconds, starting at 0 when this world was first loaded
+		public function getTime():Number {
+			return currTime;
+		}
+		
 		//Updates logical gameplay elements of world
 		public function update(dt:Number):void {
 			currTime += dt;
@@ -146,9 +150,8 @@ package world
 			}
 			
 			updatePlayerShooting();
-			updateEnemySpawning();
-			updateChestSpawning();
-			updateStarSpawning();
+			flowMan.updateSpawning();
+			
 			
 			//Update player first
 			player.update(dt);
@@ -226,76 +229,6 @@ package world
 			var timeSinceShot:Number = currTime - player.lastShotTime;
 			if (timeSinceShot > player.getTimeBetweenShots())
 				spawnPlayerBullet();
-		}
-		
-		//Creates enemies as necessary during main game loop
-		protected function updateEnemySpawning():void {
-			//PLACEHOLDER BASIC: Spawn an enemy every second or so
-			var timeSinceEnemySpawn:Number = currTime - lastEnemySpawnTime;
-			if (timeSinceEnemySpawn > 1.0) {
-				//PLACEHOLDER: Spawn random enemy types
-				/*var NumEnemyTypes:int = Constants.ENEMY_PROPERTIES.length;
-				var enemyType:int = RandomUtils.randomInt(1, NumEnemyTypes-1);
-				spawnEnemy(enemyType);*/
-				
-				//spawn single enemy
-				//spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
-				
-				var enemy:Enemy;
-				
-				//5 singles then a wave
-				if(spawnCounter<5) {
-					enemy = spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
-					enemy.setInitialVelocity();
-				} else {
-					var tempMove:int = math.RandomUtils.randomInt(0,4);
-					
-					for(var i:int = 0;i<5;i++) {
-						enemy = spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
-						
-						switch(i) {
-							case 0:
-								enemy.setStartPos(100 + i*50, -120);
-								break;
-							case 1:
-								enemy.setStartPos(100 + i*50, -70);
-								break;
-							case 2:
-								enemy.setStartPos(100 + i*50, -20);
-								break;
-							case 3:
-								enemy.setStartPos(100 + i*50, -70);
-								break;
-							case 4:
-								enemy.setStartPos(100 + i*50, -120);
-								break;
-						}
-						
-						enemy.moveType = tempMove;	
-						enemy.setInitialVelocity();
-					}
-				}
-				
-				spawnCounter += 1;
-			}
-		}
-		
-		protected function updateChestSpawning():void {
-			//PLACEHOLDER BASIC: Spawn a chest every so often
-			var timeSinceChestSpawn:Number = currTime - lastChestSpawnTime;
-			if (timeSinceChestSpawn > 10.0) {
-				var enemy:Enemy = spawnEnemy(Constants.TREASURE_CHEST_ID);
-				enemy.setInitialVelocity();
-			}
-		}
-		
-		protected function updateStarSpawning():void {
-			//PLACEHOLDER BASIC: Spawn a chest every so often
-			var timeSinceStarSpawn:Number = currTime - lastStarSpawnTime;
-			if (timeSinceStarSpawn > 1.0* Math.random()) {
-				lastStarSpawnTime = currTime;
-				spawnStar();
-			}
 		}
 		
 		//Check for enemy's being hit by player bullets
@@ -411,12 +344,7 @@ package world
 			bulletPool.checkIn(removedBullet);
 		}
 		
-		public function spawnEnemy(typeNum:int):Enemy {
-			if (typeNum == Constants.TREASURE_CHEST_ID)
-				lastChestSpawnTime = currTime;
-			else
-				lastEnemySpawnTime = currTime;
-			
+		public function spawnObject(typeNum:int):Enemy {
 			var enemy:Enemy = enemyPool.checkOut();
 			enemy.alive = true;
 			enemy.liveTime = 0;
@@ -490,7 +418,7 @@ package world
 			var star:BackgroundStar = starPool.checkOut();
 			star.alive = true;
 			star.pos.setVals(Constants.GameWidth * Math.random(), -2);
-			star.vel.setVals(0, 50 + 200 * Math.random());
+			star.vel.setVals(0, 300 + 500 * Math.random());
 			
 			addObjectImage(star);
 			stars.push(star);

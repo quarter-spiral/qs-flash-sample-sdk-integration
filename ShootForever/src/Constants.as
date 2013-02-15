@@ -33,15 +33,15 @@ package
 		//GAMEPLAY CONSTANTS
 		
 		//PLAYER
-		public static const PLAYER_WIDTH:int = 1;//50;
-		public static const PLAYER_HEIGHT:int = 1;//30;
+		public static const PLAYER_WIDTH:int = 10;//50;
+		public static const PLAYER_HEIGHT:int = 10;//30;
 		
 		public static const PLAYER_BULLET_RADIUS:int = 2;
 		
-		public static const PLAYER_SHOTS_PER_SECOND_BASE:Number = 1.5;
+		public static const PLAYER_SHOTS_PER_SECOND_BASE:Number = 2;
 		public static const PLAYER_SHOTS_PER_SECOND_UPGRADE:Number = 1.0;
 		
-		public static const PLAYER_SHOT_SPEED_BASE:Number = 300.0;
+		public static const PLAYER_SHOT_SPEED_BASE:Number = 500.0;
 		public static const PLAYER_SHOT_SPEED_UPGRADE:Number = 100.0;
 		
 		public static const PLAYER_SHOT_DAMAGE_BASE:Number = 1;
@@ -89,11 +89,11 @@ package
 		protected static function initXpProperties():void {
 			var props:XpProperties;
 			
-			props = new XpProperties();
+			/*props = new XpProperties();
 			props.spawnWeight = 5;
 			props.xpAmount = 5;
 			props.imageName = "XpTinyImage";
-			XP_PROPERTIES.push(props);
+			XP_PROPERTIES.push(props);*/
 			
 			props = new XpProperties();
 			props.spawnWeight = 10;
@@ -101,7 +101,7 @@ package
 			props.imageName = "XpSmallImage";
 			XP_PROPERTIES.push(props);
 			
-			props = new XpProperties();
+			/*props = new XpProperties();
 			props.spawnWeight = 35;
 			props.xpAmount = 25;
 			props.imageName = "XpMedSmallImage";
@@ -117,7 +117,7 @@ package
 			props.spawnWeight = 15;
 			props.xpAmount = 100;
 			props.imageName = "XpMedLargeImage";
-			XP_PROPERTIES.push(props);
+			XP_PROPERTIES.push(props);*/
 			
 			props = new XpProperties();
 			props.spawnWeight = 5;
@@ -150,10 +150,10 @@ package
 			BASIC_ANGLED_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 1;
+			props.killXpCoins = 2;
 			props.maxHealth = 1;
 			props.size.setVals(25,25);
-			props.speed = 100;
+			props.speed = 200;
 			props.imageName = "Enemy1Image";
 			props.harmsPlayer = true;
 			props.darts = false;
@@ -192,22 +192,22 @@ package
 			props.killXpCoins = 2;
 			props.maxHealth = 1;
 			props.size.setVals(25,25);
-			props.speed = 50;
-			props.imageName = "Enemy2Image";
+			props.speed = 150;
+			props.imageName = "Enemy3Image";
 			props.harmsPlayer = true;
 			props.darts = true;
-			props.dartDelay = 2;
-			props.dartPause = 0.5;
-			props.postDartSpeedMult = 4.0;
+			props.dartDelay = .75;
+			props.dartPause = 0.25;
+			props.postDartSpeedMult = 2.5;
 			ENEMY_PROPERTIES.push(props);
 			
 			SINE_WAVE_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
 			props.killXpCoins = 2;
-			props.maxHealth = 2;
+			props.maxHealth = 1;
 			props.size.setVals(25,25);
-			props.speed = 10;
+			props.speed = 150;
 			props.imageName = "Enemy2Image";
 			props.harmsPlayer = true;
 			props.darts = false;
