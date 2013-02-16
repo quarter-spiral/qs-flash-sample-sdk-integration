@@ -21,8 +21,9 @@ package world
 		
 		public function init(playerInfo:PlayerInfo):void
 		{
-			basePlayerXP = playerInfo.currentXP;
-			basePlayerLevel = playerInfo.playerLevel;
+			//under new Super Hex setup, player always starts at level 0 and with 0 xp
+			basePlayerXP = 0;//playerInfo.currentXP;
+			basePlayerLevel = 0;	
 			basePlayerUpgrades = new PlayerUpgrades();
 			
 			playerLiveTime = 0;

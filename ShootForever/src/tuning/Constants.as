@@ -48,20 +48,25 @@ package tuning
 		public static const PLAYER_SHOT_SPEED_UPGRADE:Number = 100.0;
 		
 		public static const PLAYER_SHOT_DAMAGE_BASE:Number = 1;
-		public static const PLAYER_SHOT_DAMAGE_UPGRADE:Number = 1;
+		public static const PLAYER_SHOT_DAMAGE_UPGRADE:Number = 100;
 		
 		//Just in case we want upgradable shot radii
 		public static const PLAYER_SHOT_RADIUS_BASE:Number = 16;
 		public static const PLAYER_SHOT_RADIUS_UPGRADE:Number = 2;
 		
-		//UPGRADE TYPES
-		public static const UPGRADE_RANDOM:int				= 0;
-		public static const UPGRADE_SHOTS_PER_SECOND:int 	= 1;
-		public static const UPGRADE_SHOT_SPEED:int			= 2;
-		public static const UPGRADE_SHOT_DAMAGE:int 		= 3;
-		public static const UPGRADE_MAGNET_RADIUS_UP:int	= 4;	//not yet used as of 2.15.2013
-		public static const UPGRADE_BOMB_UP:int				= 5;	//a bit different than others... just gives a bomb to player... doesn't affect his/her upgrade stats
+		//LEVELING
 		
+		protected static var LEVELING_PROPERTIES:Vector.<PlayerLevelProperties>;
+		
+		//UPGRADE TYPES
+		public static const UPGRADE_NONE:int				= 0;
+		public static const UPGRADE_RANDOM:int				= 1;
+		public static const UPGRADE_SHOTS_PER_SECOND:int 	= 2;	//rate at which player spawns bullets
+		public static const UPGRADE_SHOT_SPEED:int			= 3;	//speed of bullet once spawned
+		public static const UPGRADE_SHOT_DAMAGE:int 		= 4;	//damage on baddies for player bullets
+		public static const UPGRADE_SHOT_NUMBER:int			= 5;	//increase number of at-once shots (not yet implemented as of 2.15.2013)
+		public static const UPGRADE_BOMB_UP:int				= 6;	//a bit different than others... just gives a bomb to player... doesn't affect his/her upgrade stats
+		public static const UPGRADE_MAGNET_RADIUS_UP:int	= 7;	//not yet implemented as of 2.15.2013
 		//XP
 		
 		public static var XP_PROPERTIES:Vector.<XpProperties> = new Vector.<XpProperties>();
@@ -96,6 +101,7 @@ package tuning
 		public static function init():void {
 			initXpProperties();
 			initEnemyProperties();
+			initLevelingProperties();
 		}
 		
 		protected static function initXpProperties():void {
@@ -242,6 +248,22 @@ package tuning
 			ENEMY_PROPERTIES.push(props);
 		}
 		
+		//Sets up how player levels up in-game
+		protected static function initLevelingProperties():void {
+			LEVELING_PROPERTIES = new Vector.<PlayerLevelProperties>();
+			
+			//Set xp per level and bonus upgrade on reach level here...
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(0, UPGRADE_NONE));		//level 0... not actually ever "reached"
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(500, UPGRADE_BOMB_UP));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1500, UPGRADE_SHOT_SPEED));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3000, UPGRADE_SHOTS_PER_SECOND));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(5000, UPGRADE_SHOT_DAMAGE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7500, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(11000, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(15000, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(25000, UPGRADE_NONE));
+		}
+		
 		//Returns a random Xp property, with the probability of returning any 
 		//given property weighted by its spawnWeight value.
 		public static function getRandomXpProps():XpProperties {
@@ -274,20 +296,42 @@ package tuning
 		}
 		
 		//Returns amount of xp required to reach given rank level
-		public static function getXpForLevel(rankLvl : int):int {
-			//Modify as desired...
-			switch (rankLvl) {
-				case 0: return 0; break;
-				case 1: return 500; break;
-				case 2: return 1500; break;
-				case 3: return 3000; break;
-				case 4: return 5000; break;
-				case 5: return 7500; break;
-				case 6: return 11000; break;
-				case 7: return 15000; break;
-				case 8: return 25000; break;
-				default: return 25000 + (rankLvl - 8) * 15000; break;
+		public static function getXpForLevel(level : int):int {
+			var numLevels:int = LEVELING_PROPERTIES.length;
+			if (level < numLevels) 
+				return LEVELING_PROPERTIES[level].xpNeeded;
+			//If requested level is beyond the number of scripted levels, just extrapolate the highest level...
+			else if (numLevels >= 2) {
+				var highestXpDelta:int = LEVELING_PROPERTIES[numLevels-1].xpNeeded - LEVELING_PROPERTIES[numLevels-2].xpNeeded;
+				var numLevelsBeyondScripted:int = level - numLevels;
+				return LEVELING_PROPERTIES[numLevels-1].xpNeeded + (numLevelsBeyondScripted*highestXpDelta);
 			}
+			else
+				return 0;
+		}
+		
+		//Returns the player upgrade type for achieving given level
+		public static function getLevelupUpgrade(level : int):int {
+			var numLevels:int = LEVELING_PROPERTIES.length;
+			if (level < numLevels) {
+				var upgradeType:int =  LEVELING_PROPERTIES[level].upgradeType;
+				//Select a random if needed
+				if (upgradeType == UPGRADE_RANDOM) {
+					//NOTE: Be sure to modify this if we want additional future upgrade included in random roll
+					//Not ideal setup.... should fix this later
+					upgradeType = RandomUtils.chooseInt( [
+						UPGRADE_SHOTS_PER_SECOND,
+						UPGRADE_SHOT_SPEED,
+						UPGRADE_SHOT_DAMAGE,
+						//UPGRADE_MAGNET_RADIUS_UP,
+						UPGRADE_BOMB_UP
+						]);
+				}
+				return upgradeType;
+			}
+			//If no scripted level, return nothing...
+			else
+				return UPGRADE_NONE;
 		}
 		
     }

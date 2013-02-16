@@ -59,7 +59,7 @@ package scenes
 			playerNameTxt.y = 400;
 			this.addChild(playerNameTxt);
 			
-			highScoreLbl = new TextField(150, 75, "Best: ", Constants.MAIN_FONT, 16, 0xffffff);
+			highScoreLbl = new TextField(150, 75, "Best Time: ", Constants.MAIN_FONT, 16, 0xffffff);
 			highScoreLbl.hAlign = HAlign.RIGHT;
 			highScoreLbl.vAlign = VAlign.TOP;
 			highScoreLbl.x = int(Constants.GameWidth*0.25 - highScoreLbl.width/2);
@@ -73,7 +73,7 @@ package scenes
 			highScoreTxt.y = 450;
 			this.addChild(highScoreTxt);
 			
-			rankLbl = new TextField(150, 75, "Rank: ", Constants.MAIN_FONT, 16, 0xffffff);
+			rankLbl = new TextField(150, 75, "Best Rank: ", Constants.MAIN_FONT, 16, 0xffffff);
 			rankLbl.hAlign = HAlign.RIGHT;
 			rankLbl.vAlign = VAlign.TOP;
 			rankLbl.x = int(Constants.GameWidth * 0.25 - rankLbl.width/2);
@@ -100,7 +100,7 @@ package scenes
 		protected function refreshFromPlayerInfo():void {
 			playerNameTxt.text = "Welcome, " + parentGame.getPlayerInfo().name;
 			highScoreTxt.text = parentGame.getPlayerInfo().highTime.toFixed(2);
-			rankTxt.text = Constants.getPlayerRankName(parentGame.getPlayerInfo().playerLevel);
+			rankTxt.text = Constants.getPlayerRankName(parentGame.getPlayerInfo().highLevel);
 		}
 		
 		public override function update(dt:Number):void

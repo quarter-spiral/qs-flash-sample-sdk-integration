@@ -99,7 +99,7 @@ package scenes
 			stage.addEventListener(TouchEvent.TOUCH, onTouch);
 		
 			//Init XP bar limits for player's current level (may be updated during game as xp is collected) 
-			xpBar.setLevel(parentGame.getPlayerInfo().playerLevel);
+			xpBar.setLevel(GameWorld().gameInfo.getLevel());
 			updateXPBar();
 		}
 		

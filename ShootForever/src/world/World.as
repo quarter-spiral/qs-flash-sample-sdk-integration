@@ -532,7 +532,7 @@ package world
 			gameInfo.ingameXp += amount;
 			//Record an in-game levelup(s) if we have enough xp
 			while (gameInfo.getXp() >= Constants.getXpForLevel(gameInfo.getLevel()+1)) {
-				gameInfo.ingameLevelups++;
+				flowMan.levelupPlayer();
 			}
 		}
 		

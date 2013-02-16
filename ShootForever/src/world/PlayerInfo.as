@@ -5,9 +5,9 @@ package world
 	{
 		public var name:String;
 		public var highTime:Number;
-		public var playerLevel:int;
-		public var currentXP:int;
-		public var currentSpendableXP:int;
+		public var highLevel:int;
+		//public var currentXP:int; //NOTE: XP no longer persistent between sessions under new Super Hexagon setup -bh, 2.15.2013
+		//public var currentSpendableXP:int;
 		
 		//Permanent upgrades (as opposed to those we give in-game)
 		public var upgrades:PlayerUpgrades;
@@ -25,9 +25,9 @@ package world
 		public function reset():void {
 			name = "Player";
 			highTime = 0;
-			playerLevel = 0;
-			currentXP = 0;
-			currentSpendableXP = 0;
+			highLevel = 0;
+			//currentXP = 0;
+			//currentSpendableXP = 0;
 			upgrades = new PlayerUpgrades();
 		}
 	}

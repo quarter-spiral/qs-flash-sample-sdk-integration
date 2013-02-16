@@ -1,6 +1,7 @@
 package world
 {
 	import math.RandomUtils;
+	
 	import tuning.Constants;
 
 	/** Holds all the various scripting for spawning baddies/chests/etc in the world
@@ -223,6 +224,38 @@ package world
 					parentWorld.spawnStar();
 				}
 			}
+		}
+		
+		//Increments player's in-game level & gives that level's upgrade award
+		//Note that this does *not* modify player XP, so it's a good idea to be sure
+		//the level up is warranted by current XP levels first.
+		public function levelupPlayer():void {
+			parentWorld.gameInfo.ingameLevelups++;
+			
+			//Give player the upgrade award
+			var upgrade:int = Constants.getLevelupUpgrade(parentWorld.gameInfo.getLevel());
+			switch (upgrade) {
+				case Constants.UPGRADE_NONE:
+				default:
+					//Do nothing
+					break;
+				case Constants.UPGRADE_SHOTS_PER_SECOND:
+					parentWorld.gameInfo.ingameUpgrades.shotRateLevel++;
+					break;
+				case Constants.UPGRADE_SHOT_SPEED:
+					parentWorld.gameInfo.ingameUpgrades.shotSpeedLevel++;
+					break;
+				case Constants.UPGRADE_SHOT_DAMAGE:
+					parentWorld.gameInfo.ingameUpgrades.shotDamageLevel++;
+					break;
+				case Constants.UPGRADE_BOMB_UP:
+					parentWorld.gameInfo.currBombs++;
+					break;
+			}
+			
+			parentWorld.getPlayer().updateStatsFromUpgrades(parentWorld.gameInfo.ingameUpgrades);
+			
+			//TODO: Message upgrade to player w/ popup text
 		}
 	}
 }

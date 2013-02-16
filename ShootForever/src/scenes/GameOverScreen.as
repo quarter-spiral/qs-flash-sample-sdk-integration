@@ -101,7 +101,7 @@ package scenes
 			xpBar.y = rankTxt.y + 30;
 			addChild(xpBar);
 			
-			rankUpLbl = new TextField(150, 75, "Rank Up!", Constants.MAIN_FONT, 16, 0xffff00);
+			rankUpLbl = new TextField(150, 75, "New Best Rank!", Constants.MAIN_FONT, 16, 0xffff00);
 			rankUpLbl.hAlign = HAlign.CENTER;
 			rankUpLbl.vAlign = VAlign.TOP;
 			rankUpLbl.x = int(Constants.GameWidth*0.5 - rankUpLbl.width/2);
@@ -131,8 +131,11 @@ package scenes
 			var info:PlayerInfo = parentGame.getPlayerInfo();
 			if (info.latestGameInfo.getPlayerLiveTime() > info.highTime)
 				info.highTime = info.latestGameInfo.getPlayerLiveTime();
-			info.playerLevel = info.latestGameInfo.getLevel();
-			info.currentXP = info.latestGameInfo.getXp();
+			if (info.latestGameInfo.getLevel() > info.highLevel)
+				info.highLevel = info.latestGameInfo.getLevel();
+			
+			//NOTE: XP no longer persistent between sessions under new Super Hexagon setup -bh, 2.15.2013
+			//info.currentXP = info.latestGameInfo.getXp();
 			parentGame.savePlayerInfo();
 		}
 		
@@ -149,7 +152,7 @@ package scenes
 			else 
 				highScoreLbl.visible = false;
 			
-			if (playerInfo.latestGameInfo.ingameLevelups > 0)
+			if (playerInfo.latestGameInfo.getLevel() > playerInfo.highLevel)
 				rankUpLbl.visible = true;
 			else
 				rankUpLbl.visible = false;
@@ -178,9 +181,10 @@ package scenes
 		}
 		
 		private function onPlayClick(event:Event):void {
-			//Finally, apply the upgrades from previous game,
-			var info:PlayerInfo = parentGame.getPlayerInfo();
-			info.upgrades.add(info.latestGameInfo.ingameUpgrades);	
+			//Finally, apply the upgrades from previous game
+			//(DISABLED in Super Hex change now... no permanent upgrades are in current design. -bh, 2.15.2013
+			//var info:PlayerInfo = parentGame.getPlayerInfo();
+			//info.upgrades.add(info.latestGameInfo.ingameUpgrades);	
 			
 			//Clear the info from the previous game.
 			parentGame.getPlayerInfo().latestGameInfo = null; 
