@@ -5,6 +5,7 @@ package world
 	import math.Vec2;
 	
 	import starling.display.Image;
+	import tuning.Constants;
 
 	/** The player's ship in the game world */
 	public class Player extends GameObject
@@ -17,7 +18,6 @@ package world
 		public var shotRadius:Number;
 		public var magnetRadius:Number;
 		
-
 		public var lastShotTime:Number;
 		
 		//Internal util values (to prevent a lot of object allocation)

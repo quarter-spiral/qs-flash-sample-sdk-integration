@@ -7,6 +7,8 @@ package world
 	
 	import starling.display.DisplayObjectContainer;
 	
+	import tuning.Constants;
+	
 	import world.GameObject;
 	import world.pools.BulletPool;
 	import world.pools.EnemyPool;
@@ -20,6 +22,10 @@ package world
 		
 		public var mousePos:Vec2;
 		public var mouseClicked:Boolean; 	//true if player clicked mouse and we need to handle it
+		
+		//Sets whether main gameplay loop should be run (false on most game screens,
+		//but we run things like stars in the bg, etc)
+		public var mainGameRunning:Boolean;
 		
 		//Logical boundaries of game world. Objects outside these bounds should be removed
 		private var worldBounds:Rectangle;
@@ -59,8 +65,11 @@ package world
 		private var starPool:StarPool;
 		
 		//Creates a new game world with given container for the graphical images of game objects
+		//Note thate game is not in "running" mode by default (use "startMainGame()" for this)
 		public function World(imageContainer:DisplayObjectContainer, bgLayer:DisplayObjectContainer)
 		{
+			mainGameRunning = false;
+			
 			mousePos = new Vec2();
 			mouseClicked = false;
 			
@@ -89,8 +98,12 @@ package world
 		}
 		
 		//Prepares world for a new game instance
-		public function init(playerInfo:PlayerInfo):void {
+		public function startMainGame(playerInfo:PlayerInfo):void {
 			clear(); //remove existing world objects
+			
+			mainGameRunning = true;
+			
+			currTime = 0;
 			
 			flowMan.reset();
 			
@@ -107,7 +120,22 @@ package world
 			addObjectImage(player);
 			
 			//Give initial # of bombs
-			gameInfo.currBombs = 3;
+			gameInfo.currBombs = Constants.PLAYER_START_BOMBS_BASE + Constants.PLAYER_START_BOMBS_UPGRADE * playerInfo.upgrades.startBombsLevel;
+		}
+		
+		public function endMainGame():void {
+			mainGameRunning = false;
+			
+			var i:int = 0;
+			
+			//Remove main game stuff, like player, bullets, etc
+			//Note: For now, keeping enemies around... just seems right...
+			//Then enemies
+			
+			removePlayer();
+			removeAllXp();
+			removeAllBullets();
+			removeAllEnemies();
 		}
 		
 		//Adds given game object's image to this world so it may be updated & rendered
@@ -131,77 +159,102 @@ package world
 			return player;
 		}
 		
-		//Returns current gametime, in seconds, starting at 0 when this world was first loaded
-		public function getTime():Number {
+		//Returns current world runtime, in seconds, starting at 0 when this world was first init'd
+		//NOTE: This is NOT necessarily the same as the player live time (likely greater)
+		public function getWorldTime():Number {
 			return currTime;
 		}
 		
+		//Returns amount of time player has been alive in current game run
+		//Note that this may be different from total game runtime (getTime())
+		public function getPlayerLiveTime():Number {
+			if (gameInfo)
+				return gameInfo.getPlayerLiveTime();
+			return 0;
+		}
+		
 		//Updates logical gameplay elements of world
-		public function update(dt:Number):void {
+		public function updateLogic(dt:Number):void {
 			currTime += dt;
 			
-			//INPUT: Move player toward mouse position
-			if (isPlayerAlive) {
-				//TODO: faster/slower player motion based on current upgrades?
-				
-				player.pos.x = mousePos.x;
-				if (player.pos.x > Constants.GameWidth - Constants.PLAYER_WIDTH/2) player.pos.x = Constants.GameWidth - Constants.PLAYER_WIDTH/2;
-				if (player.pos.y < Constants.PLAYER_WIDTH/2) player.pos.x = Constants.PLAYER_WIDTH/2;
-			}
-			
-			updatePlayerShooting();
-			flowMan.updateSpawning();
-			
-			
-			//Update player first
-			player.update(dt);
-			
-			var i:int = 0;
-			
-			//Then enemies
-			var numEnemies:int = enemies.length;
-			for (i = 0; i < numEnemies; i++) {
-				enemies[i].update(dt);
-				
-				//Remove enemy once dead
-				if (enemies[i].alive == false) {
-					removeEnemy((i));
-					i--; numEnemies--;
+			if (mainGameRunning) {
+				//INPUT: Move player toward mouse position
+				if (isPlayerAlive) {
+					gameInfo.playerLiveTime = currTime;
+					
+					//TODO: faster/slower player motion based on current upgrades?
+					
+					if (player) {
+						player.pos.x = mousePos.x;
+						if (player.pos.x > Constants.GameWidth - Constants.PLAYER_WIDTH/2) player.pos.x = Constants.GameWidth - Constants.PLAYER_WIDTH/2;
+						if (player.pos.y < Constants.PLAYER_WIDTH/2) player.pos.x = Constants.PLAYER_WIDTH/2;
+					}
 				}
-			}
-			
-			//Then player bullets
-			var numPlayerBullets:int = playerBullets.length;
-			for (i = 0; i < numPlayerBullets; i++) {
-				playerBullets[i].update(dt);
 				
-				if (playerBullets[i].alive == false) {
-					removePlayerBullet(i);
-					i--; numPlayerBullets--;
+				//Use bomb if able
+				if (mouseClicked) {
+					mouseClicked = false;
+					usePlayerBomb();
 				}
-			}
-			
-			//Then enemy bullets
-			var numEnemyBullets:int = enemyBullets.length;
-			for (i = 0; i < numEnemyBullets; i++) {
-				enemyBullets[i].update(dt);
 				
-				//TODO: If bullet hit something, remove it (and animated removal)
-			}
-			
-			//Then falling XP
-			var numXpObjs:int = xpObjs.length;
-			for (i = 0; i < numXpObjs; i++) {
-				xpObjs[i].update(dt);
+				updatePlayerShooting();
+				flowMan.updateMobSpawning();
 				
-				//Remove xp once no longer active
-				if (xpObjs[i].alive == false) {
-					removeXpObj(i);
-					i--; numXpObjs--;
+				//Update player first
+				if (player)
+					player.update(dt);
+				
+				var i:int = 0;
+				
+				//Then enemies
+				var numEnemies:int = enemies.length;
+				for (i = 0; i < numEnemies; i++) {
+					enemies[i].update(dt);
+					
+					//Remove enemy once dead
+					if (enemies[i].alive == false) {
+						removeEnemy((i));
+						i--; numEnemies--;
+					}
 				}
+				
+				//Then player bullets
+				var numPlayerBullets:int = playerBullets.length;
+				for (i = 0; i < numPlayerBullets; i++) {
+					playerBullets[i].update(dt);
+					
+					if (playerBullets[i].alive == false) {
+						removePlayerBullet(i);
+						i--; numPlayerBullets--;
+					}
+				}
+				
+				//Then enemy bullets
+				var numEnemyBullets:int = enemyBullets.length;
+				for (i = 0; i < numEnemyBullets; i++) {
+					enemyBullets[i].update(dt);
+					
+					//TODO: If bullet hit something, remove it (and animated removal)
+				}
+				
+				//Then falling XP
+				var numXpObjs:int = xpObjs.length;
+				for (i = 0; i < numXpObjs; i++) {
+					xpObjs[i].update(dt);
+					
+					//Remove xp once no longer active
+					if (xpObjs[i].alive == false) {
+						removeXpObj(i);
+						i--; numXpObjs--;
+					}
+				}
+				
+				updateEnemyCollisions();
+				updatePlayerCollisions();
 			}
 			
-			//Then the bg stars
+			//Update bg stars (note that we run these even when mainGame isn't running)
+			flowMan.updateStarSpawning();
 			var numStars:int = stars.length;
 			for (i = 0; i < numStars; i++) {
 				stars[i].update(dt);
@@ -212,15 +265,6 @@ package world
 					i--; numStars--;
 				}
 			}
-			
-			//Use bomb if able
-			if (mouseClicked) {
-				mouseClicked = false;
-				usePlayerBomb();
-			}
-			
-			updateEnemyCollisions();
-			updatePlayerCollisions();
 		}
 		
 		//Spawns shots from player periodically
@@ -262,7 +306,6 @@ package world
 				}
 			}
 		}
-		
 		
 		//Check for player being hit by enemies, enemy bullets, or falling XP
 		//If hit occurs, run appropriate response
@@ -337,13 +380,6 @@ package world
 			playerBullets.push(bullet);
 		}
 		
-		public function removePlayerBullet(bulletIdx:int):void {
-			var removedBullet:Bullet = playerBullets.splice(bulletIdx, 1)[0];
-			if (removedBullet.image && removedBullet.image.parent) 
-				removedBullet.image.parent.removeChild(removedBullet.image);
-			bulletPool.checkIn(removedBullet);
-		}
-		
 		public function spawnObject(typeNum:int):Enemy {
 			var enemy:Enemy = enemyPool.checkOut();
 			enemy.alive = true;
@@ -388,11 +424,49 @@ package world
 			return enemy;
 		}
 		
+		
+		//Removes player avatar from game
+		public function removePlayer():void {
+			if (player) {
+				if (player.image && player.image.parent)
+					player.image.parent.removeChild(player.image);
+				player.dispose();
+				player = null;
+			}
+		}
+		
+		public function removePlayerBullet(bulletIdx:int):void {
+			var removedBullet:Bullet = playerBullets.splice(bulletIdx, 1)[0];
+			bulletPool.checkIn(removedBullet);
+		}
+		
+		//Removes all bullets (more efficiently than removing one-by-one)
+		public function removeAllBullets():void {
+			var i:int = 0;
+			
+			var numPlayerBullets:int = playerBullets.length;
+			for (i = 0; i < numPlayerBullets; i++)
+				bulletPool.checkIn(playerBullets[i]);
+			playerBullets.length = 0;
+			
+			var numEnemyBullets:int = enemyBullets.length;
+			for (i = 0; i < numEnemyBullets; i++)
+				bulletPool.checkIn(enemyBullets[i]);
+			enemyBullets.length = 0;
+		}
+		
 		public function removeEnemy(enemyIdx:int):void {
 			var removedEnemy:Enemy = enemies.splice(enemyIdx, 1)[0];
-			if (removedEnemy.image && removedEnemy.image.parent) 
-				removedEnemy.image.parent.removeChild(removedEnemy.image);
 			enemyPool.checkIn(removedEnemy);
+		}
+		
+		//Removes all enemies (more efficiently than removing one-by-one)
+		public function removeAllEnemies():void {
+			var i:int = 0;
+			var numEnemies:int = enemies.length;
+			for (i = 0; i < numEnemies; i++)
+				enemyPool.checkIn(enemies[i]);
+			enemies.length = 0;
 		}
 		
 		public function spawnXpObj(props:XpProperties, startPos : Vec2):void {			
@@ -409,9 +483,16 @@ package world
 		
 		public function removeXpObj(xpIdx:int):void {
 			var removedXp:XpObject = xpObjs.splice(xpIdx, 1)[0];
-			if (removedXp.image && removedXp.image.parent) 
-				removedXp.image.parent.removeChild(removedXp.image);
 			xpPool.checkIn(removedXp);
+		}
+		
+		//Removes all xp (more efficiently than removing one-by-one)
+		public function removeAllXp():void {
+			var i:int = 0;
+			var numXpObjs:int = xpObjs.length;
+			for (i = 0; i < numXpObjs; i++)
+				xpPool.checkIn(xpObjs[i]);
+			xpObjs.length = 0;
 		}
 		
 		public function spawnStar():void {			
@@ -433,7 +514,7 @@ package world
 		
 		public function rewardPlayerForEnemyKill(enemy:Enemy):void {			
 			//Add kill score
-			gameInfo.ingameScore += gameInfo.currMultiplier * enemy.props.killScore;
+			gameInfo.playerLiveTime += enemy.props.killScore;
 			
 			//Spawn falling XP
 			for (var i:int = 0; i < enemy.props.killXpCoins; i++) {
@@ -468,7 +549,7 @@ package world
 		//Updates graphical elements of objects in world
 		public function updateGraphics():void {
 			var i:int;
-			player.updateGraphics();
+			if (player) player.updateGraphics();
 			var numEnemies:int = enemies.length;
 			for (i = 0; i < numEnemies; i++)
 				enemies[i].updateGraphics();
@@ -520,7 +601,8 @@ package world
 		}
 		
 		private function cleanBullet(bullet:Bullet):void {
-			//Not much to do.... most is handled by removeBullet()
+			if (bullet.image && bullet.image.parent) 
+				bullet.image.parent.removeChild(bullet.image);
 		}
 		
 		private function createEnemy():Enemy {
@@ -529,7 +611,8 @@ package world
 		}
 		
 		private function cleanEnemy(enemy:Enemy):void {
-			//Not much to do.... most is handled by removeEnemy()
+			if (enemy.image && enemy.image.parent) 
+				enemy.image.parent.removeChild(enemy.image);
 		}
 		
 		private function createXpObj():XpObject {
@@ -538,7 +621,8 @@ package world
 		}
 		
 		private function cleanXpObj(xpObj:XpObject):void {
-			//Not much to do.... most is handled by removeXpObj()
+			if (xpObj.image && xpObj.image.parent) 
+				xpObj.image.parent.removeChild(xpObj.image);
 		}
 		
 		private function createStar():BackgroundStar {

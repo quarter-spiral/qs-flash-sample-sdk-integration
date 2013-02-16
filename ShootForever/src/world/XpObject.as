@@ -5,6 +5,7 @@ package world
 	import math.Vec2;
 	
 	import starling.display.Image;
+	import tuning.Constants;
 
 	/** Represents a falling experience object in the game world */
 	public class XpObject extends GameObject

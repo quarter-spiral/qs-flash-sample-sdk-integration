@@ -5,6 +5,7 @@ package world
 	import math.Vec2;
 	
 	import starling.display.Image;
+	import tuning.Constants;
 
 	/** Just a pretty background star.... no more, no less */
 	public class BackgroundStar extends GameObject

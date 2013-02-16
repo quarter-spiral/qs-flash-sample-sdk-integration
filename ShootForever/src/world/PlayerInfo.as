@@ -4,11 +4,12 @@ package world
 	public class PlayerInfo
 	{
 		public var name:String;
-		public var highScore:int;
+		public var highTime:Number;
 		public var playerLevel:int;
 		public var currentXP:int;
 		public var currentSpendableXP:int;
 		
+		//Permanent upgrades (as opposed to those we give in-game)
 		public var upgrades:PlayerUpgrades;
 		
 		//A hacky way to store info from latest game so we can update 
@@ -23,7 +24,7 @@ package world
 		//Resets all player upgrades to initial values
 		public function reset():void {
 			name = "Player";
-			highScore = 0;
+			highTime = 0;
 			playerLevel = 0;
 			currentXP = 0;
 			currentSpendableXP = 0;

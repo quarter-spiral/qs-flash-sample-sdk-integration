@@ -10,6 +10,10 @@ package scenes
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
+	
+	import tuning.Constants;
+	
+	import world.World;
 
 	/** Main menu shown to player at game startup */
 	public class MainMenu extends Screen
@@ -24,8 +28,6 @@ package scenes
 		private var rankLbl:TextField;
 		private var rankTxt:TextField;
 		
-		private var bg:DisplayObject;
-		
 		public function MainMenu(parentGame:Game)
 		{
 			super(parentGame);
@@ -33,10 +35,6 @@ package scenes
 			//TEST: Set better-than-initial player stats
 			//parentGame.getPlayerInfo().playerLevel = 3;
 			//parentGame.getPlayerInfo().highScore = 12345;
-			
-			bg = new Image(Assets.getTexture("Background"));
-			bg.blendMode = BlendMode.NONE;
-			addChild(bg);
 			
 			//Game title
 			gameTitleLbl = new TextField(400, 75, "ImpossiBattle", Constants.MAIN_FONT, 30, 0xffffff);
@@ -61,8 +59,8 @@ package scenes
 			playerNameTxt.y = 400;
 			this.addChild(playerNameTxt);
 			
-			highScoreLbl = new TextField(150, 75, "High Score: ", Constants.MAIN_FONT, 16, 0xffffff);
-			highScoreLbl.hAlign = HAlign.LEFT;
+			highScoreLbl = new TextField(150, 75, "Best: ", Constants.MAIN_FONT, 16, 0xffffff);
+			highScoreLbl.hAlign = HAlign.RIGHT;
 			highScoreLbl.vAlign = VAlign.TOP;
 			highScoreLbl.x = int(Constants.GameWidth*0.25 - highScoreLbl.width/2);
 			highScoreLbl.y = 450;
@@ -76,7 +74,7 @@ package scenes
 			this.addChild(highScoreTxt);
 			
 			rankLbl = new TextField(150, 75, "Rank: ", Constants.MAIN_FONT, 16, 0xffffff);
-			rankLbl.hAlign = HAlign.CENTER;
+			rankLbl.hAlign = HAlign.RIGHT;
 			rankLbl.vAlign = VAlign.TOP;
 			rankLbl.x = int(Constants.GameWidth * 0.25 - rankLbl.width/2);
 			rankLbl.y = 470;
@@ -101,8 +99,18 @@ package scenes
 		//Refreshed UI elements based on player data in parent game
 		protected function refreshFromPlayerInfo():void {
 			playerNameTxt.text = "Welcome, " + parentGame.getPlayerInfo().name;
-			highScoreTxt.text = parentGame.getPlayerInfo().highScore.toString();
+			highScoreTxt.text = parentGame.getPlayerInfo().highTime.toFixed(2);
 			rankTxt.text = Constants.getPlayerRankName(parentGame.getPlayerInfo().playerLevel);
+		}
+		
+		public override function update(dt:Number):void
+		{				
+			//Update the game world in the background (for pretty background stars)
+			var gameWorld:World = parentGame.getGameWorld();
+			if (gameWorld) {
+				gameWorld.updateLogic(dt);
+				gameWorld.updateGraphics();
+			}
 		}
 		
 		protected function onStartClick(event:Event):void {

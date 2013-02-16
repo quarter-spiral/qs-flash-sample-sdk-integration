@@ -10,7 +10,10 @@ package scenes
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
 	
+	import tuning.Constants;
+	
 	import world.PlayerInfo;
+	import world.World;
 
 	/** Screen shown to player after finishing a game */
 	public class GameOverScreen extends Screen
@@ -27,7 +30,7 @@ package scenes
 		private var xpTxt:TextField;
 		private var xpBar:XpBar;
 		private var playBtn:Button;
-		private var xpToSpendTxt:TextField;
+		//private var xpToSpendTxt:TextField;
 		
 		//Local data
 		private var spentXp:int = 0; 
@@ -43,7 +46,7 @@ package scenes
 			gameOverLbl.y = 50;
 			this.addChild(gameOverLbl);
 			
-			scoreLbl = new TextField(150, 75, "Score: ", Constants.MAIN_FONT, 16, 0xffffff);
+			scoreLbl = new TextField(150, 75, "Time: ", Constants.MAIN_FONT, 16, 0xffffff);
 			scoreLbl.hAlign = HAlign.CENTER;
 			scoreLbl.vAlign = VAlign.TOP;
 			scoreLbl.x = int(Constants.GameWidth*0.25 - scoreLbl.width/2);
@@ -57,7 +60,7 @@ package scenes
 			scoreTxt.y = scoreLbl.y;
 			this.addChild(scoreTxt);
 			
-			highScoreLbl = new TextField(150, 75, "High Score!", Constants.MAIN_FONT, 16, 0xffff00);
+			highScoreLbl = new TextField(150, 75, "Best Time!", Constants.MAIN_FONT, 16, 0xffff00);
 			highScoreLbl.hAlign = HAlign.CENTER;
 			highScoreLbl.vAlign = VAlign.TOP;
 			highScoreLbl.x = int(Constants.GameWidth*0.5 - highScoreLbl.width/2);
@@ -106,12 +109,12 @@ package scenes
 			rankUpLbl.visible = false; //hide by default
 			this.addChild(rankUpLbl);
 			
-			xpToSpendTxt = new TextField(150, 75, "Buy Upgrades", Constants.MAIN_FONT, 20, 0xffffff);
-			xpToSpendTxt.hAlign = HAlign.CENTER;
-			xpToSpendTxt.vAlign = VAlign.TOP;
-			xpToSpendTxt.x = int(Constants.GameWidth*0.25 - xpToSpendTxt.width/2);
-			xpToSpendTxt.y = rankUpLbl.y + 30;
-			this.addChild(xpToSpendTxt);
+//			xpToSpendTxt = new TextField(150, 75, "Buy Upgrades", Constants.MAIN_FONT, 20, 0xffffff);
+//			xpToSpendTxt.hAlign = HAlign.CENTER;
+//			xpToSpendTxt.vAlign = VAlign.TOP;
+//			xpToSpendTxt.x = int(Constants.GameWidth*0.25 - xpToSpendTxt.width/2);
+//			xpToSpendTxt.y = rankUpLbl.y + 30;
+//			this.addChild(xpToSpendTxt);
 			
 			//Start button
 			playBtn = new Button(Assets.getTexture("StartImage"), "Play Again?");
@@ -126,22 +129,22 @@ package scenes
 		public override function start():void {
 			//Apply the xp gain, high score, upgrades, etc. from previous game
 			var info:PlayerInfo = parentGame.getPlayerInfo();
-			if (info.latestGameInfo.getScore() > info.highScore)
-				info.highScore = info.latestGameInfo.getScore();
+			if (info.latestGameInfo.getPlayerLiveTime() > info.highTime)
+				info.highTime = info.latestGameInfo.getPlayerLiveTime();
 			info.playerLevel = info.latestGameInfo.getLevel();
 			info.currentXP = info.latestGameInfo.getXp();
 			parentGame.savePlayerInfo();
 		}
 		
 		private function refreshFromInfo(playerInfo:PlayerInfo):void {
-			scoreTxt.text = playerInfo.latestGameInfo.ingameScore.toString();
+			scoreTxt.text = playerInfo.latestGameInfo.getPlayerLiveTime().toFixed(2);
 			xpTxt.text = playerInfo.latestGameInfo.ingameXp.toString();
 			rankTxt.text = Constants.getPlayerRankName(playerInfo.latestGameInfo.getLevel());
 			
 			xpBar.setLevel(playerInfo.latestGameInfo.getLevel());
 			xpBar.setCurrXp(playerInfo.latestGameInfo.getXp());
 			
-			if (playerInfo.latestGameInfo.getScore() > playerInfo.highScore)
+			if (playerInfo.latestGameInfo.getPlayerLiveTime() > playerInfo.highTime)
 				highScoreLbl.visible = true;
 			else 
 				highScoreLbl.visible = false;
@@ -150,6 +153,16 @@ package scenes
 				rankUpLbl.visible = true;
 			else
 				rankUpLbl.visible = false;
+		}
+		
+		public override function update(dt:Number):void
+		{				
+			//Update the game world in the background (for pretty background stars)
+			var gameWorld:World = parentGame.getGameWorld();
+			if (gameWorld) {
+				gameWorld.updateLogic(dt);
+				gameWorld.updateGraphics();
+			}
 		}
 		
 		private function onUpgradeShotDamageClick():void {

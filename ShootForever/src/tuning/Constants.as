@@ -1,4 +1,4 @@
-package
+package tuning
 {
 	import math.RandomUtils;
 	import math.Vec2;
@@ -38,6 +38,9 @@ package
 		
 		public static const PLAYER_BULLET_RADIUS:int = 2;
 		
+		public static const PLAYER_START_BOMBS_BASE:int = 3;
+		public static const PLAYER_START_BOMBS_UPGRADE:int = 0;
+		
 		public static const PLAYER_SHOTS_PER_SECOND_BASE:Number = 2;
 		public static const PLAYER_SHOTS_PER_SECOND_UPGRADE:Number = 1.0;
 		
@@ -50,6 +53,14 @@ package
 		//Just in case we want upgradable shot radii
 		public static const PLAYER_SHOT_RADIUS_BASE:Number = 16;
 		public static const PLAYER_SHOT_RADIUS_UPGRADE:Number = 2;
+		
+		//UPGRADE TYPES
+		public static const UPGRADE_RANDOM:int				= 0;
+		public static const UPGRADE_SHOTS_PER_SECOND:int 	= 1;
+		public static const UPGRADE_SHOT_SPEED:int			= 2;
+		public static const UPGRADE_SHOT_DAMAGE:int 		= 3;
+		public static const UPGRADE_MAGNET_RADIUS_UP:int	= 4;	//not yet used as of 2.15.2013
+		public static const UPGRADE_BOMB_UP:int				= 5;	//a bit different than others... just gives a bomb to player... doesn't affect his/her upgrade stats
 		
 		//XP
 		

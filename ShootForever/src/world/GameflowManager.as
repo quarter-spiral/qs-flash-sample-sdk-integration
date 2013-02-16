@@ -1,6 +1,7 @@
 package world
 {
 	import math.RandomUtils;
+	import tuning.Constants;
 
 	/** Holds all the various scripting for spawning baddies/chests/etc in the world
 	 * Calling this "GameflowManager" since its role may expand beyond spawning in the future.... */
@@ -23,10 +24,10 @@ package world
 		}
 		
 		/** Runs all chest/enemy spawning updates */
-		public function updateSpawning():void {
+		public function updateMobSpawning():void {
 			updateEnemySpawning();
 			updateChestSpawning();
-			updateStarSpawning();
+			//updateStarSpawning(); //since this runs even on main menu & game over screens, we call this elsewhere
 		}
 		
 		/** Resets all game flow state (use this in case we add "restart" later) */
@@ -40,7 +41,7 @@ package world
 		//Creates enemies as necessary during main game loop
 		protected function updateEnemySpawning():void {
 			//PLACEHOLDER BASIC: Spawn an enemy every second or so
-			var timeSinceEnemySpawn:Number = parentWorld.getTime() - lastEnemySpawnTime;
+			var timeSinceEnemySpawn:Number = parentWorld.getPlayerLiveTime() - lastEnemySpawnTime;
 			if (timeSinceEnemySpawn > .75) {
 				//PLACEHOLDER: Spawn random enemy types
 				/*var NumEnemyTypes:int = Constants.ENEMY_PROPERTIES.length;
@@ -194,34 +195,34 @@ package world
 		
 		protected function updateChestSpawning():void {
 			//PLACEHOLDER BASIC: Spawn a chest every so often
-			var timeSinceChestSpawn:Number = parentWorld.getTime() - lastChestSpawnTime;
+			var timeSinceChestSpawn:Number = parentWorld.getPlayerLiveTime() - lastChestSpawnTime;
 			if (timeSinceChestSpawn > 10.0) {
 				var enemy:Enemy = spawnObject(Constants.TREASURE_CHEST_ID);
 				enemy.setInitialVelocity();
 			}
 		}
 		
-		protected function updateStarSpawning():void {
-			//PLACEHOLDER BASIC: Spawn a chest every so often
-			var timeSinceStarSpawn:Number = parentWorld.getTime() - lastStarSpawnTime;
-			if (timeSinceStarSpawn > .25* Math.random()) {
-				lastStarSpawnTime = parentWorld.getTime();
-				for(var i:int=0;i<3;i++) {
-					parentWorld.spawnStar();
-				}
-			}
-		}
-		
 		/** Spawns an enemy/chest in the world of given type and records the spawn time*/
 		protected function spawnObject(typeNum:int):Enemy {
 			if (typeNum == Constants.TREASURE_CHEST_ID)
-				lastChestSpawnTime = parentWorld.getTime();
+				lastChestSpawnTime = parentWorld.getPlayerLiveTime();
 			else
-				lastEnemySpawnTime = parentWorld.getTime();
+				lastEnemySpawnTime = parentWorld.getPlayerLiveTime();
 			
 			return parentWorld.spawnObject(typeNum);
 		}
 		
 		
+		public function updateStarSpawning():void {
+			//PLACEHOLDER BASIC: Spawn a chest every so often
+			//(note that we use world time so that we can run even while not in the main game loop)
+			var timeSinceStarSpawn:Number = parentWorld.getWorldTime() - lastStarSpawnTime;
+			if (timeSinceStarSpawn > .25* Math.random()) {
+				lastStarSpawnTime = parentWorld.getWorldTime();
+				for(var i:int=0;i<3;i++) {
+					parentWorld.spawnStar();
+				}
+			}
+		}
 	}
 }

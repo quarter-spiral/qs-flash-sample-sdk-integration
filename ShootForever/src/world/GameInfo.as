@@ -8,12 +8,11 @@ package world
 		public var basePlayerUpgrades:PlayerUpgrades;
 		
 		//Temp in-game values (try not to touch PlayerInfo from here)
-		public var ingameScore:int;
+		public var playerLiveTime:Number;
 		public var ingameXp:int;
 		public var ingameLevelups:int;
 		public var ingameUpgrades:PlayerUpgrades;
 		
-		public var currMultiplier:int;
 		public var currBombs:int;
 		
 		public function GameInfo()
@@ -26,12 +25,10 @@ package world
 			basePlayerLevel = playerInfo.playerLevel;
 			basePlayerUpgrades = new PlayerUpgrades();
 			
-			ingameScore = 0;
+			playerLiveTime = 0;
 			ingameXp = 0;
 			ingameLevelups = 0; 
 			ingameUpgrades = new PlayerUpgrades();
-			
-			currMultiplier = 1;
 		}
 		
 		public function getXp():int {
@@ -42,8 +39,8 @@ package world
 			return basePlayerLevel + ingameLevelups;
 		}
 		
-		public function getScore():int {
-			return ingameScore;
+		public function getPlayerLiveTime():Number {
+			return playerLiveTime;
 		}
 	}
 }

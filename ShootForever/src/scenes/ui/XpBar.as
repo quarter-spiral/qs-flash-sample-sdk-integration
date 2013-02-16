@@ -5,6 +5,7 @@ package scenes.ui
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
+	import tuning.Constants;
 	
 	/** Super basic bar for showing xp progress */
 	public class XpBar extends Sprite

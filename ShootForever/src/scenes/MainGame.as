@@ -6,9 +6,7 @@ package scenes
     
     import scenes.ui.XpBar;
     
-    import starling.display.BlendMode;
     import starling.display.Button;
-    import starling.display.DisplayObject;
     import starling.display.Image;
     import starling.display.Sprite;
     import starling.events.EnterFrameEvent;
@@ -21,6 +19,8 @@ package scenes
     import starling.utils.HAlign;
     import starling.utils.VAlign;
     
+    import tuning.Constants;
+    
     import world.World;
     import world.pools.ImagePool;
 
@@ -29,15 +29,10 @@ package scenes
     {
 //        private var mStartButton:Button;
 //        private var mResultText:TextField;
-		
-		private var bg:DisplayObject;		//the absolute farthest backdrop
-		private var mainPlane:Sprite;		//container for most gameplay object images
-		private var bgPlane:Sprite;			//container for bg gameplay object images;
         
 		//UI elements
 		private var pauseBtn : Button;
 		private var scoreTxt : TextField;	
-		private var scoreMultTxt : TextField;
 		private var xpBar : XpBar;
 		private var pauseImage : Image;
 		private var bombContainer : Sprite;
@@ -49,27 +44,13 @@ package scenes
 		private var mousePos:Vec2;
 		
 		private var paused:Boolean = false;
-		
-		private var gameWorld:World;
         
         public function MainGame(parentGame : Game)
         {
             super(parentGame);
 			
 			bombPool = new ImagePool(createBomb, cleanBomb, 3, 20);
-			bombsOnBar = new Vector.<Image>();
-            
-			bg = new Image(Assets.getTexture("Background"));
-			bg.blendMode = BlendMode.NONE;
-			addChild(bg);
-			
-			bgPlane = new Sprite();
-			bgPlane.touchable = false;
-			addChild(bgPlane);
-			
-			mainPlane = new Sprite();
-			mainPlane.touchable = false;
-			addChild(mainPlane);	
+			bombsOnBar = new Vector.<Image>();	
 
 			// Score
 			scoreTxt = new TextField(150, 75, "000000", Constants.MAIN_FONT, 20, 0xffffff);
@@ -77,14 +58,6 @@ package scenes
 			scoreTxt.vAlign = VAlign.TOP;
 			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
 			this.addChild(scoreTxt);
-			
-			//Score multiplier
-			scoreMultTxt = new TextField(100,75, "", Constants.MAIN_FONT, 30, 0xffffff);
-			scoreMultTxt.hAlign = HAlign.CENTER;
-			scoreMultTxt.vAlign = VAlign.TOP;
-			scoreMultTxt.x = int(Constants.GameWidth/2 - scoreMultTxt.width/2);
-			scoreMultTxt.y = scoreTxt.y + 25;
-			this.addChild(scoreMultTxt);
 			
 			//XP
 			xpBar = new XpBar(true);
@@ -112,17 +85,18 @@ package scenes
 			pauseBtn.y = 0;
 			addChild(pauseBtn);
 			
-			//Create the game world
-			gameWorld = new World(mainPlane, bgPlane);
-			gameWorld.init(parentGame.getPlayerInfo());
+			//Start the main game
+			GameWorld().startMainGame(parentGame.getPlayerInfo());
         }
+		
+		//Returns game world that this screen affects
+		public function GameWorld():World {
+			return parentGame.getGameWorld();
+		}
 		
 		public override function start():void {
 			//Start listening to the mouse
 			stage.addEventListener(TouchEvent.TOUCH, onTouch);
-			
-			//Start main game loop
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		
 			//Init XP bar limits for player's current level (may be updated during game as xp is collected) 
 			xpBar.setLevel(parentGame.getPlayerInfo().playerLevel);
@@ -131,73 +105,73 @@ package scenes
 		
 		public override function close(): void {
 			if (stage) stage.removeEventListener(TouchEvent.TOUCH, onTouch);
-			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
         
         public override function dispose():void
         {
 			close();
 			
-			if (gameWorld) {
-				gameWorld.dispose();
-				gameWorld = null;
-			}
             super.dispose();
         }
         
-        private function onEnterFrame(event:EnterFrameEvent):void
+        public override function update(dt:Number):void
         {
 			if (!paused) {
 				//Limit size of updates to about 10 Hz to prevent big update steps
-				var updateDt:Number = Math.min(event.passedTime, 0.1);
+				var updateDt:Number = Math.min(dt, 0.1);
 					
 				//Basically, just update logical game world...
-				gameWorld.update(updateDt);
+				GameWorld().updateLogic(updateDt);
 				//Then update the graphical representation thereof
-				gameWorld.updateGraphics();
+				GameWorld().updateGraphics();
 				
-				//Update score/XP (TODO: these don't always need to be updated every frame. Update only on events from gameWorld)
-				updateScoreText();
+				//Update score/XP (TODO: these don't always need to be updated every frame. Update only on events from GameWorld())
+				updateTimeText();
 				updateXPBar();
 				updateBombsBar();
 				
 				//If player is dead, finish the game 
-				if (gameWorld.isPlayerAlive == false)
+				if (GameWorld().isPlayerAlive == false)
 					runGameEnd();
 			}
         }
 		
 		private function onTouch(event:TouchEvent):void
 		{
-			if (gameWorld) {
+			if (GameWorld()) {
 				//Just extract the mouse position, which is all we want
 				var touch:Touch = event.getTouch(stage);
 				if (touch)
 				{
-					gameWorld.mousePos.x = touch.globalX;
-					gameWorld.mousePos.y = touch.globalY;
+					GameWorld().mousePos.x = touch.globalX;
+					GameWorld().mousePos.y = touch.globalY;
 					
-					if (touch.phase == TouchPhase.BEGAN)
-						gameWorld.mouseClicked = true;
+					//Record a mouse click to the game for handling
+					if (touch.phase == TouchPhase.BEGAN) {
+						//Hacky, but ignore the touch if its on the pause button (nested 2 levels deep)
+						var isPauseClick:Boolean = touch.target && touch.target.parent && touch.target.parent.parent == pauseBtn
+						
+						if (!isPauseClick)
+							GameWorld().mouseClicked = true;
+					}
 				}
 			}
 		}
 		
-		private function updateScoreText():void {
-			scoreMultTxt.text = "x" + gameWorld.gameInfo.currMultiplier.toString();
-			scoreTxt.text = gameWorld.gameInfo.getScore().toString();
+		private function updateTimeText():void {
+			scoreTxt.text = GameWorld().gameInfo.getPlayerLiveTime().toFixed(2);
 		}
 		
 		private function updateXPBar():void {
-			xpBar.setCurrXp(gameWorld.gameInfo.getXp());
+			xpBar.setCurrXp(GameWorld().gameInfo.getXp());
 			
 			//If player leveled up, update the XP bar limits
-			if (gameWorld.gameInfo.getLevel() >  xpBar.getLevel()) 
-				xpBar.setLevel(gameWorld.gameInfo.getLevel());
+			if (GameWorld().gameInfo.getLevel() >  xpBar.getLevel()) 
+				xpBar.setLevel(GameWorld().gameInfo.getLevel());
 		}
 		
 		private function updateBombsBar():void {
-			var numBombsDelta:int = gameWorld.gameInfo.currBombs - bombsOnBar.length;
+			var numBombsDelta:int = GameWorld().gameInfo.currBombs - bombsOnBar.length;
 			var i:int = 0;
 			//Remove as needed...
 			if (numBombsDelta < 0) {
@@ -224,23 +198,25 @@ package scenes
 		public override function onKey(event:KeyboardEvent):void {
 			//Debug hotkeys
 			if (event.keyCode == Keyboard.K) {
-				gameWorld.killPlayer(false);
+				GameWorld().killPlayer(false);
 				runGameEnd();
 			}
 			else if (event.keyCode == Keyboard.X) {
-				gameWorld.awardXpToPlayer(200);
+				GameWorld().awardXpToPlayer(200);
 			}
 			else if (event.keyCode == Keyboard.T) {
-				gameWorld.spawnObject(Constants.TREASURE_CHEST_ID);
+				GameWorld().spawnObject(Constants.TREASURE_CHEST_ID);
 			}
 			else if (event.keyCode == Keyboard.B) {
-				gameWorld.gameInfo.currBombs++;
+				GameWorld().gameInfo.currBombs++;
 			}
 		}
 		
 		private function runGameEnd():void {
+			GameWorld().endMainGame();
+			
 			//Save the game info
-			parentGame.getPlayerInfo().latestGameInfo = gameWorld.gameInfo;
+			parentGame.getPlayerInfo().latestGameInfo = GameWorld().gameInfo;
 			
 			//Open the game over screen
 			parentGame.showScreen("GameOver");

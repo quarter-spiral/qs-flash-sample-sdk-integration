@@ -5,6 +5,7 @@ package world
 	import math.Vec2;
 	
 	import starling.display.Image;
+	import tuning.Constants;
 
 	//A bullet/laser/what-have-you fired by the player or an enemy
 	public class Bullet extends GameObject

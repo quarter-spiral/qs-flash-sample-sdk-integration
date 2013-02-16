@@ -7,6 +7,7 @@ package world
 	
 	import starling.display.Image;
 	import starling.utils.deg2rad;
+	import tuning.Constants;
 
 	//A logical enemy of the player in the game world
 	public class Enemy extends GameObject

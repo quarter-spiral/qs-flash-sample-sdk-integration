@@ -10,15 +10,29 @@ package
     import scenes.Screen;
     
     import starling.core.Starling;
+    import starling.display.BlendMode;
+    import starling.display.DisplayObject;
+    import starling.display.Image;
     import starling.display.Sprite;
+    import starling.events.EnterFrameEvent;
     import starling.events.Event;
     import starling.events.KeyboardEvent;
     
+    import tuning.Constants;
+    
     import world.PlayerInfo;
+    import world.World;
 
     public class Game extends Sprite
     {
         private var currentScreen:Screen;
+		
+		//Main game world (we run it in the bg of all screens, but used to run actual game in MainGame)
+		private var gameWorld:World;
+		
+		private var bg:DisplayObject;		//the absolute farthest backdrop
+		private var mainPlane:Sprite;		//container for most gameplay object images
+		private var bgPlane:Sprite;			//container for bg gameplay object images;
 		
 		private var playerInfo:PlayerInfo;
         
@@ -53,6 +67,10 @@ package
 			return playerInfo;
 		}
 		
+		public function getGameWorld():World {
+			return gameWorld;
+		}
+		
 		public function showScreen(name:String):void
 		{
 			//Close current screen?
@@ -75,6 +93,14 @@ package
 			}
 		}
 		
+		private function onEnterFrame(event:EnterFrameEvent):void
+		{
+			//Delegate the frame update to open screen
+			if (currentScreen) {
+				currentScreen.update(event.passedTime);
+			}
+		}
+		
 		public function resetPlayerInfo():void {
 			//Save an empty profile to disk
 			playerInfo = new PlayerInfo();
@@ -92,6 +118,23 @@ package
         private function onAddedToStage(event:Event):void
         {
             stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			//Initialize the various display layers
+			bg = new Image(Assets.getTexture("Background"));
+			bg.blendMode = BlendMode.NONE;
+			addChild(bg);
+			
+			bgPlane = new Sprite();
+			bgPlane.touchable = false;
+			addChild(bgPlane);
+			
+			mainPlane = new Sprite();
+			mainPlane.touchable = false;
+			addChild(mainPlane);
+			
+			//Create the game world (we'll reuse it across game runs)
+			gameWorld = new World(mainPlane, bgPlane);
 			
 			showScreen("MainMenu");
 			//showScene("MainGame"); //DEBUG: Go direct to gameplay
@@ -100,6 +143,12 @@ package
         private function onRemovedFromStage(event:Event):void
         {
             stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKey);
+			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			if (gameWorld) {
+				gameWorld.dispose();
+				gameWorld = null;
+			}
         }
         
         private function onKey(event:KeyboardEvent):void

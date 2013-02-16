@@ -33,6 +33,11 @@ package scenes
 			dispatchEvent(new Event(CLOSING, true));
 		}
 		
+		//Run any per-frame updates, where dt is time passed since previous update
+		public function update(dt:Number):void {
+			//No updates by default...
+		}
+		
 		//React to a keyboard event (forwarded by listener on root Game class)
 		public function onKey(event:KeyboardEvent):void {}
     }
