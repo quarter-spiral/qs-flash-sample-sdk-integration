@@ -514,7 +514,8 @@ package world
 		
 		public function rewardPlayerForEnemyKill(enemy:Enemy):void {			
 			//Add kill score
-			gameInfo.playerLiveTime += enemy.props.killScore;
+			//DISABLED FOR NEW "SuperHex" mode. 
+			//gameInfo.currScore += enemy.props.killScore;
 			
 			//Spawn falling XP
 			for (var i:int = 0; i < enemy.props.killXpCoins; i++) {
