@@ -70,6 +70,9 @@ package
 		[Embed(source = "../media/textures/star.png")]
 		public static const StarImage:Class;
 		
+		[Embed(source = "../media/textures/action_msg_bg.png")]
+		public static const ActionMessageBgImage:Class;
+		
 		//STARLING DEMO:
         
         [Embed(source = "../media/textures/background.png")]

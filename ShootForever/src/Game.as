@@ -8,7 +8,9 @@ package
     import scenes.MainGame;
     import scenes.MainMenu;
     import scenes.Screen;
+    import scenes.ui.ActionMessage;
     
+    import starling.animation.Juggler;
     import starling.core.Starling;
     import starling.display.BlendMode;
     import starling.display.DisplayObject;
@@ -22,6 +24,7 @@ package
     
     import world.PlayerInfo;
     import world.World;
+    import world.pools.ActionMessagePool;
 
     public class Game extends Sprite
     {
@@ -33,6 +36,10 @@ package
 		private var bg:DisplayObject;		//the absolute farthest backdrop
 		private var mainPlane:Sprite;		//container for most gameplay object images
 		private var bgPlane:Sprite;			//container for bg gameplay object images;
+		private var msgPlane:Sprite;		//container for action messages;
+		
+		private var activeMsgs:Vector.<ActionMessage>;
+		private var  msgPool:ActionMessagePool;	
 		
 		private var playerInfo:PlayerInfo;
         
@@ -61,6 +68,9 @@ package
             addEventListener(Screen.CLOSING, onScreenClosing);
             addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
             addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+			
+			activeMsgs = new Vector.<ActionMessage>();
+			msgPool = new ActionMessagePool(createActionMsg, cleanActionMsg);
       	}
 		
 		public function getPlayerInfo():PlayerInfo {
@@ -93,11 +103,35 @@ package
 			}
 		}
 		
+		//Creates & animates given action message on the screen, using the 
+		//main Starling juggler by default unless another juggler is given
+		public function addActionMessage(message:String, customJuggler:Juggler = null):void {
+			var juggler:Juggler = customJuggler;
+			if (juggler == null)
+				juggler = Starling.juggler;
+			
+			var actionMsg:ActionMessage = msgPool.checkOut();
+			actionMsg.setText(message);
+			msgPlane.addChild(actionMsg.image);
+			
+			juggler.add(actionMsg);
+			activeMsgs.push(actionMsg);
+		}
+		
 		private function onEnterFrame(event:EnterFrameEvent):void
 		{
 			//Delegate the frame update to open screen
 			if (currentScreen) {
 				currentScreen.update(event.passedTime);
+			}
+			
+			//Update global action msgs on screen
+			var numActionMsgs:int = activeMsgs.length;
+			for (var i:int = numActionMsgs-1; i >= 0; i--) {
+				if (activeMsgs[i].isComplete()) {
+					var finishedMsg:ActionMessage = activeMsgs.splice(i, 1)[0];
+					msgPool.checkIn(finishedMsg);
+				}
 			}
 		}
 		
@@ -133,6 +167,10 @@ package
 			mainPlane.touchable = false;
 			addChild(mainPlane);
 			
+			msgPlane = new Sprite();
+			msgPlane.touchable = false;
+			addChild(msgPlane);
+			
 			//Create the game world (we'll reuse it across game runs)
 			gameWorld = new World(mainPlane, bgPlane);
 			
@@ -156,6 +194,10 @@ package
             if (event.keyCode == Keyboard.S)
                 Starling.current.showStats = !Starling.current.showStats;
 			
+			//DEBUG: Add debug action msg
+			if (event.keyCode == Keyboard.M)
+				addActionMessage("Test Message!");
+			
 			//Forward the keystroke to current screen
 			if (currentScreen)
 				currentScreen.onKey(event);
@@ -166,5 +208,21 @@ package
             currentScreen.removeFromParent(true);
 			currentScreen = null;
         }
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////
+		//Object pool creators/cleaners
+		///////////////////////////////////////////////////////////////////////////////////////////////
+		
+		private function createActionMsg():ActionMessage {
+			var msg:ActionMessage = new ActionMessage();
+			return msg;
+		}
+		
+		private function cleanActionMsg(msg:ActionMessage):void {
+			msg.reset();
+			if (msg.image && msg.image.parent) 
+				msg.image.parent.removeChild(msg.image);
+		}
+		///////////////////////////////////////////////////////////////////////////////////////////////
     }
 }

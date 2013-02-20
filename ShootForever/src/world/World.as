@@ -5,6 +5,7 @@ package world
 	import math.RandomUtils;
 	import math.Vec2;
 	
+	import starling.core.Starling;
 	import starling.display.DisplayObjectContainer;
 	
 	import tuning.Constants;
