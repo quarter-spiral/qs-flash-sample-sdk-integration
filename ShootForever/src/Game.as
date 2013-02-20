@@ -36,6 +36,7 @@ package
 		private var bg:DisplayObject;		//the absolute farthest backdrop
 		private var mainPlane:Sprite;		//container for most gameplay object images
 		private var bgPlane:Sprite;			//container for bg gameplay object images;
+		private var screenPlane:Sprite;		//container for the various main screens
 		private var msgPlane:Sprite;		//container for action messages;
 		
 		private var activeMsgs:Vector.<ActionMessage>;
@@ -45,7 +46,7 @@ package
         
         public function Game()
         {
-			Constants.init();
+			Constants.init(this);
 			
 			//Load up local player info, or create a new profile (not shared until a level completes)
 			//TODO: versioning of player data (just hacked in for now)
@@ -86,7 +87,7 @@ package
 			//Close current screen?
 			if (currentScreen) {
 				currentScreen.close();
-				removeChild(currentScreen);
+				screenPlane.removeChild(currentScreen);
 				currentScreen = null;
 			}
 			
@@ -98,7 +99,7 @@ package
 				case "GameOver": currentScreen = new GameOverScreen(this); break;
 			}
 			if (currentScreen) {
-				addChild(currentScreen);
+				screenPlane.addChild(currentScreen);
 				currentScreen.start();
 			}
 		}
@@ -166,6 +167,10 @@ package
 			mainPlane = new Sprite();
 			mainPlane.touchable = false;
 			addChild(mainPlane);
+			
+			screenPlane = new Sprite();
+			screenPlane.touchable = true;
+			addChild(screenPlane);
 			
 			msgPlane = new Sprite();
 			msgPlane.touchable = false;

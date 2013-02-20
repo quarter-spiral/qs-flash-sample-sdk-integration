@@ -44,10 +44,9 @@ package scenes.ui
 		
 		public function ActionMessage()
 		{
-			//TODO: Put constants in Constants.as to determine this
-			sweepInTime = 0.5;
-			holdTime = 0.5;
-			sweepOutTime = 1.0;
+			sweepInTime = Constants.ACTION_MSG_SWEEP_IN_TIME;
+			holdTime = Constants.ACTION_MSG_HOLD_TIME;
+			sweepOutTime = Constants.ACTION_MSG_SWEEP_OUT_TIME;
 			totalTime = sweepInTime + holdTime + sweepOutTime;
 			
 			image = new Sprite();

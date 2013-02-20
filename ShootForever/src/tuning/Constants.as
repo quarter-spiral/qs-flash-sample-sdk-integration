@@ -9,6 +9,10 @@ package tuning
 	
     public class Constants
     {
+		//Hacky, but maintain a global game instance for access by various bits
+		protected static var game:Game;
+		public static function getGameInstance():Game {return game;}
+		
 		public static const LOCAL_DATA_NAME:String = "ShootForeverData";
 		
         public static const GameWidth:int  = 400;
@@ -97,8 +101,13 @@ package tuning
 		public static const WAVE_ENEMY_SIDE_MOTION_AMPLITUDE:Number = 100;	//Amplitude of sideways motion for sinusoid enemy
 		public static const WAVE_ENEMY_SIDE_MOTION_PERIOD:Number = 2;	//Affects rate of sideways motion for sinusoid enemy
 
+		//UI & ANIMATIONS
+		public static const ACTION_MSG_SWEEP_IN_TIME:Number = 	0.3;		//Time for popup action msgs to "sweep in" from sides
+		public static const ACTION_MSG_HOLD_TIME:Number		= 0.4;			//Time that action msgs sit still before starting to fade
+		public static const ACTION_MSG_SWEEP_OUT_TIME:Number = 1.0;			//Time that action msgs take to fade/sweep out
 		
-		public static function init():void {
+		public static function init(gameInstance :Game):void {
+			Constants.game = gameInstance;
 			initXpProperties();
 			initEnemyProperties();
 			initLevelingProperties();
