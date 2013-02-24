@@ -196,18 +196,32 @@ package scenes
 		
 		public override function onKey(event:KeyboardEvent):void {
 			//Debug hotkeys
-			if (event.keyCode == Keyboard.K) {
-				GameWorld().killPlayer(false);
-				runGameEnd();
-			}
-			else if (event.keyCode == Keyboard.X) {
-				GameWorld().awardXpToPlayer(200);
-			}
-			else if (event.keyCode == Keyboard.T) {
-				GameWorld().spawnObject(Constants.TREASURE_CHEST_ID);
-			}
-			else if (event.keyCode == Keyboard.B) {
-				GameWorld().gameInfo.currBombs++;
+			CONFIG::DEBUG {
+				if (event.keyCode == Keyboard.K) {
+					GameWorld().killPlayer(false);
+					runGameEnd();
+				}
+				else if (event.keyCode == Keyboard.X) {
+					GameWorld().awardXpToPlayer(200);
+				}
+				else if (event.keyCode == Keyboard.T) {
+					GameWorld().spawnObject(Constants.TREASURE_CHEST_ID);
+				}
+				else if (event.keyCode == Keyboard.B) {
+					GameWorld().gameInfo.currBombs++;
+				}
+				
+				//Debug player upgrades
+				else if (event.keyCode == Keyboard.NUMBER_1)
+					GameWorld().FlowMan.upgradePlayer(Constants.UPGRADE_SHOTS_PER_SECOND, true);
+				else if (event.keyCode == Keyboard.NUMBER_2)
+					GameWorld().FlowMan.upgradePlayer(Constants.UPGRADE_SHOT_DAMAGE, true);
+				else if (event.keyCode == Keyboard.NUMBER_3)
+					GameWorld().FlowMan.upgradePlayer(Constants.UPGRADE_SHOT_NUMBER, true);
+				else if (event.keyCode == Keyboard.NUMBER_4)
+					GameWorld().FlowMan.upgradePlayer(Constants.UPGRADE_MAGNET_RADIUS_UP, true);
+				else if (event.keyCode == Keyboard.NUMBER_5)
+					GameWorld().FlowMan.upgradePlayer(Constants.UPGRADE_BOMB_UP, true);
 			}
 		}
 		

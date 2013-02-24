@@ -4,11 +4,11 @@ package world
 	public class PlayerUpgrades
 	{
 		//Upgrade levels
-		public var startBombsLevel:int = 0;
-		public var shotDamageLevel:int = 0;
-		public var shotRateLevel:int = 0;
-		public var shotSpeedLevel:int = 0;
-		public var shotRadiusLevel:int = 0;
+		public var startBombsLevel:int = 0;		//increases number of bombs at game start
+		public var shotRateLevel:int = 0;		//decreases firing interval
+		public var shotDamageLevel:int = 0;		//increases damage per shot
+		public var shotNumLevel:int = 0;		//increase number shots created at each fire interval
+		public var magnetRadiusLevel:int = 0;	//radius of XP magnet
 		
 		public function PlayerUpgrades()
 		{
@@ -20,8 +20,8 @@ package world
 			dup.startBombsLevel = this.startBombsLevel
 			dup.shotDamageLevel = this.shotDamageLevel;
 			dup.shotRateLevel = this.shotRateLevel;
-			dup.shotSpeedLevel = this.shotSpeedLevel;
-			dup.shotRadiusLevel = this.shotRadiusLevel;
+			dup.shotNumLevel = this.shotNumLevel;
+			dup.magnetRadiusLevel = this.magnetRadiusLevel;
 			return dup;
 		}
 		
@@ -30,8 +30,8 @@ package world
 			this.startBombsLevel += toAdd.startBombsLevel;
 			this.shotDamageLevel += toAdd.shotDamageLevel;
 			this.shotRateLevel += toAdd.shotRateLevel;
-			this.shotRadiusLevel += toAdd.shotRadiusLevel;
-			this.shotSpeedLevel += toAdd.shotSpeedLevel;
+			this.shotNumLevel += toAdd.shotNumLevel;
+			this.magnetRadiusLevel += toAdd.magnetRadiusLevel;
 		}
 	}
 }

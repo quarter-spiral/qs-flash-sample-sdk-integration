@@ -233,9 +233,15 @@ package world
 			parentWorld.gameInfo.ingameLevelups++;
 			
 			//Give player the upgrade award
-			var upgrade:int = Constants.getLevelupUpgrade(parentWorld.gameInfo.getLevel());
+			var upgradeType:int = Constants.getLevelupUpgrade(parentWorld.gameInfo.getLevel());
+			upgradePlayer(upgradeType, true);
+		}
+		
+		//Upgrades player stats for given upgrade type in current game, optionally
+		//messaging this upgrade using the game UI
+		public function upgradePlayer(upgradeType:int, showMsg:Boolean):void {
 			var upgradeMsg:String = "";
-			switch (upgrade) {
+			switch (upgradeType) {
 				case Constants.UPGRADE_NONE:
 				default:
 					//Do nothing
@@ -244,13 +250,17 @@ package world
 					parentWorld.gameInfo.ingameUpgrades.shotRateLevel++;
 					upgradeMsg = "Fire Up";
 					break;
-				case Constants.UPGRADE_SHOT_SPEED:
-					parentWorld.gameInfo.ingameUpgrades.shotSpeedLevel++;
-					upgradeMsg = "Fire Speed Up";
-					break;
 				case Constants.UPGRADE_SHOT_DAMAGE:
 					parentWorld.gameInfo.ingameUpgrades.shotDamageLevel++;
 					upgradeMsg = "Damage Up";
+					break;
+				case Constants.UPGRADE_SHOT_NUMBER:
+					parentWorld.gameInfo.ingameUpgrades.shotNumLevel++;
+					upgradeMsg = "Bullet Up";
+					break;
+				case Constants.UPGRADE_MAGNET_RADIUS_UP:
+					parentWorld.gameInfo.ingameUpgrades.magnetRadiusLevel++;
+					upgradeMsg = "Magnet Up";
 					break;
 				case Constants.UPGRADE_BOMB_UP:
 					parentWorld.gameInfo.currBombs++;
@@ -258,7 +268,7 @@ package world
 					break;
 			}
 			
-			parentWorld.getPlayer().updateStatsFromUpgrades(parentWorld.gameInfo.ingameUpgrades);
+			parentWorld.getPlayer().setUpgrades(parentWorld.gameInfo.ingameUpgrades);
 			
 			//Message upgrade to player w/ popup text (hacky & global-reach, but meh...)
 			if (upgradeMsg.length > 0)

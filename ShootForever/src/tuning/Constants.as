@@ -1,11 +1,9 @@
 package tuning
 {
 	import math.RandomUtils;
-	import math.Vec2;
 	
 	import world.EnemyProperties;
 	import world.XpProperties;
-	import world.pools.XpPool;
 	
     public class Constants
     {
@@ -49,14 +47,20 @@ package tuning
 		public static const PLAYER_SHOTS_PER_SECOND_UPGRADE:Number = 1.0;
 		
 		public static const PLAYER_SHOT_SPEED_BASE:Number = 500.0;
-		public static const PLAYER_SHOT_SPEED_UPGRADE:Number = 100.0;
+		//public static const PLAYER_SHOT_SPEED_UPGRADE:Number = 100.0; //not upgradeable as of 2.24.2013
 		
 		public static const PLAYER_SHOT_DAMAGE_BASE:Number = 1;
 		public static const PLAYER_SHOT_DAMAGE_UPGRADE:Number = 100;
 		
+		public static const PLAYER_SHOT_NUMBER_BASE:int = 1;
+		public static const PLAYER_SHOT_NUMBER_UPGRADE:int = 1;
+		
+		public static const PLAYER_MAGNET_RADIUS_BASE:Number = 100.0;
+		public static const PLAYER_MAGNET_RADIUS_UPGRADE:Number = 50.0;
+		
 		//Just in case we want upgradable shot radii
 		public static const PLAYER_SHOT_RADIUS_BASE:Number = 16;
-		public static const PLAYER_SHOT_RADIUS_UPGRADE:Number = 2;
+		//public static const PLAYER_SHOT_RADIUS_UPGRADE:Number = 2; //not upgradeable as of 2.24.2013
 		
 		//LEVELING
 		
@@ -66,11 +70,10 @@ package tuning
 		public static const UPGRADE_NONE:int				= 0;
 		public static const UPGRADE_RANDOM:int				= 1;
 		public static const UPGRADE_SHOTS_PER_SECOND:int 	= 2;	//rate at which player spawns bullets
-		public static const UPGRADE_SHOT_SPEED:int			= 3;	//speed of bullet once spawned
-		public static const UPGRADE_SHOT_DAMAGE:int 		= 4;	//damage on baddies for player bullets
-		public static const UPGRADE_SHOT_NUMBER:int			= 5;	//increase number of at-once shots (not yet implemented as of 2.15.2013)
+		public static const UPGRADE_SHOT_DAMAGE:int 		= 3;	//damage on baddies for player bullets
+		public static const UPGRADE_SHOT_NUMBER:int			= 4;	//increase number of at-once shots
+		public static const UPGRADE_MAGNET_RADIUS_UP:int	= 5;	//not yet implemented as of 2.15.2013
 		public static const UPGRADE_BOMB_UP:int				= 6;	//a bit different than others... just gives a bomb to player... doesn't affect his/her upgrade stats
-		public static const UPGRADE_MAGNET_RADIUS_UP:int	= 7;	//not yet implemented as of 2.15.2013
 		//XP
 		
 		public static var XP_PROPERTIES:Vector.<XpProperties> = new Vector.<XpProperties>();
@@ -264,10 +267,9 @@ package tuning
 			//Set xp per level and bonus upgrade on reach level here...
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(0, UPGRADE_NONE));		//level 0... not actually ever "reached"
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(500, UPGRADE_BOMB_UP));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1500, UPGRADE_SHOT_SPEED));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3000, UPGRADE_SHOTS_PER_SECOND));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(5000, UPGRADE_SHOT_DAMAGE));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7500, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7500, UPGRADE_SHOT_NUMBER));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(11000, UPGRADE_NONE));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(15000, UPGRADE_NONE));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(25000, UPGRADE_NONE));
@@ -330,9 +332,9 @@ package tuning
 					//Not ideal setup.... should fix this later
 					upgradeType = RandomUtils.chooseInt( [
 						UPGRADE_SHOTS_PER_SECOND,
-						UPGRADE_SHOT_SPEED,
 						UPGRADE_SHOT_DAMAGE,
-						//UPGRADE_MAGNET_RADIUS_UP,
+						UPGRADE_SHOT_NUMBER,
+						UPGRADE_MAGNET_RADIUS_UP,
 						UPGRADE_BOMB_UP
 						]);
 				}

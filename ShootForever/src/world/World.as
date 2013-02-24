@@ -65,6 +65,8 @@ package world
 		private var xpPool:XpPool;
 		private var starPool:StarPool;
 		
+		public function get FlowMan():GameflowManager {return flowMan;}
+		
 		//Creates a new game world with given container for the graphical images of game objects
 		//Note thate game is not in "running" mode by default (use "startMainGame()" for this)
 		public function World(imageContainer:DisplayObjectContainer, bgLayer:DisplayObjectContainer)
@@ -272,8 +274,9 @@ package world
 		protected function updatePlayerShooting():void {
 			//If enough time has passed, spawn a new shot
 			var timeSinceShot:Number = currTime - player.lastShotTime;
-			if (timeSinceShot > player.getTimeBetweenShots())
-				spawnPlayerBullet();
+			if (timeSinceShot > player.getTimeBetweenShots()) {
+				firePlayerBullets();
+			}
 		}
 		
 		//Check for enemy's being hit by player bullets
@@ -293,7 +296,7 @@ package world
 						playerBullets[j].alive = false;
 						
 						//Hurt enemy, or kill if health is 0
-						enemies[i].currHealth -= playerBullets[j].damage;
+						enemies[i].currHealth -= playerBullets[j].getDamage();
 						if (enemies[i].currHealth <= 0) {
 							enemies[i].currHealth = 0;
 							enemies[i].alive = false;
@@ -367,14 +370,24 @@ package world
 			}
 		}
 		
-		public function spawnPlayerBullet():void {
+		//Runs the logic for a player firing action (spawns 1 or more player bullets) 
+		public function firePlayerBullets():void {
 			player.lastShotTime = currTime;	
 			
+			//TODO: Create # of bullets based on player's shot number level
+			//Current: just spawn a single bullet
+			spawnPlayerBullet(0,0);
+		}
+		
+		//Creates a new bullet fired by player, with starting position offset from player's position by given values
+		public function spawnPlayerBullet(playerXOffset:Number, playerYOffset:Number):void {
 			var bullet:Bullet = bulletPool.checkOut();
 			bullet.alive = true;
 			bullet.size.setVals(player.shotRadius, player.shotRadius);
-			bullet.damage = player.shotDamage;
+			bullet.setDamageLevel(player.shotDamage, player.getUpgrades().shotDamageLevel);
 			bullet.pos.setValsFrom(player.pos);
+			bullet.pos.x += playerXOffset;
+			bullet.pos.y += playerYOffset;
 			bullet.vel.setVals(0, -player.shotSpeed); //negative so we move updwards
 			addObjectImage(bullet);
 			

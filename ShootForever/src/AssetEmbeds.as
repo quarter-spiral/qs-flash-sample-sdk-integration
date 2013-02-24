@@ -10,8 +10,20 @@ package
 		[Embed(source = "../media/textures/player.png")]
 		public static const PlayerImage:Class;
 		
-		[Embed(source = "../media/textures/bullet.png")]
-		public static const BulletImage:Class;
+		[Embed(source = "../media/textures/bullet_0.png")]
+		public static const Bullet0Image:Class;
+
+		[Embed(source = "../media/textures/bullet_1.png")]
+		public static const Bullet1Image:Class;
+
+		[Embed(source = "../media/textures/bullet_2.png")]
+		public static const Bullet2Image:Class;
+		
+		[Embed(source = "../media/textures/bullet_3.png")]
+		public static const Bullet3Image:Class;
+		
+		[Embed(source = "../media/textures/bullet_4.png")]
+		public static const Bullet4Image:Class;
 		
 		[Embed(source = "../media/textures/xp_tiny.png")]
 		public static const XpTinyImage:Class;

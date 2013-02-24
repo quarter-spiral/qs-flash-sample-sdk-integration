@@ -5,17 +5,22 @@ package world
 	import math.Vec2;
 	
 	import starling.display.Image;
+	
 	import tuning.Constants;
 
 	/** The player's ship in the game world */
 	public class Player extends GameObject
 	{
 		
+		//Current upgrades for this player
+		public var upgrades:PlayerUpgrades;
+		
 		//Player traits (affected by levelups)
 		public var shotDamage:Number;
 		public var shotRate:Number;
 		public var shotSpeed:Number;
 		public var shotRadius:Number;
+		public var shotNum:Number;
 		public var magnetRadius:Number;
 		
 		public var lastShotTime:Number;
@@ -28,7 +33,7 @@ package world
 		{
 			super(parentWorld);
 			
-			updateStatsFromUpgrades(upgrades); //inits stats
+			setUpgrades(upgrades); //inits stats
 						 
 			lastShotTime = 0;
 			
@@ -43,14 +48,27 @@ package world
 			image.pivotY = image.height/2;
 		}
 		
-		//Sets game stats on this player based on current upgrades
-		//Called after user upgrades player traits
-		public function updateStatsFromUpgrades(upgrades : PlayerUpgrades):void {
-			shotDamage = Constants.PLAYER_SHOT_DAMAGE_BASE		+ upgrades.shotDamageLevel * Constants.PLAYER_SHOT_DAMAGE_UPGRADE;
+		//Sets the current upgrades for this player & sets its gameplay stats on those upgrades
+		public function setUpgrades(upgrades : PlayerUpgrades):void {
+			//Null upgrades object not allowed, so creat a default one if given null...
+			if (upgrades == null)
+				upgrades = new PlayerUpgrades();
+			this.upgrades = upgrades;
+	
 			shotRate = Constants.PLAYER_SHOTS_PER_SECOND_BASE	+ upgrades.shotRateLevel * Constants.PLAYER_SHOTS_PER_SECOND_UPGRADE;
-			shotSpeed = Constants.PLAYER_SHOT_SPEED_BASE		+ upgrades.shotSpeedLevel * Constants.PLAYER_SHOT_SPEED_UPGRADE;
-			shotRadius = Constants.PLAYER_SHOT_RADIUS_BASE		+ upgrades.shotRadiusLevel * Constants.PLAYER_SHOT_RADIUS_UPGRADE;
-			//magnetRadius = ; //TODO
+			shotDamage = Constants.PLAYER_SHOT_DAMAGE_BASE		+ upgrades.shotDamageLevel * Constants.PLAYER_SHOT_DAMAGE_UPGRADE;
+			shotNum = Constants.PLAYER_SHOT_NUMBER_BASE 		+ upgrades.shotNumLevel * Constants.PLAYER_SHOT_NUMBER_UPGRADE;
+			magnetRadius = Constants.PLAYER_MAGNET_RADIUS_BASE 	+ upgrades.magnetRadiusLevel * Constants.PLAYER_MAGNET_RADIUS_UPGRADE;
+			
+			//No longer upgradeable, as of 2.24.2013
+			shotSpeed = Constants.PLAYER_SHOT_SPEED_BASE;//		+ upgrades.shotSpeedLevel * Constants.PLAYER_SHOT_SPEED_UPGRADE;
+			shotRadius = Constants.PLAYER_SHOT_RADIUS_BASE;//		+ upgrades.shotRadiusLevel * Constants.PLAYER_SHOT_RADIUS_UPGRADE;
+			
+		}
+		
+		//Returns current upgrades for this player
+		public function getUpgrades():PlayerUpgrades {
+			return upgrades;
 		}
 		
 		public function getTimeBetweenShots():Number {
