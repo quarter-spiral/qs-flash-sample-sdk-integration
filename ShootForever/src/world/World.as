@@ -374,9 +374,47 @@ package world
 		public function firePlayerBullets():void {
 			player.lastShotTime = currTime;	
 			
-			//TODO: Create # of bullets based on player's shot number level
-			//Current: just spawn a single bullet
-			spawnPlayerBullet(0,0);
+			//Create # of bullets based on player's shot number level
+			//We could define bullet spawn locations using a one-size-fits-all mathematical equation,
+			//but using a per-case switch gives us flexibility to make custom patterns per level if we want
+			var pwidth:Number = player.image.width;
+			switch (player.getUpgrades().shotNumLevel) {
+				case 0:	
+					spawnPlayerBullet(0,0);
+					break
+				case 1:
+					spawnPlayerBullet(-0.15 * pwidth, 0);
+					spawnPlayerBullet(0.15 * pwidth, 0);
+					break;
+				case 2:
+					spawnPlayerBullet(-0.2 * pwidth, 0);
+					spawnPlayerBullet(0, 0);
+					spawnPlayerBullet(0.2 * pwidth, 0);
+					break;
+				case 3:
+					spawnPlayerBullet(-0.3 * pwidth, 0);
+					spawnPlayerBullet(-0.1 * pwidth, 0);
+					spawnPlayerBullet(0.1 * pwidth, 0);
+					spawnPlayerBullet(0.3 * pwidth, 0);
+					break;
+				case 4:
+					spawnPlayerBullet(-0.3 * pwidth, 0);
+					spawnPlayerBullet(-0.15 * pwidth, 0);
+					spawnPlayerBullet(0, 0);
+					spawnPlayerBullet(0.15 * pwidth, 0);
+					spawnPlayerBullet(0.3 * pwidth, 0);
+					break;
+				default:
+					//In the general case, spawn n+1 bullets in a row
+					var numBulletsToSpawn:int = player.getUpgrades().shotNumLevel + 1;
+					var bulletX:Number = 0;
+					var dx:Number = pwidth / (numBulletsToSpawn + 1);
+					for (var i:int = 0; i < numBulletsToSpawn; i++) {
+						spawnPlayerBullet(bulletX, 0);
+						bulletX += dx;
+					}
+					break
+			}
 		}
 		
 		//Creates a new bullet fired by player, with starting position offset from player's position by given values
