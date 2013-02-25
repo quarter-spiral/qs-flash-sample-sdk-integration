@@ -56,7 +56,12 @@ package world
 			if (alive == false) return;
 			
 			//Have xp "fall" downward
-			vel.y += Constants.XP_GRAVITY;
+			//(note our rough "terminal velocity" approximation)
+			//if (vel.y < 0 || vel.y < Constants.XP_TERMINAL_VEL_SQRD)
+				vel.y += Constants.XP_GRAVITY;
+				
+			//Apply damping to XP motion (prevents excess speeds & oscillations from XP magnet)
+			vel.scale(Constants.XP_DRAG);
 			
 			deltaPos.setValsFrom(vel);
 			deltaPos.scale(dt);

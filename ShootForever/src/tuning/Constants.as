@@ -55,8 +55,8 @@ package tuning
 		public static const PLAYER_SHOT_NUMBER_BASE:int = 1;
 		public static const PLAYER_SHOT_NUMBER_UPGRADE:int = 1;
 		
-		public static const PLAYER_MAGNET_RADIUS_BASE:Number = 100.0;
-		public static const PLAYER_MAGNET_RADIUS_UPGRADE:Number = 50.0;
+		public static const PLAYER_MAGNET_RADIUS_BASE:Number = 50.0;
+		public static const PLAYER_MAGNET_RADIUS_UPGRADE:Number = 25.0;
 		
 		//Just in case we want upgradable shot radii
 		public static const PLAYER_SHOT_RADIUS_BASE:Number = 16;
@@ -79,7 +79,11 @@ package tuning
 		public static var XP_PROPERTIES:Vector.<XpProperties> = new Vector.<XpProperties>();
 		private static var totalXpWeight:int = 0;
 		
-		public static const XP_GRAVITY:Number = 12; //Affects how quickly XP falls from baddies
+		//XP motion tuning (note that these guys generally need to be tuned as a group,
+		//as changing one will usually create an imbalance among the others)
+		public static const XP_DRAG:Number = 0.98;					//A constant drag coefficient applied to XP each update (prevents oscillations & excessive speeds)
+		public static const XP_GRAVITY:Number = 10; 				//Affects how quickly XP falls from baddies
+		public static const XP_MAGNET_FORCE_BASE:Number = 50.0;		//Strength of xp magnet (basically an "acceleration" value) (See Player.checkAndApplyMagnet())
 		
 		//Xp costs in upgrade store
 		public static const UPGRADE_SHOTS_PER_SECOND_COST:Number = 500;

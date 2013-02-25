@@ -10,6 +10,9 @@ package
 		[Embed(source = "../media/textures/player.png")]
 		public static const PlayerImage:Class;
 		
+		[Embed(source = "../media/textures/magnet.png")]
+		public static const MagnetImage:Class;
+		
 		[Embed(source = "../media/textures/bullet_0.png")]
 		public static const Bullet0Image:Class;
 

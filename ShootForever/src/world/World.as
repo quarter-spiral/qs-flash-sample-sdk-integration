@@ -119,7 +119,7 @@ package world
 			//Create player at the bottom of the screen
 			player = new Player(this, playerInfo.upgrades);
 			player.pos.x = Constants.GameWidth/2;
-			player.pos.y = Constants.GameHeight - player.image.height/2- 30;
+			player.pos.y = Constants.GameHeight - player.ShipHeight/2- 30;
 			addObjectImage(player);
 			
 			//Give initial # of bombs
@@ -335,19 +335,21 @@ package world
 				
 				//TODO: Player-enemy-bullet collisions
 				
-				//Player-XP collisions
+				//Player-XP collisions (also, magnet pull)
 				for (i = 0; i < numXpObjs; i++) {
 					if (xpObjs[i].alive == false) continue;
 					
+					//Check for player collision
 					if (player.checkCollisionRect(xpObjs[i].boundBox)) {
-						//Remove xp
 						xpObjs[i].alive = false;
-						
-						
 						awardXpToPlayer(xpObjs[i].getProperties().xpAmount);
 						
 						//TODO: Animate xp grab with pretty particles
 					}
+					
+					//Apply magnetic force, if necessary
+					if (xpObjs[i].alive)
+						player.checkAndApplyMagnet(xpObjs[i]);
 				}
 			}
 		}
@@ -377,7 +379,7 @@ package world
 			//Create # of bullets based on player's shot number level
 			//We could define bullet spawn locations using a one-size-fits-all mathematical equation,
 			//but using a per-case switch gives us flexibility to make custom patterns per level if we want
-			var pwidth:Number = player.image.width;
+			var pwidth:Number = player.ShipWidth;
 			switch (player.getUpgrades().shotNumLevel) {
 				case 0:	
 					spawnPlayerBullet(0,0);
