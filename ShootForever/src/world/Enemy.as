@@ -2,11 +2,11 @@ package world
 {
 	import flash.geom.Rectangle;
 	
-	import math.RandomUtils;
 	import math.Vec2;
 	
 	import starling.display.Image;
-	import starling.utils.deg2rad;
+	import starling.display.Sprite;
+	
 	import tuning.Constants;
 
 	//A logical enemy of the player in the game world
@@ -22,6 +22,7 @@ package world
 		public var enemyType:int = 0;
 		
 		public var liveTime:Number = 0; //time this enemy has been alive
+		public var hurtTime:Number = 0;	//time at which this enemy was last damaged
 		
 		public var currHealth:int;
 		public var hasDarted:Boolean;
@@ -36,6 +37,12 @@ package world
 		protected var deltaPos:Vec2;
 		protected var worldBoundsPadded:Rectangle;
 		
+		protected var imgHolder:Sprite;
+		protected var normalImg:Image;
+		protected var hurtImg:Image;
+		
+		//Time this enemy was hurt
+		
 		public function Enemy(parentWorld:World)
 		{
 			super(parentWorld);
@@ -46,7 +53,13 @@ package world
 			deltaPos = new Vec2();
 			worldBoundsPadded = new Rectangle();
 			
+			//Create a centered holder for enemy graphics
+			imgHolder = new Sprite();
+			image = imgHolder;
+			
 			setType(0); //default type
+			
+			reset();
 		}
 		
 		public function setType(typeNum:int):void {
@@ -59,7 +72,16 @@ package world
 			
 			size.setValsFrom(props.size);
 			
-			loadImage();
+			loadImages();
+		}
+		
+		//Called when enemy is removed from game, but may be used again
+		//(eg: for a pooling system)
+		public function reset():void {
+			alive = true;
+			liveTime = 0;
+			hasDarted = false;
+			endHurtFlash();
 		}
 		
 		public function setInitialVelocity():void {
@@ -118,13 +140,19 @@ package world
 		}
 		
 		//Loads the graphical image of this baddie. Override for specific enemy types
-		public function loadImage():void {
-			//TODO: clear any existing image?
+		public function loadImages():void {
+			imgHolder.removeChildren(0, imgHolder.numChildren-1);
 			
 			//Change image based on movement type
-			image = new Image(Assets.getTexture(props.imageName));
-			image.pivotX = image.width/2;
-			image.pivotY = image.height/2;
+			normalImg = new Image(Assets.getTexture(props.imageName));
+			hurtImg = new Image(Assets.getTexture(props.imageName + "Hurt"));
+			
+			//Be sure image is centered
+			imgHolder.pivotX = normalImg.width/2;
+			imgHolder.pivotY = normalImg.height/2;
+			
+			//May have changed type images, so refresh current image
+			refreshCurrentEnemyImage();
 		}
 		
 		public function setStartPos(startX:Number, startY:Number):void {
@@ -136,6 +164,12 @@ package world
 			if (alive == false) return;
 			
 			liveTime += dt;
+			
+			//Update image based on whether we're doing a "hurt" flash
+			if (hurtTime >= 0) {
+				if (liveTime > hurtTime + Constants.ENEMY_HURT_FLASH_LENGTH)
+					endHurtFlash();
+			}
 			
 			//Update enemy movement based on type
 			switch (enemyType) {
@@ -219,6 +253,39 @@ package world
 			else {
 				dir.setVals(0,0);
 			}
+		}
+		
+		protected function startHurtFlash():void {
+			hurtTime = liveTime;
+			refreshCurrentEnemyImage();
+		}
+		
+		protected function endHurtFlash():void {
+			hurtTime = -1;
+			refreshCurrentEnemyImage();
+		}
+		
+		protected function refreshCurrentEnemyImage():void {
+			if (imgHolder.numChildren > 0)
+				imgHolder.removeChildAt(0);
+			
+			if (hurtTime < 0 || Constants.ENEMY_FLASH_WHEN_HURT == false)
+				imgHolder.addChild(normalImg);
+			else
+				imgHolder.addChild(hurtImg);
+		}
+		
+		//Applies damage to this enemy and shows graphical "hurt" flash if specified
+		public function applyDamage(damage:int, showGraphicalFlash:Boolean):void {
+			currHealth -= damage; 
+			//"Kill" if health is 0
+			if (currHealth <= 0) {
+				currHealth = 0;
+				alive = false;
+			}
+			
+			if (showGraphicalFlash && damage > 0)
+				startHurtFlash();
 		}
 	}
 }

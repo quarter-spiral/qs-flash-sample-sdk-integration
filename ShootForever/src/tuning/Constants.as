@@ -107,6 +107,9 @@ package tuning
 		public static var SINE_WAVE_ENEMY_ID:int;
 		public static const WAVE_ENEMY_SIDE_MOTION_AMPLITUDE:Number = 100;	//Amplitude of sideways motion for sinusoid enemy
 		public static const WAVE_ENEMY_SIDE_MOTION_PERIOD:Number = 2;	//Affects rate of sideways motion for sinusoid enemy
+		
+		public static const ENEMY_FLASH_WHEN_HURT:Boolean = true;		//enable/disable flashing graphic when enemies are hurt by player
+		public static const ENEMY_HURT_FLASH_LENGTH:Number = 0.15;		//length of graphical flash when enemies are hurt, in seconds
 
 		//UI & ANIMATIONS
 		public static const ACTION_MSG_SWEEP_IN_TIME:Number = 	0.3;		//Time for popup action msgs to "sweep in" from sides

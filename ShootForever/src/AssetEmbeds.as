@@ -70,6 +70,9 @@ package
 		[Embed(source = "../media/textures/treasure_chest.png")]
 		public static const TreasureChestImage:Class;
 		
+		[Embed(source = "../media/textures/treasure_chest_hurt.png")]
+		public static const TreasureChestImageHurt:Class;
+		
 		[Embed(source = "../media/textures/enemy1.png")]
 		public static const Enemy1Image:Class;
 
@@ -81,6 +84,18 @@ package
 		
 		[Embed(source = "../media/textures/enemy4.png")]
 		public static const Enemy4Image:Class;
+		
+		[Embed(source = "../media/textures/enemy1_hurt.png")]
+		public static const Enemy1ImageHurt:Class;
+		
+		[Embed(source = "../media/textures/enemy2_hurt.png")]
+		public static const Enemy2ImageHurt:Class;
+		
+		[Embed(source = "../media/textures/enemy3_hurt.png")]
+		public static const Enemy3ImageHurt:Class;
+		
+		[Embed(source = "../media/textures/enemy4_hurt.png")]
+		public static const Enemy4ImageHurt:Class;
 
 		[Embed(source = "../media/textures/star.png")]
 		public static const StarImage:Class;

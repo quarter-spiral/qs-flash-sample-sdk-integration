@@ -295,12 +295,9 @@ package world
 						//Remove bullet
 						playerBullets[j].alive = false;
 						
-						//Hurt enemy, or kill if health is 0
-						enemies[i].currHealth -= playerBullets[j].getDamage();
-						if (enemies[i].currHealth <= 0) {
-							enemies[i].currHealth = 0;
-							enemies[i].alive = false;
-							
+						//Hurt enemy, or kill if health is no longer alive
+						enemies[i].applyDamage(playerBullets[j].getDamage(), true);
+						if (enemies[i].alive == false) {
 							//Award points to player
 							rewardPlayerForEnemyKill(enemies[i]);
 							
@@ -436,9 +433,6 @@ package world
 		
 		public function spawnObject(typeNum:int):Enemy {
 			var enemy:Enemy = enemyPool.checkOut();
-			enemy.alive = true;
-			enemy.liveTime = 0;
-			enemy.hasDarted = false;
 			enemy.setType(typeNum);
 			
 			//Set enemy spawn initial variables based on type
@@ -668,6 +662,7 @@ package world
 		private function cleanEnemy(enemy:Enemy):void {
 			if (enemy.image && enemy.image.parent) 
 				enemy.image.parent.removeChild(enemy.image);
+			enemy.reset();
 		}
 		
 		private function createXpObj():XpObject {
