@@ -22,14 +22,26 @@ package tuning
 		public static const MAIN_FONT:String = "Verdana";	
 		
 		public static const PLAYER_RANK_NAMES:Array = [
-			"Noob",
-			"Wimp",
-			"Footman",
-			"Veteran",
-			"Mayor of the Town",
-			"Regent of the World",
-			"Lord of the Galaxy",
-			"King of All Cosmos"
+			"Ensign I",
+			"Ensign II",
+			"Junior Lieutenant I",
+			"Junior Lieutenant II",
+			"Lieutenant I",
+			"Lieutenant II",
+			"Captain I",
+			"Captain II",
+			"Major I",
+			"Major II",
+			"Lieutenant Colonel I",
+			"Lieutenant Colonel II",
+			"Colonel",
+			"Senior Colonel",
+			"Commander",
+			"Supreme Commander",
+			"Rear Admiral",
+			"Vice Admiral",
+			"Senior Vice Admiral",
+			"Admiral"
 		]
 		
 		//GAMEPLAY CONSTANTS
@@ -40,7 +52,7 @@ package tuning
 		
 		public static const PLAYER_BULLET_RADIUS:int = 2;
 		
-		public static const PLAYER_START_BOMBS_BASE:int = 3;
+		public static const PLAYER_START_BOMBS_BASE:int = 0;
 		public static const PLAYER_START_BOMBS_UPGRADE:int = 0;
 		
 		public static const PLAYER_SHOTS_PER_SECOND_BASE:Number = 2;
@@ -158,7 +170,7 @@ package tuning
 			
 			props = new XpProperties();
 			props.spawnWeight = 5;
-			props.xpAmount = 500;
+			props.xpAmount = 50;
 			props.imageName = "XpLargeImage";
 			XP_PROPERTIES.push(props);
 			
@@ -272,11 +284,14 @@ package tuning
 			LEVELING_PROPERTIES = new Vector.<PlayerLevelProperties>();
 			
 			//Set xp per level and bonus upgrade on reach level here...
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(0, UPGRADE_NONE));		//level 0... not actually ever "reached"
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(500, UPGRADE_BOMB_UP));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3000, UPGRADE_SHOTS_PER_SECOND));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(5000, UPGRADE_SHOT_DAMAGE));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7500, UPGRADE_SHOT_NUMBER));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(0, UPGRADE_NONE));					//level 0... not actually ever "reached"
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(250, UPGRADE_SHOT_NUMBER));			//Ensign I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(550, UPGRADE_SHOT_NUMBER));			//Ensign II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(900, UPGRADE_SHOT_NUMBER));			//Junior Lieutenant I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3000, UPGRADE_SHOT_NUMBER));			//Junior Lieutenant II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(6000, UPGRADE_SHOTS_PER_SECOND));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7000, UPGRADE_SHOT_DAMAGE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(8500, UPGRADE_SHOT_NUMBER));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(11000, UPGRADE_NONE));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(15000, UPGRADE_NONE));
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(25000, UPGRADE_NONE));
