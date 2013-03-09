@@ -29,7 +29,7 @@ package world
 		
 		//Graphical components
 		protected var shipImg:Image;
-		protected var magnetImg:Image;
+		//ETHAN commenting out magnetImg ||protected var magnetImg:Image;
 		
 		//Internal util values (to prevent a lot of object allocation)
 		protected var delta:Vec2;
@@ -54,10 +54,10 @@ package world
 			shipImg.pivotY = shipImg.height/2;
 			imageHolder.addChild(shipImg);
 			
-			magnetImg = new Image(Assets.getTexture("MagnetImage"));
+			/*magnetImg = new Image(Assets.getTexture("MagnetImage"));
 			magnetImg.pivotX = magnetImg.width/2;
 			magnetImg.pivotY = magnetImg.height/2;
-			imageHolder.addChildAt(magnetImg, 0);	
+			imageHolder.addChildAt(magnetImg, 0);*/	
 			
 			setUpgrades(upgrades); //inits stats
 		}
@@ -84,7 +84,7 @@ package world
 			shotRadius = Constants.PLAYER_SHOT_RADIUS_BASE;//		+ upgrades.shotRadiusLevel * Constants.PLAYER_SHOT_RADIUS_UPGRADE;
 			
 			//Update visual magnet radius
-			magnetImg.width = magnetImg.height = 2*magnetRadius;
+			//magnetImg.width = magnetImg.height = 2*magnetRadius;
 		}
 		
 		//Returns current upgrades for this player

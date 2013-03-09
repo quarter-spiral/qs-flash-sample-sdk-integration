@@ -91,15 +91,10 @@ package world
 					vel.setVals(props.speed, 0);
 					break;
 				case Constants.BASIC_ANGLED_ENEMY_ID:
-				default:					
-					//Set movement direction toward player's position
-					/*getDirectionToPlayer(vel);
-					vel.scale(props.speed);*/
-					
-					//test of type method
+				case Constants.MEDIUM_ANGLED_ENEMY_ID:
+				default:
 					switch (this.moveType) {
 						case 0:
-							//vel.setVals(0,100);
 							vel.setMovement(80,props.speed);
 							break;
 						case 1:
@@ -124,7 +119,11 @@ package world
 					this.props.dartDelay = .5 + Math.random()*2.5;
 					vel.setVals(0, props.speed);
 					break;
-				case Constants.DART_HORIZONTAL_ENEMY_ID:
+				case Constants.DART_RIGHT_ENEMY_ID:
+					vel.setVals(props.speed, 0);					
+					this.props.dartDelay = .5 + Math.random()*.5;
+					break;
+				case Constants.DART_RIGHT_MED_ID:
 					vel.setVals(props.speed, 0);					
 					this.props.dartDelay = .5 + Math.random()*.5;
 					break;
@@ -132,10 +131,21 @@ package world
 					vel.setVals(props.speed, 0);			
 					this.props.dartDelay = .5 + Math.random()*.5;
 					break;
+				case Constants.DART_LEFT_MED_ID:
+					vel.setVals(props.speed, 0);					
+					this.props.dartDelay = .5 + Math.random()*.5;
+					break;
 				case Constants.SINE_WAVE_ENEMY_ID:
 					//Fall down toward bottom of screen (will move sideways as needed)
 					vel.setVals(0, props.speed);
 					break;
+				case Constants.SINE_WAVE_MED_ID:
+					//Fall down toward bottom of screen (will move sideways as needed)
+					vel.setVals(0, props.speed);
+					break;
+				case Constants.BASIC_HEAVY_ENEMY_ID:
+					//slow movement
+					vel.setVals(0, props.speed);
 			}
 		}
 		
@@ -174,11 +184,18 @@ package world
 			//Update enemy movement based on type
 			switch (enemyType) {
 				case Constants.SINE_WAVE_ENEMY_ID:
+				case Constants.SINE_WAVE_MED_ID:
 					var xOffset:Number = Constants.WAVE_ENEMY_SIDE_MOTION_AMPLITUDE * Math.sin(liveTime * 2 * Math.PI / Constants.WAVE_ENEMY_SIDE_MOTION_PERIOD);
 					//Find velocity that will snap this bad guy to where he should be, horizontally
 					var xDelta:Number = xOffset - (pos.x - startPos.x);
 					vel.setVals(xDelta, vel.y);
 					break;
+				/*case Constants.SINE_WAVE_MED_ID:
+					var xOffset:Number = Constants.WAVE_ENEMY_SIDE_MOTION_AMPLITUDE * Math.sin(liveTime * 2 * Math.PI / Constants.WAVE_ENEMY_SIDE_MOTION_PERIOD);
+					//Find velocity that will snap this bad guy to where he should be, horizontally
+					var xDelta:Number = xOffset - (pos.x - startPos.x);
+					vel.setVals(xDelta, vel.y);
+					break;*/
 			}
 			
 			//If this enemy dartTarget, do so if it's time

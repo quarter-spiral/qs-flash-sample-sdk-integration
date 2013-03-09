@@ -43,48 +43,24 @@ package world
 		protected function updateEnemySpawning():void {
 			//PLACEHOLDER BASIC: Spawn an enemy every second or so
 			var timeSinceEnemySpawn:Number = parentWorld.getPlayerLiveTime() - lastEnemySpawnTime;
-			if (timeSinceEnemySpawn > .75) {
-				//PLACEHOLDER: Spawn random enemy types
-				/*var NumEnemyTypes:int = Constants.ENEMY_PROPERTIES.length;
-				var enemyType:int = RandomUtils.randomInt(1, NumEnemyTypes-1);
-				spawnEnemy(enemyType);*/
-				
-				//spawn single enemy
-				//spawnEnemy(Constants.BASIC_ANGLED_ENEMY_ID);
-				
+			if (timeSinceEnemySpawn > .75) {				
 				var enemy:Enemy;
-				var waveType:int = math.RandomUtils.randomInt(0,3);
+				var waveType:int = 0;//math.RandomUtils.randomInt(0,3);
 				var tempMove:int = math.RandomUtils.randomInt(0,4);
 				
 				//5 singles then a wave
 				if(spawnCounter<20) {
 					switch(waveType) {
 						case 0:
-							//3 basics in a v
-							for(var i:int = 0;i<3;i++) {
-								enemy = spawnObject(Constants.BASIC_ANGLED_ENEMY_ID);
-								
-								switch(i) {
-									case 0:
-										enemy.setStartPos(100 + i*50, -70);
-										break;
-									case 1:
-										enemy.setStartPos(100 + i*50, -20);
-										break;
-									case 2:
-										enemy.setStartPos(100 + i*50, -70);
-										break;
-								}
-								
-								enemy.moveType = tempMove;	
-								enemy.setInitialVelocity();
-							}
+							//spawnThreeTightV(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							//spawnSevenTightLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							spawnSingleMoveLeft(Constants.DART_LEFT_MED_ID);
 							break;
 						case 1:
 							//3 sine in a line
 							var spawnAnchor:int = Math.floor(200*Math.random());
 							
-							for(i=0;i<3;i++) {
+							for(var i:int=0;i<3;i++) {
 								enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
 								enemy.setStartPos(75*i+spawnAnchor,-20);
 								enemy.setInitialVelocity();
@@ -148,7 +124,7 @@ package world
 							
 							//2 darters at once
 							for(i=0;i<3;i++) {
-								enemy = spawnObject(Constants.DART_HORIZONTAL_ENEMY_ID);
+								enemy = spawnObject(Constants.DART_RIGHT_ENEMY_ID);
 								enemy.moveType = tempMove;
 								enemy.setStartPos(-25-50*i,100*i+spawnAnchor);
 								enemy.setInitialVelocity();
@@ -213,6 +189,172 @@ package world
 			return parentWorld.spawnObject(typeNum);
 		}
 		
+		//Ethan's functions for spawning enemies
+		public function spawnSingle(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			enemy = spawnObject(enemyType);
+			enemy.setStartPos(25 + 250*Math.random(), -20);
+				
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				enemy.moveType = tempMove;
+			}
+				
+			enemy.setInitialVelocity();	
+		}
+		
+		public function spawnSingleMoveRight(enemyType:int):void {
+			var enemy:Enemy;
+			
+			enemy = spawnObject(enemyType);
+			enemy.setStartPos(-25 - 50*Math.random(), 50 + 150*Math.random());
+			
+			enemy.setInitialVelocity();	
+		}
+		
+		public function spawnSingleMoveLeft(enemyType:int):void {
+			var enemy:Enemy;
+			
+			enemy = spawnObject(enemyType);
+			enemy.setStartPos(425 + 50*Math.random(), 50 + 150*Math.random());
+			
+			enemy.setInitialVelocity();	
+		}
+		
+		public function spawnThreeTightV(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 200*Math.random();
+			
+			for(var i:int = 0;i<3;i++) {
+				enemy = spawnObject(enemyType);
+						
+				switch(i) {
+					case 0:
+						enemy.setStartPos(anchor + i*50, -70);
+						break;
+					case 1:
+						enemy.setStartPos(anchor + i*50, -20);
+						break;
+					case 2:
+						enemy.setStartPos(anchor + i*50, -70);
+						break;
+					}
+						
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+					
+				enemy.setInitialVelocity();
+			}		
+		}
+		
+		public function spawnFiveTightV(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 100*Math.random();
+			
+			for(var i:int = 0;i<5;i++) {
+				enemy = spawnObject(enemyType);
+				
+				switch(i) {
+					case 0:
+						enemy.setStartPos(anchor + i*50, -120);
+						break;
+					case 1:
+						enemy.setStartPos(anchor + i*50, -70);
+						break;
+					case 2:
+						enemy.setStartPos(anchor + i*50, -20);
+						break;
+					case 3:
+						enemy.setStartPos(anchor + i*50, -70);
+						break;
+					case 4:
+						enemy.setStartPos(anchor + i*50, -120);
+						break;
+				}
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
+				enemy.setInitialVelocity();
+			}		
+		}
+		
+		public function spawnThreeTightLine(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 200*Math.random();
+			
+			for(var i:int = 0;i<3;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(anchor + i*50, -20);
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
+				enemy.setInitialVelocity();
+			}		
+		}
+		
+		public function spawnFiveTightLine(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 100*Math.random();
+			
+			for(var i:int = 0;i<5;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(anchor+i*50,-25);
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
+				enemy.setInitialVelocity();
+			}		
+		}
+		
+		public function spawnSevenTightLine(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			for(var i:int = 0;i<7;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(25+i*50,-25);
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
+				enemy.setInitialVelocity();
+			}		
+		}
 		
 		public function updateStarSpawning():void {
 			//PLACEHOLDER BASIC: Spawn a chest every so often

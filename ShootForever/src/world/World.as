@@ -457,7 +457,7 @@ package world
 					break;
 				}
 				case Constants.HORIZONTAL_ENEMY_ID:
-				case Constants.DART_HORIZONTAL_ENEMY_ID:
+				case Constants.DART_RIGHT_ENEMY_ID:
 					//Start of left side of screen
 					startYPct = 0.3 + Math.random()*0.1;
 					enemy.setStartPos(-enemy.boundBox.width/2, startYPct * Constants.GameHeight);	

@@ -85,6 +85,18 @@ package
 		[Embed(source = "../media/textures/enemy4.png")]
 		public static const Enemy4Image:Class;
 		
+		[Embed(source = "../media/textures/enemy5.png")]
+		public static const Enemy5Image:Class;
+		
+		[Embed(source = "../media/textures/enemy6.png")]
+		public static const Enemy6Image:Class;
+		
+		[Embed(source = "../media/textures/enemy7.png")]
+		public static const Enemy7Image:Class;
+		
+		[Embed(source = "../media/textures/enemy8.png")]
+		public static const Enemy8Image:Class;
+		
 		[Embed(source = "../media/textures/enemy1_hurt.png")]
 		public static const Enemy1ImageHurt:Class;
 		
@@ -96,6 +108,18 @@ package
 		
 		[Embed(source = "../media/textures/enemy4_hurt.png")]
 		public static const Enemy4ImageHurt:Class;
+		
+		[Embed(source = "../media/textures/enemy5_hurt.png")]
+		public static const Enemy5ImageHurt:Class;
+		
+		[Embed(source = "../media/textures/enemy6_hurt.png")]
+		public static const Enemy6ImageHurt:Class;
+		
+		[Embed(source = "../media/textures/enemy7_hurt.png")]
+		public static const Enemy7ImageHurt:Class;
+		
+		[Embed(source = "../media/textures/enemy8_hurt.png")]
+		public static const Enemy8ImageHurt:Class;
 
 		[Embed(source = "../media/textures/star.png")]
 		public static const StarImage:Class;

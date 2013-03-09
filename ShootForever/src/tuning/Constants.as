@@ -41,7 +41,8 @@ package tuning
 			"Rear Admiral",
 			"Vice Admiral",
 			"Senior Vice Admiral",
-			"Admiral"
+			"Admiral",
+			"Supreme High Admiral"
 		]
 		
 		//GAMEPLAY CONSTANTS
@@ -107,18 +108,26 @@ package tuning
 		public static var 	TREASURE_CHEST_ID:int;
 		
 		public static var 	BASIC_ANGLED_ENEMY_ID:int;
+		public static var 	MEDIUM_ANGLED_ENEMY_ID:int; 				//angled enemy with more hp
 		public static const BASIC_ENEMY_ATTACK_ANGLE:Number = 0;		//angle away from vertical, in degrees (0 = fall straight down)
 		
 		public static var 	HORIZONTAL_ENEMY_ID:int;
 		
 		public static var   DART_ENEMY_ID:int;
 		
-		public static var 	DART_HORIZONTAL_ENEMY_ID:int;
+		public static var 	DART_RIGHT_ENEMY_ID:int;
 		public static var   DART_LEFT_ENEMY_ID:int;
+		
+		public static var 	DART_RIGHT_MED_ID:int;
+		public static var 	DART_LEFT_MED_ID:int;
 		
 		public static var SINE_WAVE_ENEMY_ID:int;
 		public static const WAVE_ENEMY_SIDE_MOTION_AMPLITUDE:Number = 100;	//Amplitude of sideways motion for sinusoid enemy
 		public static const WAVE_ENEMY_SIDE_MOTION_PERIOD:Number = 2;	//Affects rate of sideways motion for sinusoid enemy
+		
+		public static var SINE_WAVE_MED_ID:int;
+		
+		public static var BASIC_HEAVY_ENEMY_ID:int; //large ship with slow motion and high hp
 		
 		public static const ENEMY_FLASH_WHEN_HURT:Boolean = true;		//enable/disable flashing graphic when enemies are hurt by player
 		public static const ENEMY_HURT_FLASH_LENGTH:Number = 0.15;		//length of graphical flash when enemies are hurt, in seconds
@@ -208,6 +217,18 @@ package tuning
 			props.dartTarget = false;
 			ENEMY_PROPERTIES.push(props);
 			
+			MEDIUM_ANGLED_ENEMY_ID = enemyId++;
+			props = new EnemyProperties();
+			props.killScore = 10;
+			props.killXpCoins = 4;
+			props.maxHealth = 3;
+			props.size.setVals(56,40);
+			props.speed = 225;
+			props.imageName = "Enemy8Image";
+			props.harmsPlayer = true;
+			props.dartTarget = false;
+			ENEMY_PROPERTIES.push(props);
+			
 			HORIZONTAL_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
@@ -223,7 +244,7 @@ package tuning
 			DART_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 10;
+			props.killXpCoins = 5;
 			props.maxHealth = 3;
 			props.size.setVals(60,65);
 			props.speed = 50;
@@ -236,7 +257,7 @@ package tuning
 			props.postDartSpeedMult = 7.0;
 			ENEMY_PROPERTIES.push(props);
 			
-			DART_HORIZONTAL_ENEMY_ID = enemyId++;
+			DART_RIGHT_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
 			props.killXpCoins = 2;
@@ -248,6 +269,21 @@ package tuning
 			props.dartTarget = true;
 			props.dartDelay = .75;
 			props.dartPause = 0.25;
+			props.postDartSpeedMult = 2.5;
+			ENEMY_PROPERTIES.push(props);
+			
+			DART_RIGHT_MED_ID = enemyId++;
+			props = new EnemyProperties();
+			props.killScore = 10;
+			props.killXpCoins = 4;
+			props.maxHealth = 2;
+			props.size.setVals(40,30);
+			props.speed = 175;
+			props.imageName = "Enemy7Image";
+			props.harmsPlayer = true;
+			props.dartTarget = true;
+			props.dartDelay = .75;
+			props.dartPause = 1;
 			props.postDartSpeedMult = 2.5;
 			ENEMY_PROPERTIES.push(props);
 			
@@ -266,6 +302,21 @@ package tuning
 			props.postDartSpeedMult = -2.5;
 			ENEMY_PROPERTIES.push(props);
 			
+			DART_LEFT_MED_ID = enemyId++;
+			props = new EnemyProperties();
+			props.killScore = 10;
+			props.killXpCoins = 4;
+			props.maxHealth = 2;
+			props.size.setVals(40,30);
+			props.speed = -175;
+			props.imageName = "Enemy7Image";
+			props.harmsPlayer = true;
+			props.dartTarget = true;
+			props.dartDelay = .75;
+			props.dartPause = 1;
+			props.postDartSpeedMult = -2.5;
+			ENEMY_PROPERTIES.push(props);
+			
 			SINE_WAVE_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
@@ -274,6 +325,30 @@ package tuning
 			props.size.setVals(25,25);
 			props.speed = 150;
 			props.imageName = "Enemy2Image";
+			props.harmsPlayer = true;
+			props.dartTarget = false;
+			ENEMY_PROPERTIES.push(props);
+			
+			SINE_WAVE_MED_ID = enemyId++;
+			props = new EnemyProperties();
+			props.killScore = 10;
+			props.killXpCoins = 5;
+			props.maxHealth = 3;
+			props.size.setVals(66,51);
+			props.speed = 175;
+			props.imageName = "Enemy6Image";
+			props.harmsPlayer = true;
+			props.dartTarget = false;
+			ENEMY_PROPERTIES.push(props);
+			
+			BASIC_HEAVY_ENEMY_ID = enemyId++;
+			props = new EnemyProperties();
+			props.killScore = 10;
+			props.killXpCoins = 10;
+			props.maxHealth = 10;
+			props.size.setVals(109,86);
+			props.speed = 50;
+			props.imageName = "Enemy5Image";
 			props.harmsPlayer = true;
 			props.dartTarget = false;
 			ENEMY_PROPERTIES.push(props);
@@ -288,13 +363,22 @@ package tuning
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(250, UPGRADE_SHOT_NUMBER));			//Ensign I
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(550, UPGRADE_SHOT_NUMBER));			//Ensign II
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(900, UPGRADE_SHOT_NUMBER));			//Junior Lieutenant I
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3000, UPGRADE_SHOT_NUMBER));			//Junior Lieutenant II
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(6000, UPGRADE_SHOTS_PER_SECOND));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7000, UPGRADE_SHOT_DAMAGE));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(8500, UPGRADE_SHOT_NUMBER));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(11000, UPGRADE_NONE));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(15000, UPGRADE_NONE));
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(25000, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1350, UPGRADE_SHOT_NUMBER));			//Junior Lieutenant II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1850, UPGRADE_SHOTS_PER_SECOND));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(2450, UPGRADE_SHOT_DAMAGE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3100, UPGRADE_SHOT_NUMBER));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3800, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(4600, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(5450, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(6400, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7400, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(8450, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(9600, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(10800, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(12100, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(13450, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(14850, UPGRADE_NONE));
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(16350, UPGRADE_NONE));
 		}
 		
 		//Returns a random Xp property, with the probability of returning any 
