@@ -27,7 +27,7 @@ package world
 		/** Runs all chest/enemy spawning updates */
 		public function updateMobSpawning():void {
 			updateEnemySpawning();
-			updateChestSpawning();
+			//TURNING OFF CHESTS updateChestSpawning();
 			//updateStarSpawning(); //since this runs even on main menu & game over screens, we call this elsewhere
 		}
 		
@@ -41,129 +41,37 @@ package world
 		
 		//Creates enemies as necessary during main game loop
 		protected function updateEnemySpawning():void {
-			//PLACEHOLDER BASIC: Spawn an enemy every second or so
 			var timeSinceEnemySpawn:Number = parentWorld.getPlayerLiveTime() - lastEnemySpawnTime;
 			if (timeSinceEnemySpawn > .75) {				
 				var enemy:Enemy;
-				var waveType:int = 0;//math.RandomUtils.randomInt(0,3);
-				var tempMove:int = math.RandomUtils.randomInt(0,4);
+				var waveType:int = math.RandomUtils.chooseInt([0,0,0,1,1,1,2,2,2,3,3,4]);
 				
-				//5 singles then a wave
-				if(spawnCounter<20) {
+				if(spawnCounter < 100) {
 					switch(waveType) {
 						case 0:
-							//spawnThreeTightV(Constants.MEDIUM_ANGLED_ENEMY_ID);
-							//spawnSevenTightLine(Constants.BASIC_ANGLED_ENEMY_ID);
-							spawnSingleMoveLeft(Constants.DART_LEFT_MED_ID);
+							spawnFiveTightV(Constants.BASIC_ANGLED_ENEMY_ID);
 							break;
 						case 1:
-							//3 sine in a line
-							var spawnAnchor:int = Math.floor(200*Math.random());
-							
-							for(var i:int=0;i<3;i++) {
-								enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
-								enemy.setStartPos(75*i+spawnAnchor,-20);
-								enemy.setInitialVelocity();
-							}
+							spawnFiveTightV(Constants.BASIC_ANGLED_ENEMY_ID);
 							break;
 						case 2:
-							//horizontal dart enemy
-							enemy = spawnObject(Constants.DART_LEFT_ENEMY_ID);
-							enemy.moveType = tempMove;
-							enemy.setStartPos(450,75+200*Math.random());
-							enemy.setInitialVelocity();
+							spawnThreeLooseV(Constants.SINE_WAVE_ENEMY_ID);
 							break;
 						case 3:
-							//big straight on dart
-							enemy = spawnObject(Constants.DART_ENEMY_ID);
-							enemy.setStartPos(75+250*Math.random(),-30);
-							enemy.setInitialVelocity();
+							spawnFiveTightV(Constants.SINE_WAVE_ENEMY_ID);
+							break;
+						case 4:
+							spawnSingle(Constants.DART_ENEMY_ID);
 							break;
 					}
-				} else {
-					switch(waveType) {
-						case 0:
-							//v of 5 basic
-							for(i = 0;i<5;i++) {
-								enemy = spawnObject(Constants.BASIC_ANGLED_ENEMY_ID);
-								
-								switch(i) {
-									case 0:
-										enemy.setStartPos(100 + i*50, -120);
-										break;
-									case 1:
-										enemy.setStartPos(100 + i*50, -70);
-										break;
-									case 2:
-										enemy.setStartPos(100 + i*50, -20);
-										break;
-									case 3:
-										enemy.setStartPos(100 + i*50, -70);
-										break;
-									case 4:
-										enemy.setStartPos(100 + i*50, -120);
-										break;
-								}
-								
-								enemy.moveType = tempMove;	
-								enemy.setInitialVelocity();
-							}
-							break;
-						case 1:
-							//4 sine in a line
-							spawnAnchor = Math.floor(125*Math.random());
-							
-							for(i=0;i<4;i++) {
-								enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
-								enemy.setStartPos(75*i+spawnAnchor,-20);
-								enemy.setInitialVelocity();
-							}
-							break;
-						case 2:
-							spawnAnchor = 200*Math.random();
-							
-							//2 darters at once
-							for(i=0;i<3;i++) {
-								enemy = spawnObject(Constants.DART_RIGHT_ENEMY_ID);
-								enemy.moveType = tempMove;
-								enemy.setStartPos(-25-50*i,100*i+spawnAnchor);
-								enemy.setInitialVelocity();
-							}
-							break;
-						case 3:
-							//big dart with a v of normals
-							//TODO - SLOW ASS SINE ENEMIES
-							for(i = 0;i<5;i++) {
-								switch(i) {
-									case 0:
-										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
-										enemy.setStartPos(100 + i*50, -120);
-										break;
-									case 1:
-										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
-										enemy.setStartPos(100 + i*50, -70);
-										break;
-									case 2:
-										enemy = spawnObject(Constants.DART_ENEMY_ID);
-										enemy.setStartPos(100 + i*50, -20);
-										break;
-									case 3:
-										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
-										enemy.setStartPos(100 + i*50, -70);
-										break;
-									case 4:
-										enemy = spawnObject(Constants.SINE_WAVE_ENEMY_ID);
-										enemy.setStartPos(100 + i*50, -120);
-										break;
-								}
-								
-								enemy.moveType = 3;	
-								enemy.setInitialVelocity();
-							}
-							break;
-							
+				}
+				
+				if(spawnCounter >= 100) {
+					if(math.RandomUtils.chooseInt([0,1])) {
+						spawnDoubleMoveLeft(Constants.DART_LEFT_MED_ID);
+					} else {
+						spawnDoubleMoveRight(Constants.DART_RIGHT_MED_ID);
 					}
-						
 				}
 				
 				spawnCounter += 1;
@@ -225,6 +133,54 @@ package world
 			enemy.setInitialVelocity();	
 		}
 		
+		public function spawnDoubleMoveRight(enemyType:int):void {
+			var enemy:Enemy;
+			var anchorX:int = -50*Math.random();
+			var anchorY:int = 150*Math.random();
+			
+			for(var i:int=0;i<2;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(-25 + anchorX, 50 + anchorY + i*75);
+				enemy.setInitialVelocity();	
+			}
+		}
+		
+		public function spawnDoubleMoveLeft(enemyType:int):void {
+			var enemy:Enemy;
+			var anchorX:int = 50*Math.random();
+			var anchorY:int = 150*Math.random();
+			
+			for(var i:int=0;i<2;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(425 + anchorX, 50 + anchorY + i*75);
+				enemy.setInitialVelocity();	
+			}
+		}
+		
+		public function spawnTripleMoveRight(enemyType:int):void {
+			var enemy:Enemy;
+			var anchorX:int = -50*Math.random();
+			var anchorY:int = 150*Math.random();
+			
+			for(var i:int=0;i<3;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(-25 + anchorX, 50 + anchorY + i*75);
+				enemy.setInitialVelocity();	
+			}
+		}
+		
+		public function spawnTripleMoveLeft(enemyType:int):void {
+			var enemy:Enemy;
+			var anchorX:int = 50*Math.random();
+			var anchorY:int = 150*Math.random();
+			
+			for(var i:int=0;i<3;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(425 + anchorX, 50 + anchorY + i*75);
+				enemy.setInitialVelocity();	
+			}
+		}
+		
 		public function spawnThreeTightV(enemyType:int):void {
 			var enemy:Enemy;
 			
@@ -253,6 +209,38 @@ package world
 					enemy.moveType = tempMove;
 				}
 					
+				enemy.setInitialVelocity();
+			}		
+		}
+		
+		public function spawnThreeLooseV(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 70*Math.random();
+			
+			for(var i:int = 0;i<3;i++) {
+				enemy = spawnObject(enemyType);
+				
+				switch(i) {
+					case 0:
+						enemy.setStartPos(anchor + i*140, -120);
+						break;
+					case 1:
+						enemy.setStartPos(anchor + i*140, -20);
+						break;
+					case 2:
+						enemy.setStartPos(anchor + i*140, -120);
+						break;
+				}
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
 				enemy.setInitialVelocity();
 			}		
 		}
@@ -295,6 +283,48 @@ package world
 			}		
 		}
 		
+		public function spawnTwoTightLine(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 250*Math.random();
+			
+			for(var i:int = 0;i<2;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(anchor + i*50, -20);
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
+				enemy.setInitialVelocity();
+			}		
+		}
+		
+		public function spawnTwoLooseLine(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 210*Math.random();
+			
+			for(var i:int = 0;i<2;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(anchor + i*140, -20);
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
+				enemy.setInitialVelocity();
+			}		
+		}
+		
 		public function spawnThreeTightLine(enemyType:int):void {
 			var enemy:Enemy;
 			
@@ -307,6 +337,27 @@ package world
 			for(var i:int = 0;i<3;i++) {
 				enemy = spawnObject(enemyType);
 				enemy.setStartPos(anchor + i*50, -20);
+				
+				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+					enemy.moveType = tempMove;
+				}
+				
+				enemy.setInitialVelocity();
+			}		
+		}
+		
+		public function spawnThreeLooseLine(enemyType:int):void {
+			var enemy:Enemy;
+			
+			if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
+				var tempMove:int = math.RandomUtils.randomInt(0,4);	
+			}
+			
+			var anchor:int = 25 + 70*Math.random();
+			
+			for(var i:int = 0;i<3;i++) {
+				enemy = spawnObject(enemyType);
+				enemy.setStartPos(anchor + i*140, -20);
 				
 				if(enemyType == Constants.BASIC_ANGLED_ENEMY_ID || enemyType == Constants.MEDIUM_ANGLED_ENEMY_ID) {
 					enemy.moveType = tempMove;

@@ -28,23 +28,20 @@ package
 		[Embed(source = "../media/textures/bullet_4.png")]
 		public static const Bullet4Image:Class;
 		
-		[Embed(source = "../media/textures/xp_tiny.png")]
-		public static const XpTinyImage:Class;
+		[Embed(source = "../media/textures/xp_5.png")]
+		public static const Xp5Image:Class;
 		
-		[Embed(source = "../media/textures/xp_small.png")]
-		public static const XpSmallImage:Class;
+		[Embed(source = "../media/textures/xp_10.png")]
+		public static const Xp10Image:Class;
 		
-		[Embed(source = "../media/textures/xp_medsmall.png")]
-		public static const XpMedSmallImage:Class;
+		[Embed(source = "../media/textures/xp_25.png")]
+		public static const Xp25Image:Class;
 		
-		[Embed(source = "../media/textures/xp_medium.png")]
-		public static const XpMediumImage:Class;
+		[Embed(source = "../media/textures/xp_50.png")]
+		public static const Xp50Image:Class;
 		
-		[Embed(source = "../media/textures/xp_medlarge.png")]
-		public static const XpMedLargeImage:Class;
-		
-		[Embed(source = "../media/textures/xp_large.png")]
-		public static const XpLargeImage:Class;
+		[Embed(source = "../media/textures/xp_100.png")]
+		public static const Xp100Image:Class;
 		
 		[Embed(source = "../media/textures/xp_bar_bg.png")]
 		public static const XpBarBg:Class;

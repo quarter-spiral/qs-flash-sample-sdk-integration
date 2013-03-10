@@ -357,7 +357,8 @@ package world
 				gameInfo.currBombs--;
 				var numEnemies:int = enemies.length;
 				for (var i:int = 0; i < numEnemies; i++) {
-					enemies[i].alive = false;
+					//enemies[i].alive = false;
+					enemies[i].applyDamage(1,true);
 					
 					//Award points to player (except for treasure chest!)
 					//Note that bombs explode treasure chests, but don't give their rewards
@@ -463,8 +464,6 @@ package world
 					enemy.setStartPos(-enemy.boundBox.width/2, startYPct * Constants.GameHeight);	
 					break;
 			}
-			
-			//enemy.setInitialVelocity(); //TEST veloticy is only set by enemy creation
 			
 			addObjectImage(enemy);
 			enemies.push(enemy);

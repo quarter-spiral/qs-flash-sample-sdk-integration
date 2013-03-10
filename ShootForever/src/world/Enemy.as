@@ -116,7 +116,7 @@ package world
 					vel.setVals(props.speed, 0);
 					break;
 				case Constants.DART_ENEMY_ID:
-					this.props.dartDelay = .5 + Math.random()*2.5;
+					this.props.dartDelay = 2 + Math.random()*1.5;
 					vel.setVals(0, props.speed);
 					break;
 				case Constants.DART_RIGHT_ENEMY_ID:
