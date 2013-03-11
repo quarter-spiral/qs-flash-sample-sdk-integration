@@ -19,7 +19,7 @@ package tuning
         public static const CenterX:int = GameWidth / 2;
         public static const CenterY:int = GameHeight / 2;
 		
-		public static const MAIN_FONT:String = "Verdana";	
+		public static const MAIN_FONT:String = "Arial";	
 		
 		public static const PLAYER_RANK_NAMES:Array = [
 			"Ensign I",
@@ -202,7 +202,7 @@ package tuning
 			BASIC_ANGLED_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 2;
+			props.killXpCoins = 3;
 			props.maxHealth = 1;
 			props.size.setVals(37,34);
 			props.speed = 200;
@@ -214,7 +214,7 @@ package tuning
 			MEDIUM_ANGLED_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 3;
+			props.killXpCoins = 4;
 			props.maxHealth = 3;
 			props.size.setVals(56,40);
 			props.speed = 225;
@@ -223,22 +223,10 @@ package tuning
 			props.dartTarget = false;
 			ENEMY_PROPERTIES.push(props);
 			
-			/*HORIZONTAL_ENEMY_ID = enemyId++;
-			props = new EnemyProperties();
-			props.killScore = 10;
-			props.killXpCoins = 1;
-			props.maxHealth = 1;
-			props.size.setVals(25,25);
-			props.speed = 100;
-			props.imageName = "Enemy1Image";
-			props.harmsPlayer = true;
-			props.dartTarget = false;
-			ENEMY_PROPERTIES.push(props);*/
-			
 			DART_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 5;
+			props.killXpCoins = 6;
 			props.maxHealth = 3;
 			props.size.setVals(65,72);
 			props.speed = 50;
@@ -254,7 +242,7 @@ package tuning
 			DART_RIGHT_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 2;
+			props.killXpCoins = 3;
 			props.maxHealth = 1;
 			props.size.setVals(37,32);
 			props.speed = 150;
@@ -269,7 +257,7 @@ package tuning
 			DART_RIGHT_MED_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 4;
+			props.killXpCoins = 5;
 			props.maxHealth = 2;
 			props.size.setVals(40,30);
 			props.speed = 175;
@@ -284,7 +272,7 @@ package tuning
 			DART_LEFT_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 2;
+			props.killXpCoins = 3;
 			props.maxHealth = 1;
 			props.size.setVals(37,32);
 			props.speed = -150;
@@ -299,7 +287,7 @@ package tuning
 			DART_LEFT_MED_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 4;
+			props.killXpCoins = 5;
 			props.maxHealth = 2;
 			props.size.setVals(40,30);
 			props.speed = -175;
@@ -314,7 +302,7 @@ package tuning
 			SINE_WAVE_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 2;
+			props.killXpCoins = 3;
 			props.maxHealth = 1;
 			props.size.setVals(43,32);
 			props.speed = 150;
@@ -326,7 +314,7 @@ package tuning
 			SINE_WAVE_MED_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 4;
+			props.killXpCoins = 5;
 			props.maxHealth = 3;
 			props.size.setVals(66,51);
 			props.speed = 175;
@@ -338,7 +326,7 @@ package tuning
 			BASIC_HEAVY_ENEMY_ID = enemyId++;
 			props = new EnemyProperties();
 			props.killScore = 10;
-			props.killXpCoins = 8;
+			props.killXpCoins = 10;
 			props.maxHealth = 10;
 			props.size.setVals(109,86);
 			props.speed = 50;
@@ -354,27 +342,27 @@ package tuning
 			
 			//Set xp per level and bonus upgrade on reach level here...
 			LEVELING_PROPERTIES.push(new PlayerLevelProperties(0, UPGRADE_NONE));						//level 0... not actually ever "reached"
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(150, UPGRADE_SHOTS_PER_SECOND));			//Ensign I
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(350, UPGRADE_BOMB_UP));					//Ensign II
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(650, UPGRADE_MAGNET_RADIUS_UP));			//Junior Lieutenant I
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1000, UPGRADE_SHOTS_PER_SECOND));		//Junior Lieutenant II
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1475, UPGRADE_SHOT_NUMBER));				//5 - Lieutenant I
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(2000, UPGRADE_SHOTS_PER_SECOND));		//Lieutenant II
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(2575, UPGRADE_BOMB_UP));					//Captain I
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3250, UPGRADE_MAGNET_RADIUS_UP));		//Captain II
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3975, UPGRADE_BOMB_UP));					//Major I
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(4825, UPGRADE_SHOT_DAMAGE));				//10 - Major II
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(5725, UPGRADE_SHOTS_PER_SECOND));		//Lieutenant Colonel I
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(6675, UPGRADE_BOMB_UP));					//Lieutenant Colonel II
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7725, UPGRADE_MAGNET_RADIUS_UP));		//Colonel
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(8825, UPGRADE_SHOTS_PER_SECOND));					//Senior Colonel
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(10050, UPGRADE_SHOT_NUMBER));			//15 - Commander
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(11325, UPGRADE_SHOTS_PER_SECOND));		//Supreme Commander
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(12650, UPGRADE_BOMB_UP));				//Rear Admiral
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(14075, UPGRADE_MAGNET_RADIUS_UP));		//Vice Admiral
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(15550, UPGRADE_BOMB_UP));					//Senior Vice Admiral
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(17150, UPGRADE_SHOT_DAMAGE));			//20 - Admiral
-			LEVELING_PROPERTIES.push(new PlayerLevelProperties(19000, UPGRADE_SHOT_NUMBER));			//Supreme High Admiral
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(100, UPGRADE_SHOTS_PER_SECOND));			//Ensign I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(225, UPGRADE_BOMB_UP));					//Ensign II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(425, UPGRADE_MAGNET_RADIUS_UP));			//Junior Lieutenant I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(650, UPGRADE_SHOTS_PER_SECOND));		//Junior Lieutenant II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(975, UPGRADE_SHOT_NUMBER));				//5 - Lieutenant I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1325, UPGRADE_SHOTS_PER_SECOND));		//Lieutenant II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(1700, UPGRADE_BOMB_UP));					//Captain I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(2150, UPGRADE_MAGNET_RADIUS_UP));		//Captain II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(2625, UPGRADE_BOMB_UP));					//Major I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3200, UPGRADE_SHOT_DAMAGE));				//10 - Major II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(3800, UPGRADE_SHOTS_PER_SECOND));		//Lieutenant Colonel I
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(4425, UPGRADE_BOMB_UP));					//Lieutenant Colonel II
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(5125, UPGRADE_MAGNET_RADIUS_UP));		//Colonel
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(5850, UPGRADE_SHOTS_PER_SECOND));					//Senior Colonel
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(6675, UPGRADE_SHOT_NUMBER));			//15 - Commander
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(7525, UPGRADE_SHOTS_PER_SECOND));		//Supreme Commander
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(8400, UPGRADE_BOMB_UP));				//Rear Admiral
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(9350, UPGRADE_MAGNET_RADIUS_UP));		//Vice Admiral
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(10325, UPGRADE_BOMB_UP));					//Senior Vice Admiral
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(11400, UPGRADE_SHOT_DAMAGE));			//20 - Admiral
+			LEVELING_PROPERTIES.push(new PlayerLevelProperties(12625, UPGRADE_SHOT_NUMBER));			//Supreme High Admiral
 		}	
 		
 		//Returns a random Xp property, with the probability of returning any 

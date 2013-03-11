@@ -52,26 +52,27 @@ package scenes
 			bombsOnBar = new Vector.<Image>();	
 
 			// Score
-			scoreTxt = new TextField(150, 75, "000000", Constants.MAIN_FONT, 20, 0xffffff);
+			scoreTxt = new TextField(150, 75, "000000", Constants.MAIN_FONT, 20, 0xFF43FF);
 			scoreTxt.hAlign = HAlign.CENTER;
 			scoreTxt.vAlign = VAlign.TOP;
 			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
+			scoreTxt.y = 5;
 			this.addChild(scoreTxt);
 			
 			//XP
 			xpBar = new XpBar(true);
 			xpBar.x = Constants.GameWidth - xpBar.width - 5;
-			xpBar.y = Constants.GameHeight - xpBar.height - 5;
+			xpBar.y = Constants.GameHeight - xpBar.height - 10;
 			this.addChild(xpBar);
 			
 			//Bomb container
 			bombContainer = new Sprite();
 			bombContainer.x = 5;
-			bombContainer.y = Constants.GameHeight - 20;
+			bombContainer.y = Constants.GameHeight - 30;
 			this.addChild(bombContainer);
 			
 			//Pause button/cover image
-			pauseImage = new Image(Assets.getTexture("BlackSquare"));
+			/*pauseImage = new Image(Assets.getTexture("BlackSquare"));
 			pauseImage.scaleX = Constants.GameWidth;
 			pauseImage.scaleY = Constants.GameHeight;
 			pauseImage.alpha = 0.6;
@@ -82,7 +83,7 @@ package scenes
 			pauseBtn.addEventListener(Event.TRIGGERED, onPauseClick);
 			pauseBtn.x = Constants.GameWidth - pauseBtn.width;
 			pauseBtn.y = 0;
-			addChild(pauseBtn);
+			addChild(pauseBtn);*/
 			
 			//Start the main game
 			GameWorld().startMainGame(parentGame.getPlayerInfo());

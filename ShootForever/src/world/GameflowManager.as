@@ -46,7 +46,7 @@ package world
 				var enemy:Enemy;
 				var waveType:int = math.RandomUtils.chooseInt([0,0,0,1,1,1,2,2,2,3,3,4]);
 				
-				if(spawnCounter < 100) {
+				if(spawnCounter < 20) {
 					switch(waveType) {
 						case 0:
 							spawnFiveTightV(Constants.BASIC_ANGLED_ENEMY_ID);
@@ -62,15 +62,192 @@ package world
 							break;
 						case 4:
 							spawnSingle(Constants.DART_ENEMY_ID);
+							spawnTwoLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
 							break;
 					}
 				}
 				
-				if(spawnCounter >= 100) {
-					if(math.RandomUtils.chooseInt([0,1])) {
-						spawnDoubleMoveLeft(Constants.DART_LEFT_MED_ID);
-					} else {
-						spawnDoubleMoveRight(Constants.DART_RIGHT_MED_ID);
+				//First pass
+				if(spawnCounter >= 20 && spawnCounter < 40) {
+					switch(waveType) {
+						case 0:
+							spawnFiveTightLine(Constants.SINE_WAVE_ENEMY_ID);
+							break;
+						case 1:
+							spawnSingle(Constants.DART_ENEMY_ID);
+							spawnThreeLooseV(Constants.BASIC_ANGLED_ENEMY_ID);
+							break;
+						case 2:
+							spawnThreeLooseV(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 3:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnSingleMoveLeft(Constants.DART_LEFT_ENEMY_ID);
+							} else {
+								spawnSingleMoveRight(Constants.DART_RIGHT_ENEMY_ID);
+							}
+							
+							spawnThreeLooseV(Constants.BASIC_ANGLED_ENEMY_ID);
+							
+							break;
+						case 4:
+							spawnSevenTightLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							break;
+					}
+				}
+				
+				//First pass
+				if(spawnCounter >= 40 && spawnCounter < 60) {
+					switch(waveType) {
+						case 0:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnSingleMoveLeft(Constants.DART_LEFT_ENEMY_ID);
+							} else {
+								spawnSingleMoveRight(Constants.DART_RIGHT_ENEMY_ID);
+							}
+							
+							spawnFiveTightLine(Constants.SINE_WAVE_ENEMY_ID);
+							break;
+						case 1:
+							spawnFiveTightV(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 2:
+							spawnThreeLooseLine(Constants.SINE_WAVE_MED_ID);
+							break;
+						case 3:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnDoubleMoveLeft(Constants.DART_LEFT_ENEMY_ID);
+							} else {
+								spawnDoubleMoveRight(Constants.DART_RIGHT_ENEMY_ID);
+							}
+							
+							spawnThreeLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							break;
+						case 4:
+							spawnSingle(Constants.BASIC_HEAVY_ENEMY_ID);
+							
+							spawnFiveTightLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							break;
+					}
+				}
+				
+				//First pass
+				if(spawnCounter >= 60 && spawnCounter < 80) {
+					switch(waveType) {
+						case 0:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnDoubleMoveLeft(Constants.DART_LEFT_ENEMY_ID);
+							} else {
+								spawnDoubleMoveRight(Constants.DART_RIGHT_ENEMY_ID);
+							}
+							
+							spawnTwoLooseLine(Constants.SINE_WAVE_MED_ID);
+							break;
+						case 1:
+							spawnFiveTightV(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 2:
+							spawnSingle(Constants.BASIC_HEAVY_ENEMY_ID);
+							spawnTwoTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 3:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnSingleMoveLeft(Constants.DART_LEFT_MED_ID);
+							} else {
+								spawnSingleMoveRight(Constants.DART_RIGHT_MED_ID);
+							}
+							spawnThreeLooseLine(Constants.SINE_WAVE_ENEMY_ID);
+							break;
+						case 4:
+							spawnTwoLooseLine(Constants.DART_ENEMY_ID);
+							spawnThreeLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							break;
+					}
+				}
+				
+				//First Pass
+				if(spawnCounter >= 80 && spawnCounter < 100) {
+					switch(waveType) {
+						case 0:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnTripleMoveLeft(Constants.DART_LEFT_ENEMY_ID);
+							} else {
+								spawnTripleMoveRight(Constants.DART_RIGHT_ENEMY_ID);
+							}
+							spawnThreeLooseV(Constants.SINE_WAVE_ENEMY_ID);
+							break;
+						case 1:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnSingleMoveLeft(Constants.DART_LEFT_MED_ID);
+							} else {
+								spawnSingleMoveRight(Constants.DART_RIGHT_MED_ID);
+							}
+							spawnThreeLooseLine(Constants.SINE_WAVE_MED_ID);
+							break;
+						case 2:
+							spawnFiveTightV(Constants.SINE_WAVE_MED_ID);
+							break;
+						case 3:
+							spawnThreeLooseLine(Constants.DART_ENEMY_ID);
+							break;
+						case 4:
+							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+					}
+				}
+				
+				//First Pass
+				if(spawnCounter >= 100 && spawnCounter < 120) {
+					switch(waveType) {
+						case 0:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnDoubleMoveLeft(Constants.DART_LEFT_MED_ID);
+							} else {
+								spawnDoubleMoveRight(Constants.DART_RIGHT_MED_ID);
+							}
+							
+							spawnThreeLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							break;
+						case 1:
+							spawnFiveTightV(Constants.SINE_WAVE_MED_ID);
+							break;
+						case 2:
+							spawnThreeLooseV(Constants.BASIC_HEAVY_ENEMY_ID);
+							break;
+						case 3:
+							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 4:
+							if(math.RandomUtils.chooseInt([0,1])) {
+								spawnTripleMoveLeft(Constants.DART_LEFT_MED_ID);
+							} else {
+								spawnTripleMoveRight(Constants.DART_RIGHT_MED_ID);
+							}
+							
+							spawnThreeLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							break;
+					}
+				}
+				
+				if(spawnCounter >= 120) {
+					switch(waveType) {
+						case 0:
+							spawnTripleMoveLeft(Constants.DART_LEFT_MED_ID);
+							spawnThreeLooseLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 1:
+							spawnTripleMoveRight(Constants.DART_RIGHT_MED_ID);
+							spawnThreeLooseLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 2:
+							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							break;
+						case 3:
+							spawnThreeLooseV(Constants.BASIC_HEAVY_ENEMY_ID);
+							break;
+						case 4:
+							spawnFiveTightV(Constants.DART_ENEMY_ID);
+							break;
 					}
 				}
 				

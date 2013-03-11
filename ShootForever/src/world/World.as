@@ -119,7 +119,7 @@ package world
 			//Create player at the bottom of the screen
 			player = new Player(this, playerInfo.upgrades);
 			player.pos.x = Constants.GameWidth/2;
-			player.pos.y = Constants.GameHeight - player.ShipHeight/2- 30;
+			player.pos.y = Constants.GameHeight - player.ShipHeight/2- 40;
 			addObjectImage(player);
 			
 			//Give initial # of bombs

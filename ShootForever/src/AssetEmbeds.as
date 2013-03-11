@@ -124,6 +124,21 @@ package
 		[Embed(source = "../media/textures/action_msg_bg.png")]
 		public static const ActionMessageBgImage:Class;
 		
+		[Embed(source = "../media/textures/logo.png")]
+		public static const LogoImage:Class;
+		
+		[Embed(source = "../media/textures/music_on.png")]
+		public static const MusicOnImage:Class;
+		
+		[Embed(source = "../media/textures/music_off.png")]
+		public static const MusicOffImage:Class;
+		
+		[Embed(source = "../media/textures/sound_on.png")]
+		public static const SoundOnImage:Class;
+		
+		[Embed(source = "../media/textures/sound_off.png")]
+		public static const SoundOffImage:Class;
+		
 		//STARLING DEMO:
         
         [Embed(source = "../media/textures/background.png")]

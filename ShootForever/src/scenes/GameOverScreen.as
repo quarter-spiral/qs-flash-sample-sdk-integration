@@ -30,6 +30,8 @@ package scenes
 		private var xpTxt:TextField;
 		private var xpBar:XpBar;
 		private var playBtn:Button;
+		private var musicBtn:Button;
+		private var soundBtn:Button;
 		//private var xpToSpendTxt:TextField;
 		
 		//Local data
@@ -39,36 +41,38 @@ package scenes
 		{
 			super(parentGame);
 			
-			gameOverLbl  = new TextField(400, 75, "Game Over", Constants.MAIN_FONT, 30, 0xffffff);
+			gameOverLbl  = new TextField(400, 75, "Mission Fail!", Constants.MAIN_FONT, 30, 0xD33A35);
 			gameOverLbl.hAlign = HAlign.CENTER;
 			gameOverLbl.vAlign = VAlign.TOP;
+			gameOverLbl.bold = true;
 			gameOverLbl.x = int(Constants.GameWidth/2 - gameOverLbl.width/2);
-			gameOverLbl.y = 50;
+			gameOverLbl.y = 35;
 			this.addChild(gameOverLbl);
 			
-			scoreLbl = new TextField(150, 75, "Time: ", Constants.MAIN_FONT, 16, 0xffffff);
+			scoreLbl = new TextField(400, 75, "Your time", Constants.MAIN_FONT, 24, 0xffffff);
 			scoreLbl.hAlign = HAlign.CENTER;
 			scoreLbl.vAlign = VAlign.TOP;
-			scoreLbl.x = int(Constants.GameWidth*0.25 - scoreLbl.width/2);
-			scoreLbl.y = 120;
+			scoreLbl.x = int(Constants.GameWidth/2 - scoreLbl.width/2);
+			scoreLbl.y = 155;
 			this.addChild(scoreLbl);
 			
-			scoreTxt = new TextField(150, 75, "0", Constants.MAIN_FONT, 16, 0xffffff);
+			scoreTxt = new TextField(400, 75, "0", Constants.MAIN_FONT, 28, 0xffffff);
 			scoreTxt.hAlign = HAlign.CENTER;
 			scoreTxt.vAlign = VAlign.TOP;
-			scoreTxt.x = int(Constants.GameWidth*0.75 - scoreTxt.width/2);
-			scoreTxt.y = scoreLbl.y;
+			scoreTxt.bold = true;
+			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
+			scoreTxt.y = 125;
 			this.addChild(scoreTxt);
 			
-			highScoreLbl = new TextField(150, 75, "Best Time!", Constants.MAIN_FONT, 16, 0xffff00);
+			highScoreLbl = new TextField(400, 75, "New best time!", Constants.MAIN_FONT, 24, 0xFF43FF);
 			highScoreLbl.hAlign = HAlign.CENTER;
 			highScoreLbl.vAlign = VAlign.TOP;
-			highScoreLbl.x = int(Constants.GameWidth*0.5 - highScoreLbl.width/2);
-			highScoreLbl.y = scoreTxt.y + 20;
+			highScoreLbl.x = int(Constants.GameWidth/2 - highScoreLbl.width/2);
+			highScoreLbl.y = 180;
 			highScoreLbl.visible = false; //hide by default
 			this.addChild(highScoreLbl);
 			
-			xpLbl = new TextField(150, 75, "+XP", Constants.MAIN_FONT, 16, 0x00a2e8);
+			/*xpLbl = new TextField(150, 75, "+XP", Constants.MAIN_FONT, 16, 0x00a2e8);
 			xpLbl.hAlign = HAlign.CENTER;
 			xpLbl.vAlign = VAlign.TOP;
 			xpLbl.x = int(Constants.GameWidth*0.25 - scoreLbl.width/2);
@@ -80,32 +84,33 @@ package scenes
 			xpTxt.vAlign = VAlign.TOP;
 			xpTxt.x = int(Constants.GameWidth*0.75 - scoreTxt.width/2);
 			xpTxt.y = xpLbl.y;
-			this.addChild(xpTxt);
+			this.addChild(xpTxt);*/
 			
-			rankLbl = new TextField(150, 75, "Rank: ", Constants.MAIN_FONT, 16, 0xffffff);
+			rankLbl = new TextField(400, 75, "Your rank", Constants.MAIN_FONT, 24, 0xffffff);
 			rankLbl.hAlign = HAlign.CENTER;
 			rankLbl.vAlign = VAlign.TOP;
-			rankLbl.x = int(Constants.GameWidth * 0.25 - rankLbl.width/2);
-			rankLbl.y = xpTxt.y + 40;
+			rankLbl.x = int(Constants.GameWidth/2 - rankLbl.width/2);
+			rankLbl.y = 300;
 			this.addChild(rankLbl);
 			
-			rankTxt = new TextField(300, 75, "", Constants.MAIN_FONT, 16, 0xffffff);
+			rankTxt = new TextField(400, 75, "", Constants.MAIN_FONT, 28, 0xffffff);
 			rankTxt.hAlign = HAlign.CENTER;
 			rankTxt.vAlign = VAlign.TOP;
-			rankTxt.x = int(Constants.GameWidth*0.75 - rankTxt.width/2);
-			rankTxt.y = rankLbl.y;
+			rankTxt.bold = true;
+			rankTxt.x = int(Constants.GameWidth/2 - rankTxt.width/2);
+			rankTxt.y = 270;
 			this.addChild(rankTxt);
 			
-			xpBar = new XpBar(false);
+			/*xpBar = new XpBar(false);
 			xpBar.x = int(Constants.GameWidth*0.5 - xpBar.width/2);
 			xpBar.y = rankTxt.y + 30;
-			addChild(xpBar);
+			addChild(xpBar);*/
 			
-			rankUpLbl = new TextField(150, 75, "New Best Rank!", Constants.MAIN_FONT, 16, 0xffff00);
+			rankUpLbl = new TextField(400, 75, "New best rank!", Constants.MAIN_FONT, 24, 0xFF43FF);
 			rankUpLbl.hAlign = HAlign.CENTER;
 			rankUpLbl.vAlign = VAlign.TOP;
-			rankUpLbl.x = int(Constants.GameWidth*0.5 - rankUpLbl.width/2);
-			rankUpLbl.y = xpBar.y + 60;
+			rankUpLbl.x = int(Constants.GameWidth/2 - rankUpLbl.width/2);
+			rankUpLbl.y = 325;
 			rankUpLbl.visible = false; //hide by default
 			this.addChild(rankUpLbl);
 			
@@ -117,11 +122,25 @@ package scenes
 //			this.addChild(xpToSpendTxt);
 			
 			//Start button
-			playBtn = new Button(Assets.getTexture("StartImage"), "Play Again?");
+			playBtn = new Button(Assets.getTexture("StartImage"), "");
 			playBtn.addEventListener(Event.TRIGGERED, onPlayClick);
 			playBtn.x = Constants.GameWidth/2 - playBtn.width/2;
-			playBtn.y = 540;
+			playBtn.y = 425;
 			addChild(playBtn);
+			
+			musicBtn = new Button(Assets.getTexture("MusicOnImage"));
+			//TODO mute music
+			musicBtn.downState = Assets.getTexture("MusicOffImage");
+			musicBtn.x = (3*Constants.GameWidth/4) - musicBtn.width/2;
+			musicBtn.y = 530 - musicBtn.height/2;
+			this.addChild(musicBtn);
+			
+			soundBtn = new Button(Assets.getTexture("SoundOnImage"));
+			//TODO mute sound
+			soundBtn.downState = Assets.getTexture("SoundOffImage");
+			soundBtn.x = (3*Constants.GameWidth/4) + musicBtn.width/2;
+			soundBtn.y = 530 - soundBtn.height/2;
+			this.addChild(soundBtn);
 			
 			refreshFromInfo(parentGame.getPlayerInfo());
 		}
@@ -141,11 +160,11 @@ package scenes
 		
 		private function refreshFromInfo(playerInfo:PlayerInfo):void {
 			scoreTxt.text = playerInfo.latestGameInfo.getPlayerLiveTime().toFixed(2);
-			xpTxt.text = playerInfo.latestGameInfo.ingameXp.toString();
+			//xpTxt.text = playerInfo.latestGameInfo.ingameXp.toString();
 			rankTxt.text = Constants.getPlayerRankName(playerInfo.latestGameInfo.getLevel());
 			
-			xpBar.setLevel(playerInfo.latestGameInfo.getLevel());
-			xpBar.setCurrXp(playerInfo.latestGameInfo.getXp());
+			//xpBar.setLevel(playerInfo.latestGameInfo.getLevel());
+			//xpBar.setCurrXp(playerInfo.latestGameInfo.getXp());
 			
 			if (playerInfo.latestGameInfo.getPlayerLiveTime() > playerInfo.highTime)
 				highScoreLbl.visible = true;
