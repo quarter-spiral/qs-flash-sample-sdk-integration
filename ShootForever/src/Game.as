@@ -1,8 +1,13 @@
 package 
 {
+    import com.quarterspiral.sdk.PlayerInformation;
+    import com.quarterspiral.sdk.Sdk;
+    import com.quarterspiral.sdk.SdkFactory;
+    
     import flash.net.SharedObject;
     import flash.net.registerClassAlias;
     import flash.ui.Keyboard;
+    import flash.utils.Dictionary;
     
     import scenes.GameOverScreen;
     import scenes.MainGame;
@@ -43,6 +48,7 @@ package
 		private var  msgPool:ActionMessagePool;	
 		
 		private var playerInfo:PlayerInfo;
+		private var qsSdk:Sdk;
         
         public function Game()
         {
@@ -57,6 +63,21 @@ package
 			
 			if (playerInfo == null)
 				playerInfo = new PlayerInfo();
+			
+			qsSdk = SdkFactory.getInstance(Starling.current.nativeStage);
+			qsSdk.onPlayerInformationReady(function(playerInformation:PlayerInformation):void {
+				playerInfo.name = playerInformation.name;
+				if (currentScreen is MainMenu) {
+					(currentScreen as MainMenu).refreshFromPlayerInfo();
+				}
+			});
+			
+			qsSdk.onPlayerDataReady(function(playerData:Dictionary):void {
+				playerInfo.updateFromQSData(playerData);
+				if (currentScreen is MainMenu) {
+					(currentScreen as MainMenu).refreshFromPlayerInfo();
+				}
+			});
 			
             Starling.current.stage.stageWidth  = Constants.GameWidth;
             Starling.current.stage.stageHeight = Constants.GameHeight;
@@ -148,6 +169,10 @@ package
 			var shootForeverData:SharedObject = SharedObject.getLocal(Constants.LOCAL_DATA_NAME);
 			shootForeverData.data.localPlayerInfo = playerInfo;
 			shootForeverData.flush();
+			var data:Dictionary = new Dictionary();
+			data['highLevel'] = playerInfo.highLevel;
+			data['highTime'] = playerInfo.highTime;
+			qsSdk.setPlayerData(data);
 		}
         
         private function onAddedToStage(event:Event):void
