@@ -64,7 +64,6 @@ package
             
             //Load assets
             Assets.prepareSounds();
-            Assets.loadBitmapFonts();
             
             addEventListener(Screen.CLOSING, onScreenClosing);
             addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);

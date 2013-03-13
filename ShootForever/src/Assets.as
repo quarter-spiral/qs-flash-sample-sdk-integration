@@ -5,18 +5,11 @@ package
     import flash.utils.ByteArray;
     import flash.utils.Dictionary;
     
-    import starling.text.BitmapFont;
-    import starling.text.TextField;
     import starling.textures.Texture;
     import starling.textures.TextureAtlas;
 
     public class Assets
 	{        
-        // TTF-Fonts
-        // The 'embedAsCFF'-part IS REQUIRED!!!!
-        [Embed(source="../media/fonts/Ubuntu-R.ttf", embedAsCFF="false", fontFamily="Ubuntu")]        
-        private static const UbuntuRegular:Class;
-        
         // Sounds
         
         // Texture cache
@@ -25,7 +18,6 @@ package
         private static var sTextures:Dictionary = new Dictionary();
         private static var sSounds:Dictionary = new Dictionary();
         private static var sTextureAtlas:TextureAtlas;
-        private static var sBitmapFontsLoaded:Boolean;
         
         public static function getTexture(name:String):Texture
         {
@@ -60,18 +52,7 @@ package
             
             return sTextureAtlas;
         }
-        
-        public static function loadBitmapFonts():void
-        {
-            if (!sBitmapFontsLoaded)
-            {
-                var texture:Texture = getTexture("DesyrelTexture");
-                var xml:XML = XML(create("DesyrelXml"));
-                TextField.registerBitmapFont(new BitmapFont(texture, xml));
-                sBitmapFontsLoaded = true;
-            }
-        }
-        
+		
         public static function prepareSounds():void
         {
 //            sSounds["Step"] = new StepSound();   
