@@ -55,6 +55,9 @@ package
 		[Embed(source = "../media/textures/xp_bar_mini_fill.png")]
 		public static const XpBarMiniFill:Class;
 		
+		[Embed(source = "../media/textures/xp_bar_mini_left.png")]
+		public static const XpBarMiniLeft:Class;
+		
 		[Embed(source = "../media/textures/bomb.png")]
 		public static const BombImage:Class;
 		
@@ -63,6 +66,9 @@ package
 		
 		[Embed(source = "../media/textures/start.png")]
 		public static const StartImage:Class;
+		
+		[Embed(source = "../media/textures/start_again.png")]
+		public static const StartAgainImage:Class;
 		
 		[Embed(source = "../media/textures/treasure_chest.png")]
 		public static const TreasureChestImage:Class;
@@ -121,7 +127,7 @@ package
 		[Embed(source = "../media/textures/star.png")]
 		public static const StarImage:Class;
 		
-		[Embed(source = "../media/textures/action_msg_bg.png")]
+		[Embed(source = "../media/textures/upgrade_back.png")]
 		public static const ActionMessageBgImage:Class;
 		
 		[Embed(source = "../media/textures/logo.png")]

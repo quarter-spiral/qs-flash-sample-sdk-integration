@@ -62,44 +62,54 @@ package scenes
 			addChild(startBtn);
 			
 			//Player welcome
-			playerNameTxt = new TextField(400, 75, "Welcome back", Constants.MAIN_FONT, 22, 0xffffff);
+			playerNameTxt = new TextField(400, 75, "Welcome back", Constants.MAIN_FONT, 22, 0xF9B0FF);
 			playerNameTxt.hAlign = HAlign.CENTER;
 			playerNameTxt.vAlign = VAlign.TOP;
+			playerNameTxt.alpha = .85;
+			playerNameTxt.blendMode = "add";
 			//playerNameTxt.bold = true;
 			playerNameTxt.x = int(Constants.GameWidth/2 - playerNameTxt.width/2);
 			playerNameTxt.y = 165;
 			this.addChild(playerNameTxt);
 			
 			//best time label
-			highScoreLbl = new TextField(400, 75, "Your best time", Constants.MAIN_FONT, 24, 0xffffff);
+			highScoreLbl = new TextField(400, 75, "Your best time", Constants.MAIN_FONT, 24, 0xF9B0FF);
 			highScoreLbl.hAlign = HAlign.CENTER;
 			highScoreLbl.vAlign = VAlign.TOP;
+			highScoreLbl.alpha = .85;
+			highScoreLbl.blendMode = "add";
 			highScoreLbl.x = int(Constants.GameWidth/2 - playerNameTxt.width/2);
 			highScoreLbl.y = 255;
 			this.addChild(highScoreLbl);
 			
 			//best time
-			highScoreTxt = new TextField(400, 75, "0", Constants.MAIN_FONT, 28, 0xffffff);
+			highScoreTxt = new TextField(400, 75, "0", Constants.MAIN_FONT, 28, 0xF9B0FF);
 			highScoreTxt.hAlign = HAlign.CENTER;
 			highScoreTxt.vAlign = VAlign.TOP;
 			highScoreTxt.bold = true;
+			highScoreTxt.alpha = .85;
+			highScoreTxt.blendMode = "add";
 			highScoreTxt.x = int(Constants.GameWidth/2 - playerNameTxt.width/2);
 			highScoreTxt.y = 225;
 			this.addChild(highScoreTxt);
 			
 			//best rank label
-			rankLbl = new TextField(400, 75, "Your best rank", Constants.MAIN_FONT, 24, 0xffffff);
+			rankLbl = new TextField(400, 75, "Your best rank", Constants.MAIN_FONT, 24, 0xF9B0FF);
 			rankLbl.hAlign = HAlign.CENTER;
 			rankLbl.vAlign = VAlign.TOP;
+			rankLbl.alpha = .85;
+			rankLbl.blendMode = "add";
 			rankLbl.x = int(Constants.GameWidth/2 - rankLbl.width/2);
 			rankLbl.y = 355;
 			this.addChild(rankLbl);
 			
 			//best rank
-			rankTxt = new TextField(400, 75, "", Constants.MAIN_FONT, 28, 0xffffff);
+			rankTxt = new TextField(400, 75, "", Constants.MAIN_FONT, 28, 0xF9B0FF);
 			rankTxt.hAlign = HAlign.CENTER;
 			rankTxt.vAlign = VAlign.TOP;
 			rankTxt.bold = true;
+			rankTxt.alpha = .85;
+			rankTxt.blendMode = "add";
 			rankTxt.x = int(Constants.GameWidth/2 - rankTxt.width/2);
 			rankTxt.y = 315;
 			this.addChild(rankTxt);

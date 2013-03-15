@@ -5,6 +5,7 @@ package scenes.ui
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
+	
 	import tuning.Constants;
 	
 	/** Super basic bar for showing xp progress */
@@ -13,6 +14,7 @@ package scenes.ui
 		
 		private var bg:Image;
 		private var fillBar:Image;
+		private var fillBarCap:Image;
 		
 		private var playerLevel:int = 0;
 		private var lvlMinXp:int = 0;
@@ -26,14 +28,18 @@ package scenes.ui
 			super();
 			
 			if (miniMode) {
-				xpTxt = new TextField(150, 15, "0/0", Constants.MAIN_FONT, 10, 0xFFFFFF);
-				xpTxt.hAlign = HAlign.RIGHT;
-				xpTxt.vAlign = VAlign.TOP;
-				xpTxt.y = 3;
+				xpTxt = new TextField(100, 27, "0/0", Constants.MAIN_FONT, 11, 0xF9B0FF);
+				xpTxt.hAlign = HAlign.CENTER;
+				xpTxt.vAlign = VAlign.CENTER;
+				xpTxt.bold = true;
+				xpTxt.blendMode = "add";
+				xpTxt.y = 0;
 				bg = new Image(Assets.getTexture("XpBarMiniBg")); 
-				bg.x = xpTxt.x + xpTxt.width;
+				bg.x = xpTxt.x;// + xpTxt.width;
+				fillBarCap = new Image(Assets.getTexture("XpBarMiniLeft"));
+				fillBarCap.x = bg.x;
 				fillBar = new Image(Assets.getTexture("XpBarMiniFill"));
-				fillBar.x = bg.x;
+				fillBar.x = bg.x + 6;
 			}
 			else {
 				bg = new Image(Assets.getTexture("XpBarBg"));
@@ -45,6 +51,7 @@ package scenes.ui
 				xpTxt.y = 0;
 			}
 			addChild(bg);
+			addChild(fillBarCap);
 			addChild(fillBar);
 			addChild(xpTxt);
 			
@@ -74,12 +81,20 @@ package scenes.ui
 			var xpThisLevel:Number = currXp - lvlMinXp;
 			var xpBetweenLevels:Number = lvlMaxXp - lvlMinXp;
 			
+			
 			if (lvlMaxXp > 0) 
-				fillPct = xpThisLevel / xpBetweenLevels;	
+				fillPct = xpThisLevel / xpBetweenLevels;
 			
 			fillPct = Math.min(Math.max(fillPct, 0), 1.0);
 			
-			fillBar.width = bg.width * fillPct;
+			if(fillPct == 0) {
+				fillBarCap.visible = 0;
+			}
+			else {
+				fillBarCap.visible = 1;
+			}
+			
+			fillBar.width = (bg.width-6) * fillPct;
 			
 			xpTxt.text = xpThisLevel.toString() + "/" + xpBetweenLevels.toString();
 		}

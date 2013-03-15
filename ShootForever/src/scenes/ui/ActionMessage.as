@@ -50,18 +50,21 @@ package scenes.ui
 			totalTime = sweepInTime + holdTime + sweepOutTime;
 			
 			image = new Sprite();
-			//Place action msgs in center of screen
+			//Place action msgs in center in top 1/4 of screen
 			image.x = Constants.GameWidth/2;
-			image.y = Constants.GameHeight/2;
+			image.y = Constants.GameHeight/4;
 
 			bg = new Image(Assets.getTexture("ActionMessageBgImage"));
-			bg.pivotX = bg.width/2;
-			bg.pivotY = bg.height/2;
+			bg.pivotX = bg.width/2-27;
+			bg.pivotY = bg.height/4;
 			image.addChild(bg);
 			
-			msgTxt = new TextField(300, 75, "", Constants.MAIN_FONT, 20, 0xffffff);
+			msgTxt = new TextField(300, 75, "", Constants.MAIN_FONT, 28, 0xFF43FF);
 			msgTxt.hAlign = HAlign.CENTER;
 			msgTxt.vAlign = VAlign.CENTER;
+			msgTxt.bold = true;
+			msgTxt.alpha = .85;
+			msgTxt.blendMode = "multiply";
 			msgTxt.pivotX = msgTxt.width/2;
 			msgTxt.pivotY = msgTxt.height/2;
 			image.addChild(msgTxt);
