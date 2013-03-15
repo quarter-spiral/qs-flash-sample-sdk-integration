@@ -128,7 +128,7 @@ package scenes
 		}
 		
 		//Refreshed UI elements based on player data in parent game
-		protected function refreshFromPlayerInfo():void {
+		public function refreshFromPlayerInfo():void {
 			playerNameTxt.text = "Welcome back " + parentGame.getPlayerInfo().name + "!";
 			highScoreTxt.text = parentGame.getPlayerInfo().highTime.toFixed(2);
 			rankTxt.text = Constants.getPlayerRankName(parentGame.getPlayerInfo().highLevel);
