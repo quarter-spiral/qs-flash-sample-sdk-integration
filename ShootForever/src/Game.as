@@ -64,7 +64,7 @@ package
 			if (playerInfo == null)
 				playerInfo = new PlayerInfo();
 			
-			qsSdk = SdkFactory.getInstance(Starling.current.nativeStage);
+			qsSdk = SdkFactory.getInstance(Starling.current.nativeStage.root.loaderInfo);
 			qsSdk.onPlayerInformationReady(function(playerInformation:PlayerInformation):void {
 				playerInfo.name = playerInformation.name;
 				if (currentScreen is MainMenu) {
