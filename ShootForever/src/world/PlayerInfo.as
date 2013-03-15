@@ -1,5 +1,7 @@
 package world
 {
+	import flash.utils.Dictionary;
+
 	/** Container for player data that may persist between game sessions */
 	public class PlayerInfo
 	{
@@ -29,6 +31,16 @@ package world
 			//currentXP = 0;
 			//currentSpendableXP = 0;
 			upgrades = new PlayerUpgrades();
+		}
+		
+		public function updateFromQSData(playerData:Dictionary):void
+		{
+			if (playerData['highLevel'] && highLevel < playerData['highLevel']) {
+				highLevel = playerData['highLevel'];
+			}
+			if (playerData['highTime'] && highTime < playerData['highTime']) {
+				highTime = playerData['highTime'];
+			}
 		}
 	}
 }
