@@ -52,9 +52,12 @@ package scenes
 			bombsOnBar = new Vector.<Image>();	
 
 			// Score
-			scoreTxt = new TextField(150, 75, "000000", Constants.MAIN_FONT, 20, 0xFF43FF);
+			scoreTxt = new TextField(150, 75, "000000", Constants.MAIN_FONT, 20, 0xF9B0FF);
 			scoreTxt.hAlign = HAlign.CENTER;
 			scoreTxt.vAlign = VAlign.TOP;
+			scoreTxt.bold = true;
+			scoreTxt.alpha = .85;
+			scoreTxt.blendMode = "add"; 
 			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
 			scoreTxt.y = 5;
 			this.addChild(scoreTxt);
@@ -196,7 +199,7 @@ package scenes
 		}
 		
 		public override function onKey(event:KeyboardEvent):void {
-			//Debug hotkeys
+			//Debug hotkey
 			CONFIG::DEBUG {
 				if (event.keyCode == Keyboard.K) {
 					GameWorld().killPlayer(false);

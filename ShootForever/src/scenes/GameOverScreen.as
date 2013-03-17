@@ -43,21 +43,27 @@ package scenes
 			gameOverLbl.hAlign = HAlign.CENTER;
 			gameOverLbl.vAlign = VAlign.TOP;
 			gameOverLbl.bold = true;
+			gameOverLbl.alpha = .85;
+			gameOverLbl.blendMode = "add";
 			gameOverLbl.x = int(Constants.GameWidth/2 - gameOverLbl.width/2);
 			gameOverLbl.y = 35;
 			this.addChild(gameOverLbl);
 			
-			scoreLbl = new TextField(400, 75, "Your time", Constants.MAIN_FONT, 24, 0xffffff);
+			scoreLbl = new TextField(400, 75, "Your time", Constants.MAIN_FONT, 24, 0xF9B0FF);
 			scoreLbl.hAlign = HAlign.CENTER;
 			scoreLbl.vAlign = VAlign.TOP;
+			scoreLbl.alpha = .85;
+			scoreLbl.blendMode = "add";
 			scoreLbl.x = int(Constants.GameWidth/2 - scoreLbl.width/2);
 			scoreLbl.y = 155;
 			this.addChild(scoreLbl);
 			
-			scoreTxt = new TextField(400, 75, "0", Constants.MAIN_FONT, 28, 0xffffff);
+			scoreTxt = new TextField(400, 75, "0", Constants.MAIN_FONT, 28, 0xF9B0FF);
 			scoreTxt.hAlign = HAlign.CENTER;
 			scoreTxt.vAlign = VAlign.TOP;
 			scoreTxt.bold = true;
+			scoreTxt.alpha = .85;
+			scoreTxt.blendMode = "add";
 			scoreTxt.x = int(Constants.GameWidth/2 - scoreTxt.width/2);
 			scoreTxt.y = 125;
 			this.addChild(scoreTxt);
@@ -65,6 +71,8 @@ package scenes
 			highScoreLbl = new TextField(400, 75, "New best time!", Constants.MAIN_FONT, 24, 0xFF43FF);
 			highScoreLbl.hAlign = HAlign.CENTER;
 			highScoreLbl.vAlign = VAlign.TOP;
+			highScoreLbl.alpha = .85;
+			highScoreLbl.blendMode = "add";
 			highScoreLbl.x = int(Constants.GameWidth/2 - highScoreLbl.width/2);
 			highScoreLbl.y = 180;
 			highScoreLbl.visible = false; //hide by default
@@ -84,17 +92,21 @@ package scenes
 			xpTxt.y = xpLbl.y;
 			this.addChild(xpTxt);*/
 			
-			rankLbl = new TextField(400, 75, "Your rank", Constants.MAIN_FONT, 24, 0xffffff);
+			rankLbl = new TextField(400, 75, "Your rank", Constants.MAIN_FONT, 24, 0xF9B0FF);
 			rankLbl.hAlign = HAlign.CENTER;
 			rankLbl.vAlign = VAlign.TOP;
+			rankLbl.alpha = .85;
+			rankLbl.blendMode = "add";
 			rankLbl.x = int(Constants.GameWidth/2 - rankLbl.width/2);
 			rankLbl.y = 300;
 			this.addChild(rankLbl);
 			
-			rankTxt = new TextField(400, 75, "", Constants.MAIN_FONT, 28, 0xffffff);
+			rankTxt = new TextField(400, 75, "", Constants.MAIN_FONT, 28, 0xF9B0FF);
 			rankTxt.hAlign = HAlign.CENTER;
 			rankTxt.vAlign = VAlign.TOP;
 			rankTxt.bold = true;
+			rankTxt.alpha = .85;
+			rankTxt.blendMode = "add";
 			rankTxt.x = int(Constants.GameWidth/2 - rankTxt.width/2);
 			rankTxt.y = 270;
 			this.addChild(rankTxt);
@@ -107,6 +119,8 @@ package scenes
 			rankUpLbl = new TextField(400, 75, "New best rank!", Constants.MAIN_FONT, 24, 0xFF43FF);
 			rankUpLbl.hAlign = HAlign.CENTER;
 			rankUpLbl.vAlign = VAlign.TOP;
+			rankUpLbl.alpha = .85;
+			rankUpLbl.blendMode = "add";
 			rankUpLbl.x = int(Constants.GameWidth/2 - rankUpLbl.width/2);
 			rankUpLbl.y = 325;
 			rankUpLbl.visible = false; //hide by default
@@ -120,7 +134,7 @@ package scenes
 //			this.addChild(xpToSpendTxt);
 			
 			//Start button
-			playBtn = new Button(Assets.getTexture("StartImage"), "");
+			playBtn = new Button(Assets.getTexture("StartAgainImage"), "");
 			playBtn.addEventListener(Event.TRIGGERED, onPlayClick);
 			playBtn.x = Constants.GameWidth/2 - playBtn.width/2;
 			playBtn.y = 425;
