@@ -84,9 +84,6 @@ package scenes
 			pauseBtn.x = Constants.GameWidth - pauseBtn.width;
 			pauseBtn.y = 0;
 			addChild(pauseBtn);*/
-			
-			//Start the main game
-			GameWorld().startMainGame(parentGame.getPlayerInfo());
         }
 		
 		//Returns game world that this screen affects
@@ -98,6 +95,9 @@ package scenes
 			//Start listening to the mouse
 			stage.addEventListener(TouchEvent.TOUCH, onTouch);
 		
+			//Start the main game
+			GameWorld().startMainGame(parentGame.getPlayerInfo());
+			
 			//Init XP bar limits for player's current level (may be updated during game as xp is collected) 
 			xpBar.setLevel(GameWorld().gameInfo.getLevel());
 			updateXPBar();
@@ -117,8 +117,8 @@ package scenes
         public override function update(dt:Number):void
         {
 			if (!paused) {
-				//Limit size of updates to about 10 Hz to prevent big update steps
-				var updateDt:Number = Math.min(dt, 0.1);
+				//Limit size of updates to prevent big update steps
+				var updateDt:Number = Math.min(dt, Constants.WORLD_MAX_TIMESTEP);
 					
 				//Basically, just update logical game world...
 				GameWorld().updateLogic(updateDt);

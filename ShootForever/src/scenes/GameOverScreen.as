@@ -1,7 +1,5 @@
 package scenes
-{
-	import flash.net.SharedObject;
-	
+{	
 	import scenes.ui.XpBar;
 	
 	import starling.display.Button;
@@ -141,11 +139,11 @@ package scenes
 			soundBtn.x = (3*Constants.GameWidth/4) + musicBtn.width/2;
 			soundBtn.y = 530 - soundBtn.height/2;
 			this.addChild(soundBtn);
-			
-			refreshFromInfo(parentGame.getPlayerInfo());
 		}
 		
 		public override function start():void {
+			refreshFromInfo(parentGame.getPlayerInfo());
+			
 			//Apply the xp gain, high score, upgrades, etc. from previous game
 			var info:PlayerInfo = parentGame.getPlayerInfo();
 			if (info.latestGameInfo.getPlayerLiveTime() > info.highTime)
@@ -182,7 +180,10 @@ package scenes
 			//Update the game world in the background (for pretty background stars)
 			var gameWorld:World = parentGame.getGameWorld();
 			if (gameWorld) {
-				gameWorld.updateLogic(dt);
+				//Limit size of updates to prevent big update steps
+				var updateDt:Number = Math.min(dt, Constants.WORLD_MAX_TIMESTEP);
+				
+				gameWorld.updateLogic(updateDt);
 				gameWorld.updateGraphics();
 			}
 		}

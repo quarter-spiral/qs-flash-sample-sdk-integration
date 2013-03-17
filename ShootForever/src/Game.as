@@ -35,6 +35,9 @@ package
     {
         private var currentScreen:Screen;
 		
+		//Previously created screens (for reuse)
+		//private var cachedScreens:Dictionary;
+		
 		//Main game world (we run it in the bg of all screens, but used to run actual game in MainGame)
 		private var gameWorld:World;
 		
@@ -53,6 +56,8 @@ package
         public function Game()
         {
 			Constants.init(this);
+			
+			////cachedScreens = new Dictionary();
 			
 			//Load up local player info, or create a new profile (not shared until a level completes)
 			//TODO: versioning of player data (just hacked in for now)
@@ -111,13 +116,20 @@ package
 				currentScreen = null;
 			}
 			
-			//Create the requested screen
-			//TODO: later, we might want to save & reuse screens
-			switch (name) {
-				case "MainMenu": currentScreen = new MainMenu(this); break;
-				case "MainGame": currentScreen = new MainGame(this); break;
-				case "GameOver": currentScreen = new GameOverScreen(this); break;
+			//Grab a cached screen, if possible
+			currentScreen = null;//cachedScreens[name];
+			//If not already cached, create it now & cache for later use as well
+			if (currentScreen == null) {
+				switch (name) {
+					case "MainMenu": currentScreen = new MainMenu(this); break;
+					case "MainGame": currentScreen = new MainGame(this); break;
+					case "GameOver": currentScreen = new GameOverScreen(this); break;
+				}
+//				if (currentScreen)
+//					cachedScreens[name] = currentScreen;
 			}
+			
+			//Show to user on stage
 			if (currentScreen) {
 				screenPlane.addChild(currentScreen);
 				currentScreen.start();
@@ -167,7 +179,10 @@ package
 		public function savePlayerInfo():void {
 			var shootForeverData:SharedObject = SharedObject.getLocal(Constants.LOCAL_DATA_NAME);
 			shootForeverData.data.localPlayerInfo = playerInfo;
-			shootForeverData.flush();
+			//DISABLED forced data flush as a performance optimization. This creates an
+			//annoying frame lag at the end of each game otherwise. Don't worry... Flash flushes 
+			//automatically when the game closes. -bh, 3.6.2013
+			//shootForeverData.flush(); 
 			var data:Dictionary = new Dictionary();
 			data['highLevel'] = playerInfo.highLevel;
 			data['highTime'] = playerInfo.highTime;

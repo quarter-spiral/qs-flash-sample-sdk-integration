@@ -5,7 +5,6 @@ package world
 	import math.RandomUtils;
 	import math.Vec2;
 	
-	import starling.core.Starling;
 	import starling.display.DisplayObjectContainer;
 	
 	import tuning.Constants;
@@ -33,8 +32,9 @@ package world
 		
 		public var isPlayerAlive:Boolean = true;
 		
-		private var currTime:Number = 0;
-		private var playerDeathTime:Number = 0;
+		private var currWorldTime:Number = 0; 		//Total update time since world creation (never reset while this world runs)
+		private var currGameTime:Number = 0;		//Update time since start of current game (reset at start of each game)
+		private var playerDeathTime:Number = 0;		//Game time at which player died
 		
 		//Render layers
 		private var imageContainer:DisplayObjectContainer;
@@ -92,12 +92,20 @@ package world
 			
 			playerMouseDelta = new Vec2();
 			
-			bulletPool = new BulletPool(createBullet, cleanBullet, 20, 200);
+			bulletPool = new BulletPool(createBullet, cleanBullet, 20, 300);
 			enemyPool = new EnemyPool(createEnemy, cleanEnemy, 20, 200);
-			xpPool = new XpPool(createXpObj, cleanXpObj, 30, 200);
-			starPool = new StarPool(createStar, cleanStar, 50, 200);
+			xpPool = new XpPool(createXpObj, cleanXpObj, 30, 300);
+			starPool = new StarPool(createStar, cleanStar, 50, 1000);
 			
 			flowMan = new GameflowManager(this);
+			
+			//Hack: Populate the screen with a few, pretty background stars so that
+			//the game starts with stars on screen (they don suddenly start raining from the top)
+			//Matching the density of on-screen stars at startup with the number that spawn afterward
+			//isn't trivial, so just choose a reasonable enough # and hope for the best :).
+			var numInitStars:int = 20;
+			for (var i:int = 0; i < numInitStars; i++)
+				this.spawnStar(false);
 		}
 		
 		//Prepares world for a new game instance
@@ -106,12 +114,10 @@ package world
 			
 			mainGameRunning = true;
 			
-			currTime = 0;
-			
 			flowMan.reset();
 			
 			isPlayerAlive = true;
-			currTime = 0;
+			currGameTime = 0;
 			playerDeathTime = 0;
 			gameInfo = new GameInfo();
 			gameInfo.init(playerInfo);
@@ -165,7 +171,7 @@ package world
 		//Returns current world runtime, in seconds, starting at 0 when this world was first init'd
 		//NOTE: This is NOT necessarily the same as the player live time (likely greater)
 		public function getWorldTime():Number {
-			return currTime;
+			return currWorldTime;
 		}
 		
 		//Returns amount of time player has been alive in current game run
@@ -176,14 +182,37 @@ package world
 			return 0;
 		}
 		
+		//Returns scale on background star speed, which is dependent on player's current 
+		//progress in the game
+		public function getCurrentStarSpeedMultiplier():Number {
+			var liveTime:Number = getPlayerLiveTime();
+			var normalGameplayMult:Number = 1.0 + (liveTime / Constants.STAR_SPEED_MULT_INCREMENT_TIME);
+			//Before first game start, just use a constant speed
+			if (liveTime == 0.0)
+				return 1.0;
+			//Accelerate slowly over time while player plays
+			else if (isPlayerAlive)
+				return normalGameplayMult;
+			//Rapidly decelerate after player dies
+			else {
+				//Interpolate back down toward 1.0 multiplier
+				var decayEnd:Number = playerDeathTime + Constants.STAR_SPEED_POST_DEATH_DECAY_TIME;
+				var alpha:Number = 1 - Math.max((decayEnd - currGameTime)/(decayEnd - playerDeathTime), 0.0);
+				var speedMult:Number = alpha * 1.0 + (1-alpha) * normalGameplayMult;
+				return speedMult;
+			}
+				
+		}
+		
 		//Updates logical gameplay elements of world
 		public function updateLogic(dt:Number):void {
-			currTime += dt;
+			currWorldTime += dt;
+			currGameTime += dt;
 			
 			if (mainGameRunning) {
 				//INPUT: Move player toward mouse position
 				if (isPlayerAlive) {
-					gameInfo.playerLiveTime = currTime;
+					gameInfo.playerLiveTime = currGameTime;
 					
 					//TODO: faster/slower player motion based on current upgrades?
 					
@@ -257,9 +286,11 @@ package world
 			}
 			
 			//Update bg stars (note that we run these even when mainGame isn't running)
+			var speedMult:Number = getCurrentStarSpeedMultiplier();
 			flowMan.updateStarSpawning();
 			var numStars:int = stars.length;
 			for (i = 0; i < numStars; i++) {
+				stars[i].setSpeedMultiplier(speedMult);
 				stars[i].update(dt);
 				
 				//Remove xp once no longer active
@@ -273,7 +304,7 @@ package world
 		//Spawns shots from player periodically
 		protected function updatePlayerShooting():void {
 			//If enough time has passed, spawn a new shot
-			var timeSinceShot:Number = currTime - player.lastShotTime;
+			var timeSinceShot:Number = currGameTime - player.lastShotTime;
 			if (timeSinceShot > player.getTimeBetweenShots()) {
 				firePlayerBullets();
 			}
@@ -372,7 +403,7 @@ package world
 		
 		//Runs the logic for a player firing action (spawns 1 or more player bullets) 
 		public function firePlayerBullets():void {
-			player.lastShotTime = currTime;	
+			player.lastShotTime = currGameTime;	
 			
 			//Create # of bullets based on player's shot number level
 			//We could define bullet spawn locations using a one-size-fits-all mathematical equation,
@@ -542,11 +573,15 @@ package world
 			xpObjs.length = 0;
 		}
 		
-		public function spawnStar():void {			
+		//Creates a new background star.
+		//If "spawnOffScreen" is set, star appears above screen. Otherwise, random onscreen position is chosen
+		public function spawnStar(spawnOffScreen:Boolean):void {			
 			var star:BackgroundStar = starPool.checkOut();
 			star.alive = true;
-			star.pos.setVals(Constants.GameWidth * Math.random(), -2);
-			star.vel.setVals(0, 300 + 500 * Math.random());
+			var starStartX:Number = Constants.GameWidth * Math.random();
+			var starStartY:Number = spawnOffScreen ? -2 : Constants.GameHeight * Math.random();
+			star.pos.setVals(starStartX, starStartY);
+			star.baseVel.setVals(0, Constants.STAR_BASE_SPEED_MIN + Constants.STAR_BASE_SPEED_RANGE * Math.random());
 			
 			addObjectImage(star);
 			stars.push(star);
@@ -586,7 +621,7 @@ package world
 		
 		public function killPlayer(animate:Boolean):void {
 			isPlayerAlive = false;
-			playerDeathTime = currTime;
+			playerDeathTime = currGameTime;
 			
 			//TODO: Animate hurt/death with pretty particles
 			if (animate) { 

@@ -46,6 +46,8 @@ package tuning
 		]
 		
 		//GAMEPLAY CONSTANTS
+			
+		public static const WORLD_MAX_TIMESTEP:Number = 0.03;	//prevents overlarge timestep sizes (at the cost of not having real-time updates)
 		
 		//PLAYER
 		public static const PLAYER_WIDTH:int = 10;//50;
@@ -136,6 +138,13 @@ package tuning
 		public static const ACTION_MSG_SWEEP_IN_TIME:Number = 	0.3;		//Time for popup action msgs to "sweep in" from sides
 		public static const ACTION_MSG_HOLD_TIME:Number		= 0.4;			//Time that action msgs sit still before starting to fade
 		public static const ACTION_MSG_SWEEP_OUT_TIME:Number = 1.0;			//Time that action msgs take to fade/sweep out
+		
+		//Background star speed controls
+		public static const STAR_BASE_SPEED_MIN:Number = 50;
+		public static const STAR_BASE_SPEED_MAX:Number = 100;
+		public static const STAR_BASE_SPEED_RANGE:Number = STAR_BASE_SPEED_MAX - STAR_BASE_SPEED_MIN;
+		public static const STAR_SPEED_MULT_INCREMENT_TIME:Number = 3.0;			//Game time over which speed of background stars increases by 1x
+		public static const STAR_SPEED_POST_DEATH_DECAY_TIME:Number = 1.5;			//Time after player dies over which star speeds returns to baseline values 
 		
 		public static function init(gameInstance :Game):void {
 			Constants.game = gameInstance;

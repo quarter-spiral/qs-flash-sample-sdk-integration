@@ -136,10 +136,14 @@ package scenes
 		
 		public override function update(dt:Number):void
 		{				
+			
 			//Update the game world in the background (for pretty background stars)
 			var gameWorld:World = parentGame.getGameWorld();
 			if (gameWorld) {
-				gameWorld.updateLogic(dt);
+				//Limit size of updates to prevent big update steps
+				var updateDt:Number = Math.min(dt, Constants.WORLD_MAX_TIMESTEP);
+				
+				gameWorld.updateLogic(updateDt);
 				gameWorld.updateGraphics();
 			}
 		}

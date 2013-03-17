@@ -585,13 +585,22 @@ package world
 		}
 		
 		public function updateStarSpawning():void {
-			//PLACEHOLDER BASIC: Spawn a chest every so often
-			//(note that we use world time so that we can run even while not in the main game loop)
+			//(Note that we use world time so that we can run even while not in the main game loop)
+			//Also note that we spawn stars more frequently to offset changes in the speed multiplier...
+			//as player goes faster, stars should correspondingly appear at a higher rate
+			//(otherwise, density of background stars appears to fall off)
+			var speedMult:Number = parentWorld.getCurrentStarSpeedMultiplier();
 			var timeSinceStarSpawn:Number = parentWorld.getWorldTime() - lastStarSpawnTime;
-			if (timeSinceStarSpawn > .25* Math.random()) {
+			//Max time between bg star spawns... increasing this value will decrease star density, but 
+			//not in any particularly intuitive manner (based on how we calculate starSpawnTimeConst now,
+			//star density also depends not only on game time but also on how often we call updateStarSpawning(), 
+			//which is a bit strange...)
+			var starSpawnTimeMax:Number = 5.0;
+			var starSpawnTimeConst:Number = (speedMult != 0) ? starSpawnTimeMax / speedMult : 0.0;
+			if (timeSinceStarSpawn > starSpawnTimeConst * Math.random()) {
 				lastStarSpawnTime = parentWorld.getWorldTime();
 				for(var i:int=0;i<3;i++) {
-					parentWorld.spawnStar();
+					parentWorld.spawnStar(true);
 				}
 			}
 		}
