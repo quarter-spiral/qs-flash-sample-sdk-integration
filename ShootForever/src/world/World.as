@@ -1,6 +1,7 @@
 package world
 {	
 	import flash.geom.Rectangle;
+	import flash.media.Sound;
 	
 	import math.RandomUtils;
 	import math.Vec2;
@@ -316,6 +317,8 @@ package world
 			var numEnemies:int = enemies.length;
 			var numPlayerBullets:int = playerBullets.length;
 			
+			var playedHitSoundThisUpdate:Boolean = false;
+			
 			//For lack of an acceleration data structure, do a full m*n intersection of everything...
 			for (var i:int = 0; i < numEnemies; i++) {
 				if (enemies[i].alive == false) continue;
@@ -331,6 +334,11 @@ package world
 						if (enemies[i].alive == false) {
 							//Award points to player
 							rewardPlayerForEnemyKill(enemies[i]);
+							
+							if (!playedHitSoundThisUpdate) {
+								SoundManager.getInstance().playSound(enemies[i].props.hitSound);
+								playedHitSoundThisUpdate = true;
+							}
 							
 							//TODO: Animate hurt/death with pretty particles
 						}
@@ -371,6 +379,7 @@ package world
 					if (player.checkCollisionRect(xpObjs[i].boundBox)) {
 						xpObjs[i].alive = false;
 						awardXpToPlayer(xpObjs[i].getProperties().xpAmount);
+						SoundManager.getInstance().playSound(SoundManager.SOUND_XP_GRAB);
 						
 						//TODO: Animate xp grab with pretty particles
 					}
@@ -386,6 +395,9 @@ package world
 			if (gameInfo.currBombs > 0) {
 				//Kill all enemies
 				gameInfo.currBombs--;
+				
+				SoundManager.getInstance().playSound(SoundManager.SOUND_BOMB_USE);
+				
 				var numEnemies:int = enemies.length;
 				for (var i:int = 0; i < numEnemies; i++) {
 					//enemies[i].alive = false;
@@ -613,15 +625,24 @@ package world
 		
 		public function awardXpToPlayer(amount:int):void {
 			gameInfo.ingameXp += amount;
+			
+			var playedLevelupSoundThisUpdate:Boolean = false;
+			
 			//Record an in-game levelup(s) if we have enough xp
 			while (gameInfo.getXp() >= Constants.getXpForLevel(gameInfo.getLevel()+1)) {
 				flowMan.levelupPlayer();
+				
+				if (playedLevelupSoundThisUpdate == false) {
+					SoundManager.getInstance().playSound(SoundManager.SOUND_LEVEL_UP);
+				}
 			}
 		}
 		
 		public function killPlayer(animate:Boolean):void {
 			isPlayerAlive = false;
 			playerDeathTime = currGameTime;
+			
+			SoundManager.getInstance().playSound(SoundManager.SOUND_PLAYER_DEATH);
 			
 			//TODO: Animate hurt/death with pretty particles
 			if (animate) { 

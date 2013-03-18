@@ -19,6 +19,9 @@ package world
 		public var dartPause:Number = 0; 			//duration of pause before darting, in seconds
 		public var postDartSpeedMult:Number = 1.0;	//multiplier on speed after darting
 		
+		//Misc
+		public var hitSound:String = "";			//hit/death sound name
+		
 		public function EnemyProperties()
 		{
 		

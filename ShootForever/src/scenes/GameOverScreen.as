@@ -1,5 +1,6 @@
 package scenes
 {	
+	import scenes.ui.ToggleButton;
 	import scenes.ui.XpBar;
 	
 	import starling.display.Button;
@@ -28,8 +29,8 @@ package scenes
 		private var xpTxt:TextField;
 		private var xpBar:XpBar;
 		private var playBtn:Button;
-		private var musicBtn:Button;
-		private var soundBtn:Button;
+		private var musicBtn:ToggleButton;
+		private var soundBtn:ToggleButton;
 		//private var xpToSpendTxt:TextField;
 		
 		//Local data
@@ -140,18 +141,18 @@ package scenes
 			playBtn.y = 425;
 			addChild(playBtn);
 			
-			musicBtn = new Button(Assets.getTexture("MusicOnImage"));
-			//TODO mute music
-			musicBtn.downState = Assets.getTexture("MusicOffImage");
+			musicBtn = new ToggleButton(Assets.getTexture("MusicOnImage"), Assets.getTexture("MusicOffImage"));
 			musicBtn.x = (3*Constants.GameWidth/4) - musicBtn.width/2;
 			musicBtn.y = 530 - musicBtn.height/2;
+			musicBtn.addEventListener(Event.TRIGGERED, onMuteMusicClick);
+			musicBtn.setToggle(!SoundManager.getInstance().MusicMuted);
 			this.addChild(musicBtn);
 			
-			soundBtn = new Button(Assets.getTexture("SoundOnImage"));
-			//TODO mute sound
-			soundBtn.downState = Assets.getTexture("SoundOffImage");
+			soundBtn = new ToggleButton(Assets.getTexture("SoundOnImage"), Assets.getTexture("SoundOffImage"));
 			soundBtn.x = (3*Constants.GameWidth/4) + musicBtn.width/2;
 			soundBtn.y = 530 - soundBtn.height/2;
+			soundBtn.addEventListener(Event.TRIGGERED, onMuteSfxClick);
+			soundBtn.setToggle(!SoundManager.getInstance().SfxMuted);
 			this.addChild(soundBtn);
 		}
 		
@@ -212,6 +213,20 @@ package scenes
 			//TODO
 			
 			spentXp += Constants.UPGRADE_SHOTS_PER_SECOND_COST;
+		}
+		
+		protected function onMuteMusicClick(event:Event):void {
+			musicBtn.switchToggle();
+			SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == false);
+			
+			//Restart music if necessary
+			if (musicBtn.ToggleState)
+				SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+		}
+		
+		protected function onMuteSfxClick(event:Event):void {
+			soundBtn.switchToggle();
+			SoundManager.getInstance().setSfxMuted(soundBtn.ToggleState == false);
 		}
 		
 		private function onPlayClick(event:Event):void {

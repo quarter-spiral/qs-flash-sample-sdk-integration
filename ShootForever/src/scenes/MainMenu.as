@@ -2,11 +2,12 @@ package scenes
 {	
 	import flash.net.SharedObject;
 	
-	import starling.display.BlendMode;
+	import scenes.ui.ToggleButton;
+	
 	import starling.display.Button;
-	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.events.Event;
+	import starling.events.TouchEvent;
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
@@ -28,8 +29,8 @@ package scenes
 		private var highScoreTxt:TextField;
 		private var rankLbl:TextField;
 		private var rankTxt:TextField;
-		private var musicBtn : Button;
-		private var soundBtn : Button;
+		private var musicBtn : ToggleButton;
+		private var soundBtn : ToggleButton;
 		
 		public function MainMenu(parentGame:Game)
 		{
@@ -114,18 +115,18 @@ package scenes
 			rankTxt.y = 315;
 			this.addChild(rankTxt);
 			
-			musicBtn = new Button(Assets.getTexture("MusicOnImage"));
-			//TODO mute music
-			musicBtn.downState = Assets.getTexture("MusicOffImage");
+			musicBtn = new ToggleButton(Assets.getTexture("MusicOnImage"), Assets.getTexture("MusicOffImage"));
 			musicBtn.x = (3*Constants.GameWidth/4) - musicBtn.width/2;
 			musicBtn.y = 530 - musicBtn.height/2;
+			musicBtn.addEventListener(Event.TRIGGERED, onMuteMusicClick);
+			musicBtn.setToggle(!SoundManager.getInstance().MusicMuted);
 			this.addChild(musicBtn);
 			
-			soundBtn = new Button(Assets.getTexture("SoundOnImage"));
-			//TODO mute sound
-			soundBtn.downState = Assets.getTexture("SoundOffImage");
+			soundBtn = new ToggleButton(Assets.getTexture("SoundOnImage"), Assets.getTexture("SoundOffImage"));
 			soundBtn.x = (3*Constants.GameWidth/4) + musicBtn.width/2;
 			soundBtn.y = 530 - soundBtn.height/2;
+			soundBtn.addEventListener(Event.TRIGGERED, onMuteSfxClick);
+			soundBtn.setToggle(!SoundManager.getInstance().SfxMuted);
 			this.addChild(soundBtn);
 			
 			/*clearDataBtn = new Button(Assets.getTexture("StartImage"), "Clear Data");
@@ -136,6 +137,12 @@ package scenes
 			
 			refreshFromPlayerInfo();
 		}
+		
+		public override function start():void {
+			//TODO: Add loop-indefinitely functionality. Just play a lot of times for now
+			SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+		}
+
 		
 		//Refreshed UI elements based on player data in parent game
 		public function refreshFromPlayerInfo():void {
@@ -160,6 +167,21 @@ package scenes
 		
 		protected function onStartClick(event:Event):void {
 			parentGame.showScreen("MainGame");
+		}
+		
+		protected function onMuteMusicClick(event:Event):void {
+			musicBtn.switchToggle();
+			SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == false);
+			
+			//Restart music if necessary
+			if (musicBtn.ToggleState)
+				SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+				
+		}
+		
+		protected function onMuteSfxClick(event:Event):void {
+			soundBtn.switchToggle();
+			SoundManager.getInstance().setSfxMuted(soundBtn.ToggleState == false);
 		}
 		
 		protected function onClearDataClick(event:Event):void {
