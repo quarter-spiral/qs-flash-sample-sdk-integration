@@ -104,13 +104,16 @@ package
 				var sound:Sound = soundMap[soundName];
 				if (sound) {
 					var channel:SoundChannel = sound.play(0,numLoops);
-					if (isMusic) {
-						channel.addEventListener(Event.SOUND_COMPLETE, onMusicSoundComplete);
-						activeMusicChannels.push(channel);
-					}
-					else {
-						channel.addEventListener(Event.SOUND_COMPLETE, onSfxSoundComplete);
-						activeSfxChannels.push(channel);
+					//Make sure sound actually plays... will be null if we're out of channels
+					if (channel) {
+						if (isMusic) {
+							channel.addEventListener(Event.SOUND_COMPLETE, onMusicSoundComplete);
+							activeMusicChannels.push(channel);
+						}
+						else {
+							channel.addEventListener(Event.SOUND_COMPLETE, onSfxSoundComplete);
+							activeSfxChannels.push(channel);
+						}
 					}
 				}
 			}
