@@ -18,3 +18,8 @@ Music:
 "Go Cart - Loop Mix" Kevin MacLeod (incompetech.com) 
 Licensed under Creative Commons: By Attribution 3.0
 http://creativecommons.org/licenses/by/3.0/
+
+INSTRUCTIONS FOR DEVELOPMENT:
+Project files are provided for both FlashBuilder and FlashDevelop.
+If using FlashBuilder, import the ".project" project file into your workspace
+For FlashDevelop, please open the "ShootForever.as3proj" file
