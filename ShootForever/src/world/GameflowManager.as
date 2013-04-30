@@ -42,7 +42,7 @@ package world
 		//Creates enemies as necessary during main game loop
 		protected function updateEnemySpawning():void {
 			var timeSinceEnemySpawn:Number = parentWorld.getPlayerLiveTime() - lastEnemySpawnTime;
-			if (timeSinceEnemySpawn > .75) {				
+			if (timeSinceEnemySpawn > .6) {				
 				var enemy:Enemy;
 				var waveType:int = math.RandomUtils.chooseInt([0,0,0,1,1,1,2,2,2,3,3,4]);
 				
@@ -59,6 +59,7 @@ package world
 							break;
 						case 3:
 							spawnFiveTightV(Constants.SINE_WAVE_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSingle(Constants.DART_ENEMY_ID);
@@ -87,8 +88,8 @@ package world
 								spawnSingleMoveRight(Constants.DART_RIGHT_ENEMY_ID);
 							}
 							
-							spawnThreeLooseV(Constants.BASIC_ANGLED_ENEMY_ID);
-							
+							//spawnThreeLooseV(Constants.BASIC_ANGLED_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSevenTightLine(Constants.BASIC_ANGLED_ENEMY_ID);
@@ -121,7 +122,8 @@ package world
 								spawnDoubleMoveRight(Constants.DART_RIGHT_ENEMY_ID);
 							}
 							
-							spawnThreeLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							//spawnThreeLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSingle(Constants.BASIC_HEAVY_ENEMY_ID);
@@ -156,7 +158,8 @@ package world
 							} else {
 								spawnSingleMoveRight(Constants.DART_RIGHT_MED_ID);
 							}
-							spawnThreeLooseLine(Constants.SINE_WAVE_ENEMY_ID);
+							//spawnThreeLooseLine(Constants.SINE_WAVE_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnTwoLooseLine(Constants.DART_ENEMY_ID);
@@ -189,6 +192,8 @@ package world
 							break;
 						case 3:
 							spawnThreeLooseLine(Constants.DART_ENEMY_ID);
+							
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
@@ -216,6 +221,8 @@ package world
 							break;
 						case 3:
 							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							if(math.RandomUtils.chooseInt([0,1])) {
@@ -244,6 +251,8 @@ package world
 							break;
 						case 3:
 							spawnThreeLooseV(Constants.BASIC_HEAVY_ENEMY_ID);
+							
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnFiveTightV(Constants.DART_ENEMY_ID);
@@ -308,6 +317,20 @@ package world
 			enemy.setStartPos(425 + 50*Math.random(), 50 + 150*Math.random());
 			
 			enemy.setInitialVelocity();	
+		}
+		
+		public function spawnDoubleEdge(enemyType:int):void {
+			var enemy:Enemy;
+			
+			enemy = spawnObject(enemyType);
+			enemy.setStartPos(20,-25);
+			enemy.moveType = 2;
+			enemy.setInitialVelocity();
+			
+			enemy=spawnObject(enemyType);
+			enemy.setStartPos(380,-25);
+			enemy.moveType = 2;
+			enemy.setInitialVelocity();
 		}
 		
 		public function spawnDoubleMoveRight(enemyType:int):void {
