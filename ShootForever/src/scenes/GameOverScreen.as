@@ -154,6 +154,15 @@ package scenes
 			soundBtn.addEventListener(Event.TRIGGERED, onMuteSfxClick);
 			soundBtn.setToggle(!SoundManager.getInstance().SfxMuted);
 			this.addChild(soundBtn);
+			
+			//if music is on, switch to menu music
+			if(musicBtn.ToggleState) {
+				//note - no stop music function, going to need to hack it
+				SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == true);
+				SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == false);
+				
+				SoundManager.getInstance().playSound(SoundManager.MUSIC_MENU, 999);
+			}
 		}
 		
 		public override function start():void {
@@ -221,7 +230,7 @@ package scenes
 			
 			//Restart music if necessary
 			if (musicBtn.ToggleState)
-				SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+				SoundManager.getInstance().playSound(SoundManager.MUSIC_MENU, 999);
 		}
 		
 		protected function onMuteSfxClick(event:Event):void {
@@ -241,6 +250,16 @@ package scenes
 			//TODO: Save it all to disk again, since we've finally completed an atomic "game" and assigned
 			//all out various upgrades
 			parentGame.savePlayerInfo();
+			
+			//if music is on, switch to game music
+			if(musicBtn.ToggleState) {
+				//note - no stop music function, going to need to hack it
+				SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == true);
+				SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == false);
+				
+				SoundManager.getInstance().playSound(SoundManager.SOUND_AGAIN);
+				SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+			}
 			
 			//Start game anew
 			parentGame.showScreen("MainGame");

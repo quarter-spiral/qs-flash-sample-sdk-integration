@@ -140,7 +140,7 @@ package scenes
 		
 		public override function start():void {
 			//TODO: Add loop-indefinitely functionality. Just play a lot of times for now
-			SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+			SoundManager.getInstance().playSound(SoundManager.MUSIC_MENU, 999);
 		}
 
 		
@@ -166,6 +166,17 @@ package scenes
 		}
 		
 		protected function onStartClick(event:Event):void {
+			if(musicBtn.ToggleState) {
+				//note - no stop music function, going to need to hack it
+				SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == true);
+				SoundManager.getInstance().setMusicMuted(musicBtn.ToggleState == false);
+				
+				SoundManager.getInstance().playSound(SoundManager.SOUND_GAME_START);
+				SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+			}
+			
+			
+			//Ethan's note - existing pre music switch attemp
 			parentGame.showScreen("MainGame");
 		}
 		
@@ -175,7 +186,7 @@ package scenes
 			
 			//Restart music if necessary
 			if (musicBtn.ToggleState)
-				SoundManager.getInstance().playSound(SoundManager.MUSIC_MAIN_GAME, 999);
+				SoundManager.getInstance().playSound(SoundManager.MUSIC_MENU, 999);
 				
 		}
 		

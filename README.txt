@@ -1,4 +1,4 @@
-SHOOT SHOOT FOREVER: A demo of Quarter Spiral's functionality in a Flash shmup. 
+impossiBattle: A demo of Quarter Spiral's functionality in a Flash shmup. 
 For more info on Quarter Spiral's game publishing platform visit http://www.quarterspiral.com
 
 This sample game is a collaboration between the Quarter Spiral team and Ben Humberston. 
@@ -12,10 +12,10 @@ Parts of the code (object pooling) are borrowed with love from the Hungry Hero d
 with all due credit to Hemanth Sharma. More info at http://www.hungryherogame.com/
 
 Audio:
-Audio effects were graciously provided by http://www.soundjay.com
+Audio effects were generated using the fantastic sfxr by Tomas Pettersson: http://www.drpetter.se/project_sfxr.html
 
 Music:
-"Go Cart - Loop Mix" Kevin MacLeod (incompetech.com) 
+"Arpanauts" and "Digital Native" are taken from Resistor Anthems by Eric Skiff: http://ericskiff.com/music/
 Licensed under Creative Commons: By Attribution 3.0
 http://creativecommons.org/licenses/by/3.0/
 
