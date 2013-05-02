@@ -379,7 +379,24 @@ package world
 					if (player.checkCollisionRect(xpObjs[i].boundBox)) {
 						xpObjs[i].alive = false;
 						awardXpToPlayer(xpObjs[i].getProperties().xpAmount);
-						SoundManager.getInstance().playSound(SoundManager.SOUND_XP_GRAB);
+						
+						switch(xpObjs[i].getProperties().xpAmount) {
+							case 5:
+								SoundManager.getInstance().playSound(SoundManager.SOUND_XP_GRAB_03);
+								break;
+							case 10:
+								SoundManager.getInstance().playSound(SoundManager.SOUND_XP_GRAB_01);
+								break;
+							case 25:
+								SoundManager.getInstance().playSound(SoundManager.SOUND_XP_GRAB_04);
+								break;
+							case 50:
+								SoundManager.getInstance().playSound(SoundManager.SOUND_XP_GRAB_05);
+								break;
+							case 100:
+								SoundManager.getInstance().playSound(SoundManager.SOUND_XP_GRAB_02);
+								break;
+						}
 						
 						//TODO: Animate xp grab with pretty particles
 					}
@@ -458,6 +475,9 @@ package world
 					}
 					break
 			}
+			
+			//play sound
+			SoundManager.getInstance().playSound(SoundManager.SOUND_LASER_FIRE_01);
 		}
 		
 		//Creates a new bullet fired by player, with starting position offset from player's position by given values
@@ -642,6 +662,7 @@ package world
 			isPlayerAlive = false;
 			playerDeathTime = currGameTime;
 			
+			SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_03);
 			SoundManager.getInstance().playSound(SoundManager.SOUND_PLAYER_DEATH);
 			
 			//TODO: Animate hurt/death with pretty particles

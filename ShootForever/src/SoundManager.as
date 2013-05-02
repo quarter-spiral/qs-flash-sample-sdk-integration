@@ -24,47 +24,83 @@ package
 		}
 			
 		/** Embeds */
-		[Embed(source="../media/sounds/button-50.mp3")]
-		protected static const XpGrabSound:Class;
+		[Embed(source="../media/sounds/_coin 01.mp3")]
+		protected static const XpGrabSound01:Class;
 		
-		[Embed(source="../media/sounds/beep-23.mp3")]
-		protected static const EnemyHitSound1:Class;
+		[Embed(source="../media/sounds/_coin 02.mp3")]
+		protected static const XpGrabSound02:Class;
 		
-		[Embed(source="../media/sounds/button-3.mp3")]
-		protected static const EnemyHitSound2:Class;
+		[Embed(source="../media/sounds/_coin 03.mp3")]
+		protected static const XpGrabSound03:Class;
 		
-		[Embed(source="../media/sounds/button-13.mp3")]
-		protected static const EnemyHitSound3:Class;
+		[Embed(source="../media/sounds/_coin 04.mp3")]
+		protected static const XpGrabSound04:Class;
 		
-		[Embed(source="../media/sounds/beep-26.mp3")]
-		protected static const EnemyHitSound4:Class;
+		[Embed(source="../media/sounds/_coin 05.mp3")]
+		protected static const XpGrabSound05:Class;
 		
-		[Embed(source="../media/sounds/button-4.mp3")]
+		[Embed(source="../media/sounds/_explosion 01.mp3")]
+		protected static const EnemyDieSound01:Class;
+		
+		[Embed(source="../media/sounds/_explosion 02.mp3")]
+		protected static const EnemyDieSound02:Class;
+		
+		[Embed(source="../media/sounds/_explosion 03.mp3")]
+		protected static const EnemyDieSound03:Class;
+		
+		[Embed(source="../media/sounds/_shoot 02.mp3")]
+		protected static const LaserFireSound01:Class;
+		
+		[Embed(source="../media/sounds/_damage 01.mp3")]
+		protected static const EnemyDamageSound01:Class;
+		
+		[Embed(source="../media/sounds/_damage 02.mp3")]
+		protected static const EnemyDamageSound02:Class;
+		
+		[Embed(source="../media/sounds/_lets go.mp3")]
+		protected static const GameStartSound:Class;
+		
+		[Embed(source="../media/sounds/_again.mp3")]
+		protected static const AgainSound:Class;
+		
+		[Embed(source="../media/sounds/_mission fail.mp3")]
 		protected static const PlayerDeathSound:Class;
 		
-		[Embed(source="../media/sounds/button-14.mp3")]
+		[Embed(source="../media/sounds/_power up 03.mp3")]
 		protected static const LevelupSound:Class;
 		
-		[Embed(source="../media/sounds/button-8.mp3")]
+		[Embed(source="../media/sounds/_power up 02.mp3")]
 		protected static const BombUseSound:Class;
 		
-		//TODO: PLACEHOLDER... use final music
-		[Embed(source="../media/sounds/Go Cart - Loop Mix.mp3")]
+		[Embed(source="../media/sounds/Digital Native.mp3")]
+		protected static const MainMenuMusic:Class;
+		
+		[Embed(source="../media/sounds/Arpanaut Remix.mp3")]
 		protected static const MainGameMusic:Class;
 		
 		/**Sound names (used by external classes to request sound play) 
 		 * Note: As a simple,hacky method to differentiate SFX vs. music, use the "SOUND" prefix 
 		 * for all sound effects, and the "MUSIC" prefix for all music. */
-		public static const SOUND_XP_GRAB:String = "XpGrab";
-		public static const SOUND_ENEMY_HIT_1:String = "EnemyHit1";
-		public static const SOUND_ENEMY_HIT_2:String = "EnemyHit2";
-		public static const SOUND_ENEMY_HIT_3:String = "EnemyHit3";
-		public static const SOUND_ENEMY_HIT_4:String = "EnemyHit4";
+		public static const SOUND_XP_GRAB_01:String = "XpGrab1";
+		public static const SOUND_XP_GRAB_02:String = "XpGrab2";
+		public static const SOUND_XP_GRAB_03:String = "XpGrab3";
+		public static const SOUND_XP_GRAB_04:String = "XpGrab4";
+		public static const SOUND_XP_GRAB_05:String = "XpGrab5";
+		public static const SOUND_ENEMY_DIE_01:String = "EnemyDie1";
+		public static const SOUND_ENEMY_DIE_02:String = "EnemyDie2";
+		public static const SOUND_ENEMY_DIE_03:String = "EnemyDie3";
+		public static const SOUND_ENEMY_DAMAGE_01:String = "EnemyDamage1";
+		public static const SOUND_ENEMY_DAMAGE_02:String = "EnemyDamage2";
+		public static const SOUND_LASER_FIRE_01:String = "LaserFire1";
+		public static const SOUND_GAME_START:String = "GameStart";
+		public static const SOUND_AGAIN:String = "Again";
+		
 		public static const SOUND_PLAYER_DEATH:String = "PlayerDeath";
 		public static const SOUND_LEVEL_UP:String = "LevelUp";
 		public static const SOUND_BOMB_USE:String = "BombUse";
 		
 		public static const MUSIC_MAIN_GAME:String = "MainGameMusic";
+		public static const MUSIC_MENU:String = "MainMenuMusic";
 		
 		/** Other fields */
 		protected var sfxMuted:Boolean = false;
@@ -85,16 +121,26 @@ package
 			activeSfxChannels = new Vector.<SoundChannel>();
 			activeMusicChannels = new Vector.<SoundChannel>();
 			
-			soundMap[SOUND_XP_GRAB]  = new XpGrabSound() as Sound;
-			soundMap[SOUND_ENEMY_HIT_1] = new EnemyHitSound1() as Sound;
-			soundMap[SOUND_ENEMY_HIT_2] = new EnemyHitSound2() as Sound;
-			soundMap[SOUND_ENEMY_HIT_3] = new EnemyHitSound3() as Sound;
-			soundMap[SOUND_ENEMY_HIT_4] = new EnemyHitSound4() as Sound;
+			soundMap[SOUND_XP_GRAB_01]  = new XpGrabSound01() as Sound;
+			soundMap[SOUND_XP_GRAB_02]  = new XpGrabSound02() as Sound;
+			soundMap[SOUND_XP_GRAB_03]  = new XpGrabSound03() as Sound;
+			soundMap[SOUND_XP_GRAB_04]  = new XpGrabSound04() as Sound;
+			soundMap[SOUND_XP_GRAB_05]  = new XpGrabSound05() as Sound;
+			soundMap[SOUND_ENEMY_DIE_01] = new EnemyDieSound01() as Sound;
+			soundMap[SOUND_ENEMY_DIE_02] = new EnemyDieSound02() as Sound;
+			soundMap[SOUND_ENEMY_DIE_03] = new EnemyDieSound03() as Sound;
+			soundMap[SOUND_ENEMY_DAMAGE_01] = new EnemyDamageSound01() as Sound;
+			soundMap[SOUND_ENEMY_DAMAGE_02] = new EnemyDamageSound02() as Sound;
+			soundMap[SOUND_LASER_FIRE_01] = new LaserFireSound01() as Sound;
+			soundMap[SOUND_GAME_START] = new GameStartSound() as Sound;
+			soundMap[SOUND_AGAIN] = new AgainSound() as Sound;
+			
 			soundMap[SOUND_PLAYER_DEATH] = new PlayerDeathSound() as Sound;
 			soundMap[SOUND_LEVEL_UP] = new LevelupSound() as Sound;
 			soundMap[SOUND_BOMB_USE] = new BombUseSound() as Sound;
 			
 			soundMap[MUSIC_MAIN_GAME] = new MainGameMusic() as Sound;
+			soundMap[MUSIC_MENU] = new MainMenuMusic() as Sound;
 		}
 		
 		/** Plays specified SFX sound, if not muted */

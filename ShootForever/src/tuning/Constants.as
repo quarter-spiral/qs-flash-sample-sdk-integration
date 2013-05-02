@@ -220,7 +220,7 @@ package tuning
 			props.imageName = "Enemy1Image";
 			props.harmsPlayer = true;
 			props.dartTarget = false;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
 			ENEMY_PROPERTIES.push(props);
 			
 			MEDIUM_ANGLED_ENEMY_ID = enemyId++;
@@ -233,7 +233,7 @@ package tuning
 			props.imageName = "Enemy8Image";
 			props.harmsPlayer = true;
 			props.dartTarget = false;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_4;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_4;
 			ENEMY_PROPERTIES.push(props);
 			
 			DART_ENEMY_ID = enemyId++;
@@ -250,7 +250,7 @@ package tuning
 			props.dartDelay = 3.5;
 			props.dartPause = 1.5;
 			props.postDartSpeedMult = 7.0;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
 			ENEMY_PROPERTIES.push(props);
 			
 			DART_RIGHT_ENEMY_ID = enemyId++;
@@ -266,7 +266,7 @@ package tuning
 			props.dartDelay = .75;
 			props.dartPause = 0.25;
 			props.postDartSpeedMult = 2.5;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
 			ENEMY_PROPERTIES.push(props);
 			
 			DART_RIGHT_MED_ID = enemyId++;
@@ -282,7 +282,7 @@ package tuning
 			props.dartDelay = .75;
 			props.dartPause = 1;
 			props.postDartSpeedMult = 2.5;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
 			ENEMY_PROPERTIES.push(props);
 			
 			DART_LEFT_ENEMY_ID = enemyId++;
@@ -298,7 +298,7 @@ package tuning
 			props.dartDelay = .75;
 			props.dartPause = 0.25;
 			props.postDartSpeedMult = -2.5;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
 			ENEMY_PROPERTIES.push(props);
 			
 			DART_LEFT_MED_ID = enemyId++;
@@ -314,7 +314,7 @@ package tuning
 			props.dartDelay = .75;
 			props.dartPause = 1;
 			props.postDartSpeedMult = -2.5;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
 			ENEMY_PROPERTIES.push(props);
 			
 			SINE_WAVE_ENEMY_ID = enemyId++;
@@ -327,7 +327,7 @@ package tuning
 			props.imageName = "Enemy2Image";
 			props.harmsPlayer = true;
 			props.dartTarget = false;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_1;
 			ENEMY_PROPERTIES.push(props);
 			
 			SINE_WAVE_MED_ID = enemyId++;
@@ -340,7 +340,7 @@ package tuning
 			props.imageName = "Enemy6Image";
 			props.harmsPlayer = true;
 			props.dartTarget = false;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_2;
 			ENEMY_PROPERTIES.push(props);
 			
 			BASIC_HEAVY_ENEMY_ID = enemyId++;
@@ -353,7 +353,7 @@ package tuning
 			props.imageName = "Enemy5Image";
 			props.harmsPlayer = true;
 			props.dartTarget = false;
-			props.hitSound = SoundManager.SOUND_ENEMY_HIT_3;
+			//props.hitSound = SoundManager.SOUND_ENEMY_HIT_3;
 			ENEMY_PROPERTIES.push(props);
 		}
 		

@@ -299,10 +299,64 @@ package world
 			if (currHealth <= 0) {
 				currHealth = 0;
 				alive = false;
+				
+				switch (this.enemyType) {
+					case Constants.BASIC_ANGLED_ENEMY_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_02);
+						break;
+					case Constants.SINE_WAVE_ENEMY_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_02);
+						break;
+					case Constants.DART_LEFT_ENEMY_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_02);
+						break;
+					case Constants.DART_RIGHT_ENEMY_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_02);
+						break;
+					case Constants.MEDIUM_ANGLED_ENEMY_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_03);
+						break;
+					case Constants.SINE_WAVE_MED_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_03);
+						break;
+					case Constants.DART_LEFT_MED_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_03);
+						break;
+					case Constants.DART_RIGHT_MED_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_03);
+						break;
+					case Constants.DART_ENEMY_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_01);
+						break;
+					case Constants.BASIC_HEAVY_ENEMY_ID:
+						SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DIE_01);
+						break;
+				}
 			}
 			
 			if (showGraphicalFlash && damage > 0)
 				startHurtFlash();
+			
+			switch (this.enemyType) {
+				case Constants.MEDIUM_ANGLED_ENEMY_ID:
+					SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DAMAGE_01);
+					break;
+				case Constants.SINE_WAVE_MED_ID:
+					SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DAMAGE_01);
+					break;
+				case Constants.DART_LEFT_MED_ID:
+					SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DAMAGE_01);
+					break;
+				case Constants.DART_RIGHT_MED_ID:
+					SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DAMAGE_01);
+					break;
+				case Constants.DART_ENEMY_ID:
+					SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DAMAGE_02);
+					break;
+				case Constants.BASIC_HEAVY_ENEMY_ID:
+					SoundManager.getInstance().playSound(SoundManager.SOUND_ENEMY_DAMAGE_02);
+					break;
+			}
 		}
 	}
 }
