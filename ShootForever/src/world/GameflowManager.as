@@ -56,10 +56,10 @@ package world
 							break;
 						case 2:
 							spawnThreeLooseV(Constants.SINE_WAVE_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 3:
 							spawnFiveTightV(Constants.SINE_WAVE_ENEMY_ID);
-							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSingle(Constants.DART_ENEMY_ID);
@@ -80,6 +80,7 @@ package world
 							break;
 						case 2:
 							spawnThreeLooseV(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 3:
 							if(math.RandomUtils.chooseInt([0,1])) {
@@ -89,7 +90,7 @@ package world
 							}
 							
 							//spawnThreeLooseV(Constants.BASIC_ANGLED_ENEMY_ID);
-							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							//spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSevenTightLine(Constants.BASIC_ANGLED_ENEMY_ID);
@@ -114,6 +115,7 @@ package world
 							break;
 						case 2:
 							spawnThreeLooseLine(Constants.SINE_WAVE_MED_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 3:
 							if(math.RandomUtils.chooseInt([0,1])) {
@@ -123,7 +125,7 @@ package world
 							}
 							
 							//spawnThreeLooseLine(Constants.BASIC_ANGLED_ENEMY_ID);
-							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							//spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSingle(Constants.BASIC_HEAVY_ENEMY_ID);
@@ -147,6 +149,7 @@ package world
 							break;
 						case 1:
 							spawnFiveTightV(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 2:
 							spawnSingle(Constants.BASIC_HEAVY_ENEMY_ID);
@@ -159,7 +162,7 @@ package world
 								spawnSingleMoveRight(Constants.DART_RIGHT_MED_ID);
 							}
 							//spawnThreeLooseLine(Constants.SINE_WAVE_ENEMY_ID);
-							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							//spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnTwoLooseLine(Constants.DART_ENEMY_ID);
@@ -189,11 +192,12 @@ package world
 							break;
 						case 2:
 							spawnFiveTightV(Constants.SINE_WAVE_MED_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 3:
 							spawnThreeLooseLine(Constants.DART_ENEMY_ID);
 							
-							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							//spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
@@ -218,11 +222,12 @@ package world
 							break;
 						case 2:
 							spawnThreeLooseV(Constants.BASIC_HEAVY_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 3:
 							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							
-							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							//spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							if(math.RandomUtils.chooseInt([0,1])) {
@@ -248,11 +253,12 @@ package world
 							break;
 						case 2:
 							spawnSevenTightLine(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 3:
 							spawnThreeLooseV(Constants.BASIC_HEAVY_ENEMY_ID);
 							
-							spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
+							//spawnDoubleEdge(Constants.MEDIUM_ANGLED_ENEMY_ID);
 							break;
 						case 4:
 							spawnFiveTightV(Constants.DART_ENEMY_ID);
@@ -329,6 +335,16 @@ package world
 			
 			enemy=spawnObject(enemyType);
 			enemy.setStartPos(380,-25);
+			enemy.moveType = 2;
+			enemy.setInitialVelocity();
+			
+			enemy = spawnObject(enemyType);
+			enemy.setStartPos(20,-60);
+			enemy.moveType = 2;
+			enemy.setInitialVelocity();
+			
+			enemy=spawnObject(enemyType);
+			enemy.setStartPos(380,-60);
 			enemy.moveType = 2;
 			enemy.setInitialVelocity();
 		}
