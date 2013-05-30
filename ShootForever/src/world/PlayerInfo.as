@@ -6,7 +6,7 @@ package world
 	public class PlayerInfo
 	{
 		public var name:String;
-		public var highTime:Number;
+		public var highTime2:Number;
 		public var highLevel:int;
 		//public var currentXP:int; //NOTE: XP no longer persistent between sessions under new Super Hexagon setup -bh, 2.15.2013
 		//public var currentSpendableXP:int;
@@ -26,7 +26,7 @@ package world
 		//Resets all player upgrades to initial values
 		public function reset():void {
 			name = "Player";
-			highTime = 0;
+			highTime2 = 0;
 			highLevel = 0;
 			//currentXP = 0;
 			//currentSpendableXP = 0;
@@ -38,8 +38,8 @@ package world
 			if (playerData['highLevel'] && highLevel < playerData['highLevel']) {
 				highLevel = playerData['highLevel'];
 			}
-			if (playerData['highTime'] && highTime < playerData['highTime']) {
-				highTime = playerData['highTime'];
+			if (playerData['highTime2'] && highTime2 < playerData['highTime2']) {
+				highTime2 = playerData['highTime2'];
 			}
 		}
 	}

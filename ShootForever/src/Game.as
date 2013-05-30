@@ -185,7 +185,7 @@ package
 			//shootForeverData.flush(); 
 			var data:Dictionary = new Dictionary();
 			data['highLevel'] = playerInfo.highLevel;
-			data['highTime'] = playerInfo.highTime;
+			data['highTime2'] = playerInfo.highTime2;
 			qsSdk.setPlayerData(data);
 		}
         

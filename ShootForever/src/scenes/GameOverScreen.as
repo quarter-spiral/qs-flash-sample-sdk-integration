@@ -182,8 +182,8 @@ package scenes
 			
 			//Apply the xp gain, high score, upgrades, etc. from previous game
 			var info:PlayerInfo = parentGame.getPlayerInfo();
-			if (info.latestGameInfo.getPlayerLiveTime() > info.highTime)
-				info.highTime = info.latestGameInfo.getPlayerLiveTime();
+			if (info.latestGameInfo.getPlayerLiveTime() > info.highTime2)
+				info.highTime2 = info.latestGameInfo.getPlayerLiveTime();
 			if (info.latestGameInfo.getLevel() > info.highLevel)
 				info.highLevel = info.latestGameInfo.getLevel();
 			
@@ -200,7 +200,7 @@ package scenes
 			//xpBar.setLevel(playerInfo.latestGameInfo.getLevel());
 			//xpBar.setCurrXp(playerInfo.latestGameInfo.getXp());
 			
-			if (playerInfo.latestGameInfo.getPlayerLiveTime() > playerInfo.highTime)
+			if (playerInfo.latestGameInfo.getPlayerLiveTime() > playerInfo.highTime2)
 				highScoreLbl.visible = true;
 			else 
 				highScoreLbl.visible = false;
