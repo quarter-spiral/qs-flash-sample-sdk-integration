@@ -1,5 +1,8 @@
 package scenes
 {	
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
+	
 	import scenes.ui.ToggleButton;
 	import scenes.ui.XpBar;
 	
@@ -11,6 +14,7 @@ package scenes
 	
 	import tuning.Constants;
 	
+	import world.Bullet;
 	import world.PlayerInfo;
 	import world.World;
 
@@ -31,6 +35,7 @@ package scenes
 		private var playBtn:Button;
 		private var musicBtn:ToggleButton;
 		private var soundBtn:ToggleButton;
+		private var logoBtn:Button;
 		//private var xpToSpendTxt:TextField;
 		
 		//Local data
@@ -155,6 +160,13 @@ package scenes
 			soundBtn.setToggle(!SoundManager.getInstance().SfxMuted);
 			this.addChild(soundBtn);
 			
+			//qs logo
+			logoBtn = new Button(Assets.getTexture("QsLogoImage"), "");
+			logoBtn.addEventListener(Event.TRIGGERED, onLogoClick);
+			logoBtn.x = 10;
+			logoBtn.y = 530 - logoBtn.height/2;
+			addChild(logoBtn);
+			
 			//if music is on, switch to menu music
 			if(musicBtn.ToggleState) {
 				//note - no stop music function, going to need to hack it
@@ -263,6 +275,11 @@ package scenes
 			
 			//Start game anew
 			parentGame.showScreen("MainGame");
+		}
+		
+		//open qs.com in new window
+		protected function onLogoClick(event:Event):void {
+			navigateToURL(new URLRequest("http://goo.gl/qxbSo"), "_blank");
 		}
 	}
 }

@@ -1,6 +1,8 @@
 package scenes
 {	
 	import flash.net.SharedObject;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	
 	import scenes.ui.ToggleButton;
 	
@@ -31,6 +33,7 @@ package scenes
 		private var rankTxt:TextField;
 		private var musicBtn : ToggleButton;
 		private var soundBtn : ToggleButton;
+		private var logoBtn : Button;
 		
 		public function MainMenu(parentGame:Game)
 		{
@@ -129,6 +132,13 @@ package scenes
 			soundBtn.setToggle(!SoundManager.getInstance().SfxMuted);
 			this.addChild(soundBtn);
 			
+			//qs logo
+			logoBtn = new Button(Assets.getTexture("QsLogoImage"), "");
+			logoBtn.addEventListener(Event.TRIGGERED, onLogoClick);
+			logoBtn.x = 10;
+			logoBtn.y = 530 - logoBtn.height/2;
+			addChild(logoBtn);
+			
 			/*clearDataBtn = new Button(Assets.getTexture("StartImage"), "Clear Data");
 			clearDataBtn.addEventListener(Event.TRIGGERED, onClearDataClick);
 			clearDataBtn.x = Constants.GameWidth/2 - startBtn.width/2;
@@ -178,6 +188,11 @@ package scenes
 			
 			//Ethan's note - existing pre music switch attemp
 			parentGame.showScreen("MainGame");
+		}
+		
+		//open qs.com in new window
+		protected function onLogoClick(event:Event):void {
+			navigateToURL(new URLRequest("http://goo.gl/qxbSo"), "_blank");
 		}
 		
 		protected function onMuteMusicClick(event:Event):void {

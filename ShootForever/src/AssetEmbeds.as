@@ -133,6 +133,9 @@ package
 		[Embed(source = "../media/textures/logo.png")]
 		public static const LogoImage:Class;
 		
+		[Embed(source = "../media/textures/qs_logo.png")]
+		public static const QsLogoImage:Class;
+		
 		[Embed(source = "../media/textures/music_on.png")]
 		public static const MusicOnImage:Class;
 		
