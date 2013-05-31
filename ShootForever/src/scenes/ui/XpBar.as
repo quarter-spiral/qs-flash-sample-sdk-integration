@@ -88,10 +88,10 @@ package scenes.ui
 			fillPct = Math.min(Math.max(fillPct, 0), 1.0);
 			
 			if(fillPct == 0) {
-				fillBarCap.visible = 0;
+				fillBarCap.visible = false;
 			}
 			else {
-				fillBarCap.visible = 1;
+				fillBarCap.visible = true;
 			}
 			
 			fillBar.width = (bg.width-6) * fillPct;
