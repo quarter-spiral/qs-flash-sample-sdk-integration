@@ -235,13 +235,15 @@ package
         
         private function onKey(event:KeyboardEvent):void
         {
-            if (event.keyCode == Keyboard.S)
-                Starling.current.showStats = !Starling.current.showStats;
-			
-			//DEBUG: Add debug action msg
-			if (event.keyCode == Keyboard.M)
-				addActionMessage("Test Message!");
-			
+			CONFIG::DEBUG {
+				if (event.keyCode == Keyboard.S)
+					Starling.current.showStats = !Starling.current.showStats;
+				
+				//DEBUG: Add debug action msg
+				if (event.keyCode == Keyboard.M)
+					addActionMessage("Test Message!");
+			}
+				
 			//Forward the keystroke to current screen
 			if (currentScreen)
 				currentScreen.onKey(event);

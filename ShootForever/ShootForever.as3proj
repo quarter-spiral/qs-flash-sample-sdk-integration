@@ -20,6 +20,7 @@
   <!-- Build options -->
   <build>
     <option accessible="False" />
+    <option advancedTelemetry="False" />
     <option allowSourcePathOverlap="False" />
     <option benchmark="False" />
     <option es="False" />
@@ -41,7 +42,7 @@
     <option loadExterns="" />
     <option staticLinkRSL="True" />
     <option additional="-swf-version=13" />
-    <option compilerConstants="CONFIG::DEBUG,true" />
+    <option compilerConstants="CONFIG::DEBUG,false" />
     <option minorVersion="" />
   </build>
   <!-- SWC Include Libraries -->
