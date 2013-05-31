@@ -27,7 +27,7 @@ package
 			//Verify domain
 			//Source: http://www.ghostwire.com/blog/archives/as3-domain-locking-swfs/
 			var url:String = loaderInfo.loaderURL;
-			var allowedDomains:String = "quarterspiral.com";
+			var allowedDomains:String = "files.quarterspiral.com";
  
 			var allowedPattern:String = "^http(|s)://("+allowedDomains+")";
 			var domainCheck:RegExp = new RegExp(allowedPattern, "i");
@@ -59,6 +59,7 @@ package
 			else
 			{
 				//eg: Show "wrong domain" msg
+				
 			}
         }
         
